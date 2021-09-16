@@ -1,0 +1,27 @@
+{
+  "name": "witmon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "scripts": {
+    "bootstrap": "yarn lerna bootstrap",
+    "build": "yarn lerna run build --stream --concurrency 1",
+    "test": "yarn lerna run test --stream ",
+    "lint": "yarn lerna run lint --stream --concurrency 1",
+    "clean": "yarn lerna run clean --concurrency 4",
+    "prepare": "lerna run prepare",
+    "docker:build": "lerna run docker:build"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "volta": {
+    "node": "14.17.6",
+    "yarn": "1.22.10"
+  }
+}

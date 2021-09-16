@@ -1,0 +1,25 @@
+{
+  "name": "ui",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "prettier-standard --format"
+  },
+  "dependencies": {
+    "eslint-plugin-vue": "^7.18.0",
+    "pinia": "^2.0.0-rc.9",
+    "vue": "^3.2.6",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.6.1",
+    "@vue/compiler-sfc": "^3.2.6",
+    "autoprefixer": "^10.3.4",
+    "postcss": "^8.3.6",
+    "prettier-standard": "^16.4.1",
+    "tailwindcss": "^2.2.15",
+    "vite": "^2.5.4"
+  }
+}
