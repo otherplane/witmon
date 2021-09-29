@@ -5,10 +5,14 @@ import { FastifyPluginAsync } from 'fastify'
 import { fastifyMongodb } from 'fastify-mongodb'
 import { join } from 'path'
 
-import { Egg } from './types'
 import { EggRepository } from './repositories/egg'
 
 require('dotenv').config()
+
+// Tell how many eggs to generate
+const EGGS_COUNT = process.env.EGGS_COUNT
+  ? parseInt(process.env.EGGS_COUNT)
+  : 10
 
 export type AppOptions = {
   // Place your custom options for app below here.
@@ -51,20 +55,9 @@ const app: FastifyPluginAsync<AppOptions> = async (
   fastify.register(async (fastify, options, next) => {
     if (!fastify.mongo.db) throw Error('mongo db not found')
 
+    // Initialize eggs repository and bootstrap with EGGS_COUNT eggs if no eggs exist already
     const repository = new EggRepository(fastify.mongo.db)
-
-    const initalEggs: [Egg] = require('./eggs.json')
-    try {
-      const promises = initalEggs.map(async (egg: Egg) => {
-        const isAlreadyCreated = await repository.get(egg.key)
-        if (!isAlreadyCreated) {
-          await repository.create(egg)
-        }
-      })
-      await Promise.all(promises)
-    } catch (error) {
-      throw Error('could not create initial eggs in mongo db')
-    }
+    await repository.bootstrap(EGGS_COUNT, false)
 
     next()
   })
