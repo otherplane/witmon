@@ -65,3 +65,9 @@ test/types/index.js
 
 # compiled app
 dist
+
+# generated QR codes
+stickers/qr_codes
+
+# python deps
+stickers/src
