@@ -1,5 +1,5 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
-import { GetByKeyParams } from '../types'
+import { AuthorizationHeader, GetByKeyParams, JwtVerifyPayload } from '../types'
 import { EggRepository } from '../repositories/egg'
 
 const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
@@ -9,6 +9,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   fastify.get<{ Params: GetByKeyParams }>('/eggs/:key', {
     schema: {
       params: GetByKeyParams,
+      headers: AuthorizationHeader,
     },
     handler: async (
       request: FastifyRequest<{ Params: { key: string } }>,
@@ -16,20 +17,29 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     ) => {
       const { key } = request.params
 
-      // const token = fastify.jwt.sign({ id: key })
-      // console.log("Token:", token)
+      let eggId: string
+      try {
+        const decoded: JwtVerifyPayload = fastify.jwt.verify(
+          request.headers.authorization as string
+        )
+        eggId = decoded.id
+      } catch (err) {
+        return reply.status(403).send(new Error(`Forbidden: invalid token`))
+      }
 
-      // console.log("Decoded: ", fastify.jwt.verify(token))
-      // console.log("Decoded wrong: ", fastify.jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2MzI4MzU3NjN9.jRQqyJssy9w7cWv6rQmIjfntX6t_cVUbSmhIo18cot9"))
+      if (eggId !== key)
+        return reply.status(403).send(new Error(`Forbidden: invalid token`))
 
       const egg = await repository.get(key)
 
+      // Unreachable: valid server issued token refers to non-existent egg
       if (!egg) {
         return reply
           .status(404)
           .send(new Error(`Egg does not exist (key: ${key})`))
       }
 
+      // Unreachable: valid server issued token refers to an unclaimed egg
       if (!egg.username) {
         return reply
           .status(405)

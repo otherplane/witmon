@@ -25,6 +25,11 @@ export const ListEggsQueryString = Type.Object({
 })
 export type ListEggsQueryString = Static<typeof ListEggsQueryString>
 
+export const AuthorizationHeader = Type.Object({
+  Authorization: Type.String(),
+})
+export type AuthorizationHeader = Static<typeof AuthorizationHeader>
+
 export const GetByKeyParams = Type.Object({
   key: Type.String(),
 })
@@ -35,3 +40,9 @@ export const ImproveInput = Type.Object({
   incubator: Type.String(),
 })
 export type ImproveInput = Static<typeof ImproveInput>
+
+export const JwtVerifyPayload = Type.Object({
+  id: Type.String(),
+  iat: Type.Number(),
+})
+export type JwtVerifyPayload = Static<typeof JwtVerifyPayload>
