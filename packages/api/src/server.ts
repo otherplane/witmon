@@ -1,15 +1,14 @@
-import { build } from './app'
+import Fastify from 'fastify'
+import app from './app'
 
-const server = build({
+const server = Fastify({
   logger: {
     level: 'info',
-    prettyPrint: true
-  }
+    prettyPrint: true,
+  },
 })
 
-server.listen(3000, (err, address) => {
-  if (err) {
-    console.log(err)
-    process.exit(1)
-  }
-})
+server
+  .register(app)
+  .then(() => server.ready())
+  .then(() => server.listen(3000))

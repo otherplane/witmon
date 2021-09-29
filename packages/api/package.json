@@ -21,12 +21,14 @@
     "dotenv": "^10.0.0",
     "fastify": "^3.21.0",
     "fastify-autoload": "^3.3.1",
+    "fastify-jwt": "^3.1.0",
     "fastify-mongodb": "^4.1.0",
     "fastify-plugin": "^3.0.0",
     "fastify-sensible": "^3.1.0",
     "mongodb": "^4.1.2",
     "nodemon": "^2.0.13",
     "pino-pretty": "^7.0.1",
+    "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {
     "@types/node": "^15.0.0",
