@@ -40,7 +40,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       }
 
       // Unreachable: valid server issued token refers to an unclaimed egg
-      if (!egg.username) {
+      if (!egg.token) {
         return reply
           .status(405)
           .send(new Error(`Egg has not been claimed yet (key: ${key})`))

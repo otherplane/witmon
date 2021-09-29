@@ -1,16 +1,22 @@
 import { test } from 'tap'
-import { Egg } from '../../src/types'
 
 import { server } from './helper'
 
-const initalEggs: [Egg] = require('../../src/eggs.json')
+const initialEggs = [
+  {
+    key: 'ef12efbd765f9ad3',
+    index: 0,
+    username: 'calm-bison',
+    score: 0,
+  },
+]
 
-test('should claim EGG #1', (t) => {
+test('should claim EGG #0', (t) => {
   server.inject(
     {
       method: 'POST',
       url: '/claim',
-      payload: { key: '1' },
+      payload: { key: initialEggs[0].key },
     },
     (err, response) => {
       t.error(err)
