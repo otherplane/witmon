@@ -2,9 +2,18 @@ import { test } from 'tap'
 
 import { server } from './helper'
 
-const VALID_HEADER_TOKEN_EGG_1 = {
+const initialEggs = [
+    {
+        key: 'ef12efbd765f9ad3',
+        index: 0,
+        username: 'calm-bison',
+        score: 0,
+    },
+]
+
+const VALID_HEADER_TOKEN_EGG_0 = {
   Authorization:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE2MzI5MTY1Mzl9.UkFraLeHQgieKa7Od1K4oyGFQctWUZ7LY2TRAhb7C4Y',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVmMTJlZmJkNzY1ZjlhZDMiLCJpYXQiOjE2MzI5MzI0NjN9.Koji-yz6dQyYpsGgRKiN_PEM-nvTQqXtP8Mx8icIHYQ',
 }
 const VALID_HEADER_TOKEN_EGG_12345 = {
   Authorization:
@@ -18,7 +27,7 @@ test('should NOT get EGG #1 - no authorization header', (t) => {
   server.inject(
     {
       method: 'GET',
-      url: '/eggs/1',
+      url: `/eggs/${initialEggs[0].key}`,
     },
     (err, response) => {
       t.error(err)
@@ -36,7 +45,7 @@ test('should NOT get EGG #1 - invalid jwt token', (t) => {
   server.inject(
     {
       method: 'GET',
-      url: '/eggs/1',
+      url: `/eggs/${initialEggs[0].key}`,
       headers: {
         ...INVALID_HEADER_TOKEN,
         foo: 'bar',
@@ -59,7 +68,7 @@ test('should NOT get EGG #12345 - valid token for EGG #1', (t) => {
     {
       method: 'GET',
       url: '/eggs/12345',
-      headers: VALID_HEADER_TOKEN_EGG_1,
+      headers: VALID_HEADER_TOKEN_EGG_0,
     },
     (err, response) => {
       t.error(err)
@@ -96,8 +105,8 @@ test('should NOT get EGG #1 - valid token but egg not claimed yet', (t) => {
   server.inject(
     {
       method: 'GET',
-      url: '/eggs/1',
-      headers: VALID_HEADER_TOKEN_EGG_1,
+      url: `/eggs/${initialEggs[0].key}`,
+      headers: VALID_HEADER_TOKEN_EGG_0,
     },
     (err, response) => {
       t.error(err)
@@ -120,7 +129,7 @@ test('should get EGG #1 - get after claimed', async (t) => {
       {
         method: 'POST',
         url: '/claim',
-        payload: { key: '1' },
+        payload: { key: initialEggs[0].key },
       },
       (err, response) => {
         t.error(err)
@@ -136,7 +145,7 @@ test('should get EGG #1 - get after claimed', async (t) => {
     server.inject(
       {
         method: 'GET',
-        url: '/eggs/1',
+        url: `/eggs/${initialEggs[0].key}`,
         headers: {
           Authorization: `${token}`,
         },
@@ -148,8 +157,10 @@ test('should get EGG #1 - get after claimed', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.ok(response.json().username)
-        t.same(response.json().score, 0)
+        t.same(response.json().key, initialEggs[0].key)
+        t.same(response.json().index, initialEggs[0].index)
+        t.same(response.json().score, initialEggs[0].score)
+        t.same(response.json().username, initialEggs[0].username)
         t.notOk(response.json().token)
         t.end()
 

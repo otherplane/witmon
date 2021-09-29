@@ -27,8 +27,9 @@ test('should claim EGG #0', (t) => {
       )
       t.ok(response.json().token)
       t.ok(response.json().username)
-      t.same(response.json().key, initalEggs[0].key)
-      t.same(response.json().score, 0)
+      t.same(response.json().key, initialEggs[0].key)
+      t.same(response.json().index, initialEggs[0].index)
+      t.same(response.json().score, initialEggs[0].score)
       t.end()
     }
   )
@@ -53,7 +54,7 @@ test('should NOT claim EGG #12345 - does not exist', (t) => {
   )
 })
 
-test('should NOT claim EGG #1 - twice', async (t) => {
+test('should NOT claim EGG #0 - twice', async (t) => {
 
   // Before test: Claim an egg
   await new Promise((resolve, reject) => {
@@ -61,7 +62,7 @@ test('should NOT claim EGG #1 - twice', async (t) => {
       {
         method: 'POST',
         url: '/claim',
-        payload: { key: '1' },
+        payload: { key: initialEggs[0].key },
       },
       (err, response) => {
         t.error(err)
@@ -72,9 +73,10 @@ test('should NOT claim EGG #1 - twice', async (t) => {
         )
         t.ok(response.json().token)
         t.ok(response.json().username)
-        t.same(response.json().key, initalEggs[0].key)
-        t.same(response.json().score, 0)
-        
+        t.same(response.json().key, initialEggs[0].key)
+        t.same(response.json().index, initialEggs[0].index)
+        t.same(response.json().score, initialEggs[0].score)
+
         resolve(true)
       }
     )
@@ -85,7 +87,7 @@ test('should NOT claim EGG #1 - twice', async (t) => {
       {
         method: 'POST',
         url: '/claim',
-        payload: { key: '1' },
+        payload: { key: initialEggs[0].key },
       },
       (err, response) => {
         t.error(err)
