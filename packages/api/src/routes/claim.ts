@@ -28,13 +28,13 @@ const claim: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
       if (!egg) {
         return reply
-          .status(400)
+          .status(404)
           .send(new Error(`Egg does not exist (key: ${key})`))
       }
 
       if (egg.token) {
         return reply
-          .status(400)
+          .status(405)
           .send(new Error(`Egg has already been claimed (key ${key})`))
       }
 

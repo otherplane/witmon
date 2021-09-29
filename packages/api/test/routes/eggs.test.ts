@@ -1,16 +1,6 @@
-import { test, beforeEach, before, teardown } from 'tap'
-import { app } from '../../src/app'
-import { Egg } from '../../src/types'
-import Fastify from 'fastify'
-import { FastifyInstance } from 'fastify/types/instance'
-import { MongoClient } from 'mongodb'
+import { test } from 'tap'
 
-const mongodb = require('mongodb')
-
-const initalEggs: [Egg] = require('../../src/eggs.json')
-
-let server: FastifyInstance
-let client: MongoClient
+import { server } from './helper'
 
 const VALID_HEADER_TOKEN_EGG_1 = {
   Authorization:
@@ -23,55 +13,6 @@ const VALID_HEADER_TOKEN_EGG_12345 = {
 const INVALID_HEADER_TOKEN = {
   Authorization: 'foo',
 }
-
-before(async () => {
-  await new Promise((resolve, reject) => {
-    mongodb.MongoClient.connect(process.env.MONGO_URI).then(
-      async (dbClient: MongoClient) => {
-        client = dbClient
-        resolve(true)
-      }
-    )
-  })
-})
-
-teardown(async () => {
-  await client.close()
-})
-
-beforeEach(async (t) => {
-  // Drop mongodb `eggs` collection
-  await client.db(process.env.MONGO_INITDB_DATABASE).collection('eggs').drop()
-
-  server = Fastify().register(app)
-
-  t.teardown(() => {
-    server.close()
-  })
-})
-
-test('should claim EGG #1', (t) => {
-  server.inject(
-    {
-      method: 'POST',
-      url: '/claim',
-      payload: { key: '1' },
-    },
-    (err, response) => {
-      t.error(err)
-      t.equal(response.statusCode, 200)
-      t.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8'
-      )
-      t.ok(response.json().token)
-      t.ok(response.json().username)
-      t.same(response.json().key, initalEggs[0].key)
-      t.same(response.json().score, 0)
-      t.end()
-    }
-  )
-})
 
 test('should NOT get EGG #1 - no authorization header', (t) => {
   server.inject(
@@ -170,7 +111,7 @@ test('should NOT get EGG #1 - valid token but egg not claimed yet', (t) => {
   )
 })
 
-test('should get EGG #1 - first claim, then get', async (t) => {
+test('should get EGG #1 - get after claimed', async (t) => {
   let token: string
 
   // Before test: Claim an egg
