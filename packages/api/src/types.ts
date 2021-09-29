@@ -7,6 +7,7 @@ export type ClaimEggParams = Static<typeof ClaimEggParams>
 
 export const Egg = Type.Object({
   key: Type.String(),
+  index: Type.Number(),
   username: Type.Optional(Type.String()),
   token: Type.Optional(Type.String()),
   score: Type.Number(),

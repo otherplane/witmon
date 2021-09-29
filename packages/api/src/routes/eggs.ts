@@ -48,6 +48,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
       return reply.status(200).send({
         key: egg.key,
+        index: egg.index,
         username: egg.username,
         score: egg.score,
       })
