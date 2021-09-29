@@ -6,7 +6,7 @@ MONGO_NON_ROOT_ROLE="${MONGO_NON_ROOT_ROLE:-readWrite}"
 
 echo ">>>>>>> Creating database and users..."
 if [ -n "${MONGO_DATABASE_USERNAME:-}" ] && [ -n "${MONGO_DATABASE_PASSWORD:-}" ]; then
-	mongo -u $MONGO_INITDB_ROOT_USERNAME -p $MONGO_INITDB_ROOT_PASSWORD <<-EOF
+	mongo admin -u $MONGO_INITDB_ROOT_USERNAME -p $MONGO_INITDB_ROOT_PASSWORD <<-EOF
 		db=db.getSiblingDB("$MONGO_INITDB_DATABASE");
 		use $MONGO_INITDB_DATABASE
 		db.createUser({

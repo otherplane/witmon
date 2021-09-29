@@ -39,7 +39,6 @@ const app: FastifyPluginAsync<AppOptions> = async (
   fastify.setValidatorCompiler(({ schema }) => {
     return ajv.compile(schema)
   })
-
   // MongoDB
   fastify.register(fastifyMongodb, {
     // force to close the mongodb connection when app stopped
@@ -65,8 +64,10 @@ const app: FastifyPluginAsync<AppOptions> = async (
     } catch (error) {
       throw Error('could not create initial eggs in mongo db')
     }
-
-    next()
+  })
+  // JWT
+  fastify.register(fastifyJwt, {
+    secret: process.env.JWT_SECRET as string,
   })
 
   // JWT

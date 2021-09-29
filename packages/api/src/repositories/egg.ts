@@ -59,6 +59,16 @@ export class EggRepository {
       // lastTimeImproved: document.lastTimeImproved
     }))
   }
+  
+  // public improve (incubatedKey: string, incubatorKey: string) {
+  //   this.collection.updateOne(
+  //     { incubatedKey },
+  //     {
+  //       $push: { improvedBy: { key: incubatorKey, timestamp: Date.now() } },
+  //       lastTimeImproved: Date.now()
+  //     }
+  //   )
+  // }
 
   // public improve (incubatedKey: string, incubatorKey: string) {
   //   this.collection.updateOne(

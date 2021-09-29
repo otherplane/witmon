@@ -35,6 +35,7 @@
     "@types/tap": "^15.0.0",
     "concurrently": "^6.0.0",
     "cross-env": "^7.0.3",
+    "fastify-cli": "^2.13.0",
     "fastify-tsconfig": "^1.0.1",
     "prettier": "^2.4.1",
     "tap": "^15.0.9",
