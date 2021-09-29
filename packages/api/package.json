@@ -12,7 +12,7 @@
     "build:ts": "tsc",
     "build": "yarn build:ts",
     "docker:build": "lerna run docker:build",
-    "lint": "prettier-standard --format",
+    "lint": "prettier --write .",
     "test": "yarn build:ts && tsc -p test/tsconfig.test.json && cross-env TS_NODE_FILES=true env $(cat .env) tap --ts test/**/*.test.ts --no-coverage"
   },
   "dependencies": {
@@ -34,7 +34,7 @@
     "concurrently": "^6.0.0",
     "cross-env": "^7.0.3",
     "fastify-tsconfig": "^1.0.1",
-    "prettier-standard": "^16.4.1",
+    "prettier": "^2.4.1",
     "tap": "^15.0.9",
     "ts-node": "^10.0.0",
     "typescript": "^4.2.4"
