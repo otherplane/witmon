@@ -19,7 +19,7 @@ export class IncubationRepository {
   }
 
   public async getLast(
-    search: { to: string } | { from: string }
+    search: { from: string } | { to: string } | { from: string; to: string }
   ): Promise<Incubation | null> {
     const incubation = await this.collection.findOne(search, {
       sort: { timestamp: -1 },

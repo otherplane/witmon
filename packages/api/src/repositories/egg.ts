@@ -5,6 +5,7 @@ import {
   adjectives,
   animals,
 } from 'unique-names-generator'
+// import { writeFileSync } from 'fs'
 
 import { Egg } from '../types'
 
@@ -69,6 +70,8 @@ export class EggRepository {
       await this.create(egg)
       eggs.push(egg)
     }
+
+    // writeFileSync('bootstrap.json', JSON.stringify(eggs, null, 4))
 
     return eggs
   }

@@ -13,7 +13,7 @@
     "build": "yarn build:ts",
     "docker:build": "lerna run docker:build",
     "lint": "prettier --write .",
-    "test": "yarn build:ts && tsc -p test/tsconfig.test.json && cross-env TS_NODE_FILES=true env $(cat .env) tap --ts test/**/*.test.ts --no-coverage"
+    "test": "yarn build:ts && tsc -p test/tsconfig.test.json && cross-env TS_NODE_FILES=true env $(cat ./test/.env) tap --ts test/**/*.test.ts --no-coverage"
   },
   "dependencies": {
     "@sinclair/typebox": "^0.20.5",

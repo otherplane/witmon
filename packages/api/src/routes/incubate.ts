@@ -13,14 +13,14 @@ import {
 const INCUBATION_DURATION = process.env.INCUBATION_DURATION
   ? parseInt(process.env.INCUBATION_DURATION)
   : 5 * 60 * 1000
-// const INCUBATION_COOLDOWN = process.env.INCUBATION_COOLDOWN
-//   ? parseInt(process.env.INCUBATION_COOLDOWN)
-//   : 2 * 60 * 60 * 1000
-const INCUBATION_POINTS_SELF = process.env.INCUBATION_COOLDOWN
+const INCUBATION_COOLDOWN = process.env.INCUBATION_COOLDOWN
   ? parseInt(process.env.INCUBATION_COOLDOWN)
+  : 2 * 60 * 60 * 1000
+const INCUBATION_POINTS_SELF = process.env.INCUBATION_POINTS_SELF
+  ? parseInt(process.env.INCUBATION_POINTS_SELF)
   : 20
-const INCUBATION_POINTS_OTHERS = process.env.INCUBATION_COOLDOWN
-  ? parseInt(process.env.INCUBATION_COOLDOWN)
+const INCUBATION_POINTS_OTHERS = process.env.INCUBATION_POINTS_OTHERS
+  ? parseInt(process.env.INCUBATION_POINTS_OTHERS)
   : 100
 
 const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
@@ -43,43 +43,95 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         reply
       ) => {
         // Check 1: token is valid
-        let eggId: string
+        let fromId: string
         try {
           const decoded: JwtVerifyPayload = fastify.jwt.verify(
             request.headers.authorization as string
           )
-          console.log('decoded--------------->', decoded)
-          eggId = decoded.id
+          fromId = decoded.id
         } catch (err) {
-          console.log('ERR:____:> ', err)
           return reply.status(403).send(new Error(`Forbidden: invalid token`))
         }
 
         // Check 2 (unreachable): valid server issued token refers to non-existent egg
-        const tokenEgg = await eggRepository.get(eggId)
-        if (!tokenEgg) {
+        const fromEgg = await eggRepository.get(fromId)
+        if (!fromEgg) {
           return reply
             .status(404)
-            .send(new Error(`Egg does not exist (key: ${eggId})`))
+            .send(new Error(`Egg does not exist (key: ${fromId})`))
         }
 
-        // Check 3: target egg exist
-        const target = await eggRepository.get(request.body.target)
-        if (!target) {
+        // Check 3 (unreachable): incubating player egg has been claimed
+        if (!fromEgg.token) {
           return reply
-            .status(400)
-            .send(new Error(`Wrong target egg with key ${target}`))
+            .status(409)
+            .send(
+              new Error(`Player egg should be claimed before incubating others`)
+            )
         }
 
-        // Check 4: incubator can incubate (is free)
+        // Check 4: target egg exist
+        const toEgg = await eggRepository.get(request.body.target)
+        if (!toEgg) {
+          return reply
+            .status(404)
+            .send(new Error(`Wrong target egg with key ${toEgg}`))
+        }
 
-        // Check 5: target egg can be incubated (is free)
+        // Check 5: target egg is claimed
+        if (!toEgg.token) {
+          return reply
+            .status(409)
+            .send(new Error(`Target egg has not been claimed yet`))
+        }
 
-        // Check 6: cooldown period from incubator to target hass elapsed
+        const currentTimestamp = Date.now()
+
+        // Check 6: incubator can incubate (is free)
+        const incubatingLast = await incubationRepository.getLast({
+          from: fromId,
+        })
+        if (incubatingLast && incubatingLast.ends > currentTimestamp) {
+          return reply
+            .status(409)
+            .send(new Error(`Players can only incubate 1 egg at a time`))
+        }
+
+        // Check 7: target egg can be incubated (is free)
+        const incubatedByLast = await incubationRepository.getLast({
+          to: toEgg.key,
+        })
+        if (incubatedByLast && incubatedByLast.ends > currentTimestamp) {
+          return reply
+            .status(409)
+            .send(new Error(`Target egg is already being incubated`))
+        }
+
+        // Check 8: cooldown period from incubator to target has elapsed
+        const incubationLast = await incubationRepository.getLast({
+          from: fromId,
+          to: toEgg.key,
+        })
+
+        if (
+          incubationLast &&
+          currentTimestamp < incubationLast.ends + INCUBATION_COOLDOWN
+        ) {
+          const remainingCooldown =
+            (currentTimestamp - incubationLast.ends - INCUBATION_COOLDOWN) /
+            (1000 * 60)
+          return reply
+            .status(409)
+            .send(
+              new Error(
+                `Target egg needs ${remainingCooldown} min to cooldown before being incubated again`
+              )
+            )
+        }
 
         // Compute points:
         let points
-        if (eggId === target.key) {
+        if (fromId === toEgg.key) {
           points = INCUBATION_POINTS_SELF
         } else {
           // TODO: Add factor to decrease points if previous incubations exist
@@ -87,13 +139,12 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         }
 
         // Create and return `incubation` object
-        const timestamp = Date.now()
         const incubation = await incubationRepository.create({
-          ends: timestamp + INCUBATION_DURATION,
-          from: eggId,
+          ends: currentTimestamp + INCUBATION_DURATION,
+          from: fromId,
           points,
-          timestamp,
-          to: target.key,
+          timestamp: currentTimestamp,
+          to: toEgg.key,
         })
 
         return reply.status(200).send(incubation)
