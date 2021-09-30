@@ -1,0 +1,26 @@
+{
+  "name": "witmon-solidity-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Witmon Solidity Contracts",
+  "workspaces": [],
+  "devDependencies": {
+    "eslint": "7.24.0",
+    "eslint-config-standard": "16.0.2",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "5.1.0",
+    "eslint-plugin-standard": "5.0.0",
+    "solhint": "3.3.4"
+  },
+  "scripts": {
+    "fmt": "solhint --max-warnings 0 \"contracts/**/*.sol\" && eslint ./test && eslint ./scripts/*.js && solhint \"test/**/*.sol\"",
+    "fmt!": "solhint --max-warnings 0 \"contracts/**/*.sol\" --fix && eslint ./test --fix && eslint ./scripts/*.js --fix && solhint \"test/**/*.sol\" --fix"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "witnet-solidity-bridge": "~0.5.0"
+  }
+}
