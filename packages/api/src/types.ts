@@ -44,8 +44,16 @@ export const EggProtected = Type.Object({
 })
 export type EggProtected = Static<typeof EggProtected>
 
-// export const ImproveInput = Type.Object({
-//   incubated: Type.String(),
-//   incubator: Type.String(),
-// })
-// export type ImproveInput = Static<typeof ImproveInput>
+export const ImproveParams = Type.Object({
+  target: Type.String(),
+})
+export type ImproveParams = Static<typeof ImproveParams>
+
+export const Incubation = Type.Object({
+  to: Type.String(),
+  from: Type.String(),
+  timestamp: Type.Number(),
+  duration: Type.Number(),
+  points: Type.Number(),
+})
+export type Incubation = Static<typeof Incubation>

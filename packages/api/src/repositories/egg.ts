@@ -80,7 +80,10 @@ export class EggRepository {
       throw new Error(`Egg with key ${egg.key} already exists`)
     }
 
-    await this.collection.insertOne(egg)
+    const success = await this.collection.insertOne(egg)
+
+    if (!success.acknowledged)
+      throw new Error(`Egg could not be created (key: ${egg.key})`)
 
     return egg
   }
