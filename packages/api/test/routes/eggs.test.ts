@@ -1,27 +1,13 @@
 import { test } from 'tap'
 
-import { server } from './helper'
-
-const initialEggs = [
-  {
-    key: 'ef12efbd765f9ad3',
-    index: 0,
-    username: 'calm-bison',
-    score: 0,
-  },
-]
-
-const VALID_HEADER_TOKEN_EGG_0 = {
-  Authorization:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVmMTJlZmJkNzY1ZjlhZDMiLCJpYXQiOjE2MzI5MzI0NjN9.Koji-yz6dQyYpsGgRKiN_PEM-nvTQqXtP8Mx8icIHYQ',
-}
-const VALID_HEADER_TOKEN_EGG_12345 = {
-  Authorization:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1IiwiaWF0IjoxNjMyOTE4MDA5fQ.kzORJoQhRdB0l7kKgN7nL2-E_gTfFr69C0uS6-CF8Tk',
-}
-const INVALID_HEADER_TOKEN = {
-  Authorization: 'foo',
-}
+import {
+  claimEgg,
+  initialEggs,
+  INVALID_HEADER_TOKEN,
+  server,
+  VALID_HEADER_TOKEN_EGG_0,
+  VALID_HEADER_TOKEN_EGG_12345,
+} from './helper'
 
 test('should NOT get EGG #1 - no authorization header', (t) => {
   server.inject(
@@ -121,27 +107,10 @@ test('should NOT get EGG #1 - valid token but egg not claimed yet', (t) => {
 })
 
 test('should get EGG #1 - get after claimed', async (t) => {
-  let token: string
-
   // Before test: Claim an egg
-  await new Promise((resolve, reject) => {
-    server.inject(
-      {
-        method: 'POST',
-        url: '/claim',
-        payload: { key: initialEggs[0].key },
-      },
-      (err, response) => {
-        t.error(err)
-        t.equal(response.statusCode, 200)
-        token = response.json().token
+  const token = await claimEgg(t)(0)
 
-        resolve(true)
-      }
-    )
-  })
-
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     server.inject(
       {
         method: 'GET',
@@ -173,33 +142,14 @@ test('should get EGG #1 - get after claimed', async (t) => {
 })
 
 test('should list EGGs - list after claiming', async (t) => {
-  let token: string
-  let username: string
-  let index: number
-  let score: number
+  let username: string = initialEggs[0].username
+  let index: number = initialEggs[0].index
+  let score: number = initialEggs[0].index
 
   // Before test: Claim an egg
-  await new Promise((resolve, reject) => {
-    server.inject(
-      {
-        method: 'POST',
-        url: '/claim',
-        payload: { key: initialEggs[0].key },
-      },
-      (err, response) => {
-        t.error(err)
-        t.equal(response.statusCode, 200)
-        token = response.json().token
-        username = response.json().username
-        index = response.json().index
-        score = response.json().score
+  const token = await claimEgg(t)(0)
 
-        resolve(true)
-      }
-    )
-  })
-
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     server.inject(
       {
         method: 'GET',
