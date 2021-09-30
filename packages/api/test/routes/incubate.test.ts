@@ -1,5 +1,9 @@
 import { test } from 'tap'
-import { INCUBATION_COOLDOWN, INCUBATION_DURATION } from '../../src/constants'
+import {
+  INCUBATION_COOLDOWN,
+  INCUBATION_DURATION,
+  INCUBATION_POINTS_OTHERS,
+} from '../../src/constants'
 
 import {
   claimEgg,
@@ -42,6 +46,64 @@ test('should return incubation object after incubate itself', async (t) => {
           response.json().timestamp + INCUBATION_DURATION
         )
         t.same(response.json().points, 20)
+
+        t.end()
+
+        resolve(true)
+      }
+    )
+  })
+})
+
+test('should sum poionts to incubator and incubated', async (t) => {
+  // Before test: Claim an egg
+  const token0 = await claimEgg(t)(0)
+  await claimEgg(t)(1)
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'POST',
+        url: '/eggs/incubate',
+        payload: {
+          target: initialEggs[1].key,
+        },
+        headers: {
+          Authorization: `${token0}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        t.same(response.json().points, INCUBATION_POINTS_OTHERS)
+
+        resolve(true)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs`,
+        headers: {
+          Authorization: `${token0}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        t.same(response.json()[0].score, INCUBATION_POINTS_OTHERS)
+        t.same(response.json()[1].score, INCUBATION_POINTS_OTHERS)
 
         t.end()
 

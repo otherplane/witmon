@@ -96,12 +96,7 @@ export class EggRepository {
   }
 
   public async get(key: string): Promise<Egg | null> {
-    const egg = await this.collection.findOne({ key })
-    if (egg) {
-      return egg as Egg
-    } else {
-      return null
-    }
+    return ((await this.collection.findOne({ key })) as Egg) || null
   }
 
   public async list(): Promise<Array<Egg>> {
@@ -116,5 +111,11 @@ export class EggRepository {
       score: egg.score,
       username: egg.username,
     }))
+  }
+
+  public async addPoints(key: string, points: number): Promise<Egg | null> {
+    await this.collection.updateOne({ key }, { $inc: { score: points } })
+
+    return await this.get(key)
   }
 }

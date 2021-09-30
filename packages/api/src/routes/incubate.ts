@@ -130,6 +130,8 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           points = INCUBATION_POINTS_OTHERS
         }
 
+        await eggRepository.addPoints(toEgg.key, points)
+
         // Create and return `incubation` object
         const incubation = await incubationRepository.create({
           ends: currentTimestamp + INCUBATION_DURATION,
