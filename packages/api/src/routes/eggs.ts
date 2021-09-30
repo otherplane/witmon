@@ -37,9 +37,8 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       if (eggId !== key)
         return reply.status(403).send(new Error(`Forbidden: invalid token`))
 
-      const egg = await repository.get(key)
-
       // Unreachable: valid server issued token refers to non-existent egg
+      const egg = await repository.get(key)
       if (!egg) {
         return reply
           .status(404)
