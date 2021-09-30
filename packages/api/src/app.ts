@@ -63,9 +63,9 @@ const app: FastifyPluginAsync<AppOptions> = async (
   })
 
   // CORS
-  fastify.register(require('fastify-cors'), { 
+  fastify.register(require('fastify-cors'), {
     origin: '*',
-    methods: ["GET", "POST"]
+    methods: ['GET', 'POST'],
   })
 
   // JWT
