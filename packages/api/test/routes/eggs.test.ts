@@ -3,12 +3,12 @@ import { test } from 'tap'
 import { server } from './helper'
 
 const initialEggs = [
-    {
-        key: 'ef12efbd765f9ad3',
-        index: 0,
-        username: 'calm-bison',
-        score: 0,
-    },
+  {
+    key: 'ef12efbd765f9ad3',
+    index: 0,
+    username: 'calm-bison',
+    score: 0,
+  },
 ]
 
 const VALID_HEADER_TOKEN_EGG_0 = {
@@ -170,26 +170,96 @@ test('should get EGG #1 - get after claimed', async (t) => {
   })
 })
 
-// test('GET `/eggs` route', t => {
-//   t.plan(4)
+test('should list EGGs - list after claiming', async (t) => {
+  let token: string
+  let username: string
+  let index: number
+  let score: number
 
-//   const fastify = build()
+  // Before test: Claim an egg
+  await new Promise((resolve, reject) => {
+    server.inject(
+      {
+        method: 'POST',
+        url: '/claim',
+        payload: { key: initialEggs[0].key },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        token = response.json().token
+        username = response.json().username
+        index = response.json().index
+        score = response.json().score
 
-//   t.teardown(() => fastify.close())
+        resolve(true)
+      }
+    )
+  })
 
-//   fastify.inject(
-//     {
-//       method: 'GET',
-//       url: '/eggs'
-//     },
-//     (err, response) => {
-//       t.error(err)
-//       t.equal(response.statusCode, 200)
-//       t.equal(
-//         response.headers['content-type'],
-//         'application/json; charset=utf-8'
-//       )
-//       t.same(response.json(), initalEggs)
-//     }
-//   )
-// })
+  await new Promise((resolve, reject) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        t.same(response.json(), [{ index, username, score }])
+        t.notOk(response.json()[0].token)
+        t.notOk(response.json()[0].key)
+        t.end()
+
+        resolve(true)
+      }
+    )
+  })
+})
+
+test('should NOT list EGGs - invalid token', (t) => {
+  server.inject(
+    {
+      method: 'GET',
+      url: `/eggs`,
+      headers: {
+        Authorization: `${INVALID_HEADER_TOKEN}`,
+      },
+    },
+    (err, response) => {
+      t.error(err)
+      t.equal(response.statusCode, 403)
+      t.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8'
+      )
+      t.end()
+    }
+  )
+})
+
+test('should NOT list EGGs - valid token but non-existent egg', (t) => {
+  server.inject(
+    {
+      method: 'GET',
+      url: `/eggs`,
+      headers: VALID_HEADER_TOKEN_EGG_12345,
+    },
+    (err, response) => {
+      t.error(err)
+      t.equal(response.statusCode, 404)
+      t.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8'
+      )
+      t.end()
+    }
+  )
+})

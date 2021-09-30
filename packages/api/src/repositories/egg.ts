@@ -92,11 +92,14 @@ export class EggRepository {
       throw new Error(`Egg does not exist (key: ${egg.key})`)
     }
 
-    await this.collection.updateOne(
+    const success = await this.collection.updateOne(
       { key: egg.key },
       { $set: egg },
       { upsert: false }
     )
+
+    if (!success.acknowledged)
+      throw new Error(`Egg could not be updated (key: ${egg.key})`)
 
     return egg
   }
@@ -111,15 +114,16 @@ export class EggRepository {
   }
 
   public async list(keys?: Array<string>): Promise<Array<Egg>> {
-    const documents = keys
-      ? await this.collection.find({ key: { $in: keys } })
-      : await this.collection.find()
+    // Get only claimed eggs
+    const eggs = await this.collection.find({
+      token: { $exists: true },
+    })
 
-    return (await documents.toArray()).map((document) => ({
-      key: document.key,
-      index: document.id,
-      score: document.score,
-      username: document.username,
+    return (await eggs.toArray()).map((egg) => ({
+      index: egg.index,
+      key: egg.key,
+      score: egg.score,
+      username: egg.username,
       // improvedBy: document.improvedBy,
       // lastTimeImproved: document.lastTimeImproved
     }))
