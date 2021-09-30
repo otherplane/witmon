@@ -18,10 +18,13 @@ export class IncubationRepository {
     return incubation
   }
 
-  public async getLast(search: {to: string} | {from: string}): Promise<Incubation | null> {
-    const incubation = await this.collection.findOne(search, { sort: { timestamp: -1 }})
+  public async getLast(
+    search: { to: string } | { from: string }
+  ): Promise<Incubation | null> {
+    const incubation = await this.collection.findOne(search, {
+      sort: { timestamp: -1 },
+    })
 
     return incubation as Incubation
   }
-
 }

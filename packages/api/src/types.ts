@@ -37,10 +37,10 @@ export const EggProtected = Type.Object({
 })
 export type EggProtected = Static<typeof EggProtected>
 
-export const ImproveParams = Type.Object({
+export const IncubateParams = Type.Object({
   target: Type.String(),
 })
-export type ImproveParams = Static<typeof ImproveParams>
+export type IncubateParams = Static<typeof IncubateParams>
 
 export const Incubation = Type.Object({
   to: Type.String(),

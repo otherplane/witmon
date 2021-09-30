@@ -5,7 +5,7 @@ import { IncubationRepository } from '../repositories/incubation'
 
 import {
   AuthorizationHeader,
-  ImproveParams,
+  IncubateParams,
   Incubation,
   JwtVerifyPayload,
 } from '../types'
@@ -28,18 +28,18 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   const eggRepository = new EggRepository(fastify.mongo.db)
   const incubationRepository = new IncubationRepository(fastify.mongo.db)
 
-  fastify.post<{ Body: ImproveParams; Reply: Incubation | Error }>(
+  fastify.post<{ Body: IncubateParams; Reply: Incubation | Error }>(
     '/eggs/incubate',
     {
       schema: {
-        body: ImproveParams,
+        body: IncubateParams,
         headers: AuthorizationHeader,
         response: {
           200: Incubation,
         },
       },
       handler: async (
-        request: FastifyRequest<{ Body: ImproveParams }>,
+        request: FastifyRequest<{ Body: IncubateParams }>,
         reply
       ) => {
         // Check 1: token is valid
@@ -48,8 +48,10 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           const decoded: JwtVerifyPayload = fastify.jwt.verify(
             request.headers.authorization as string
           )
+          console.log('decoded--------------->', decoded)
           eggId = decoded.id
         } catch (err) {
+          console.log('ERR:____:> ', err)
           return reply.status(403).send(new Error(`Forbidden: invalid token`))
         }
 
