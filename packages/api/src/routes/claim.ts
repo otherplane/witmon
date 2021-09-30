@@ -27,11 +27,11 @@ const claim: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           .send(new Error(`Egg does not exist (key: ${key})`))
       }
 
-      if (egg.token) {
-        return reply
-          .status(405)
-          .send(new Error(`Egg has already been claimed (key ${key})`))
-      }
+      // if (egg.token) {
+      //   return reply
+      //     .status(405)
+      //     .send(new Error(`Egg has already been claimed (key ${key})`))
+      // }
 
       const token = fastify.jwt.sign({ id: key })
 

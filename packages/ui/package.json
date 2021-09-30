@@ -8,8 +8,10 @@
     "lint": "prettier-standard --format"
   },
   "dependencies": {
+    "axios": "^0.21.4",
     "eslint-plugin-vue": "^7.18.0",
     "pinia": "^2.0.0-rc.9",
+    "sass": "^1.42.1",
     "vue": "^3.2.6",
     "vue-router": "4"
   },
@@ -20,6 +22,7 @@
     "postcss": "^8.3.6",
     "prettier-standard": "^16.4.1",
     "tailwindcss": "^2.2.15",
-    "vite": "^2.5.4"
+    "vite": "^2.5.4",
+    "vite-plugin-components": "^0.13.3"
   }
 }
