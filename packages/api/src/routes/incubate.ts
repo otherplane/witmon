@@ -1,27 +1,19 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 
+import {
+  INCUBATION_COOLDOWN,
+  INCUBATION_DURATION,
+  INCUBATION_POINTS_OTHERS,
+  INCUBATION_POINTS_SELF,
+} from '../constants'
 import { EggRepository } from '../repositories/egg'
 import { IncubationRepository } from '../repositories/incubation'
-
 import {
   AuthorizationHeader,
   IncubateParams,
   Incubation,
   JwtVerifyPayload,
 } from '../types'
-
-const INCUBATION_DURATION = process.env.INCUBATION_DURATION
-  ? parseInt(process.env.INCUBATION_DURATION)
-  : 5 * 60 * 1000
-const INCUBATION_COOLDOWN = process.env.INCUBATION_COOLDOWN
-  ? parseInt(process.env.INCUBATION_COOLDOWN)
-  : 2 * 60 * 60 * 1000
-const INCUBATION_POINTS_SELF = process.env.INCUBATION_POINTS_SELF
-  ? parseInt(process.env.INCUBATION_POINTS_SELF)
-  : 20
-const INCUBATION_POINTS_OTHERS = process.env.INCUBATION_POINTS_OTHERS
-  ? parseInt(process.env.INCUBATION_POINTS_OTHERS)
-  : 100
 
 const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')

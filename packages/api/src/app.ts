@@ -22,7 +22,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   fastify,
   opts
 ): Promise<void> => {
-  // // HTTPS support
+  // TODO: Add HTTPS support
   // {
   //   https: {
   //     key: fs.readFileSync(path.join(__dirname, 'key.pem')),

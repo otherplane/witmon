@@ -2,7 +2,6 @@ import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 
 import { EggRepository } from '../repositories/egg'
 import { IncubationRepository } from '../repositories/incubation'
-
 import {
   AuthorizationHeader,
   Egg,
@@ -135,69 +134,3 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 }
 
 export default eggs
-
-// fastify.post<{ Body: ImproveInput; Reply: Egg | Error }>('/eggs/improve', {
-//   schema: {
-//     body: ImproveInput,
-//     response: {
-//       200: Egg
-//     }
-//   },
-//   handler: async (
-//     request: FastifyRequest<{ Body: ImproveInput }>,
-//     reply
-//   ) => {
-//     const incubated = await repository.get(request.body.incubated)
-//     const incubator = await repository.get(request.body.incubator)
-
-//     if (!incubated) {
-//       return reply
-//         .status(400)
-//         .send(
-//           new Error(
-//             `Wrong incubated egg with key ${request.body.incubated}`
-//           )
-//         )
-//     }
-
-//     if (!incubator) {
-//       return reply
-//         .status(400)
-//         .send(
-//           new Error(
-//             `Wrong incubator egg with key ${request.body.incubator}`
-//           )
-//         )
-//     }
-
-//     // Check if incubated is being incubated right now
-//     if (Date.now() < incubated.lastTimeImproved + IMPROVE_PERIOD) {
-//       const lastImprovedByIncubator = incubated.improvedBy
-//         .filter(egg => egg.key === incubator.key)
-//         .sort((egg1, egg2) => {
-//           return egg2.timestamp - egg1.timestamp
-//         })[0]
-
-//       if (
-//         !lastImprovedByIncubator ||
-//         Date.now() < lastImprovedByIncubator.timestamp + DELAY_TO_IMPROVE
-//       ) {
-//         repository.improve(incubated.key, incubator.key)
-//       } else {
-//         return reply
-//           .status(401)
-//           .send(
-//             new Error(
-//               `Egg ${incubated.key} has to wait to incubate this egg again`
-//             )
-//           )
-//       }
-//     } else {
-//       return reply
-//         .status(401)
-//         .send(
-//           new Error(`Egg ${incubated.key} is being incubated right now`)
-//         )
-//     }
-//   }
-// })

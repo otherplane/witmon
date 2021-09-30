@@ -5,23 +5,9 @@ import {
   adjectives,
   animals,
 } from 'unique-names-generator'
-// import { writeFileSync } from 'fs'
 
+import { EGG_KEY_LENGTH_BYTES, EGG_KEY_SALT } from '../constants'
 import { Egg } from '../types'
-
-/**
- * Constants. These can be customized through environment variables.
- */
-// Byte length of egg keys. This can be adjusted for usability vs. security trade-offs.
-let EGG_KEY_LENGTH_BYTES: number = process.env.EGG_KEY_LENGTH_BYTES
-  ? parseInt(process.env.EGG_KEY_LENGTH_BYTES)
-  : 8
-// Ensure that egg keys byte length is 8 <= x < 30
-if (EGG_KEY_LENGTH_BYTES < 8 || EGG_KEY_LENGTH_BYTES > 30) {
-  EGG_KEY_LENGTH_BYTES = 8
-}
-// Base string to use for salting the deterministic egg key derivation.
-const EGG_KEY_SALT: string = process.env.EGG_KEY_SALT || ''
 
 export class EggRepository {
   private collection: Collection
@@ -40,7 +26,8 @@ export class EggRepository {
     force: Boolean = false
   ): Promise<Array<Egg> | null> {
     // Tell if the collection is already bootstrapped
-    const isAlreadyBootstrapped = (await this.collection.count()) > 0
+    const isAlreadyBootstrapped =
+      (await this.collection.estimatedDocumentCount()) > 0
 
     // Prevent accidental bootstrapping if the collection is already bootstrapped
     if (isAlreadyBootstrapped && !force) {
@@ -70,8 +57,6 @@ export class EggRepository {
       await this.create(egg)
       eggs.push(egg)
     }
-
-    // writeFileSync('bootstrap.json', JSON.stringify(eggs, null, 4))
 
     return eggs
   }
@@ -119,7 +104,7 @@ export class EggRepository {
     }
   }
 
-  public async list(keys?: Array<string>): Promise<Array<Egg>> {
+  public async list(): Promise<Array<Egg>> {
     // Get only claimed eggs
     const eggs = await this.collection.find({
       token: { $exists: true },
@@ -130,18 +115,6 @@ export class EggRepository {
       key: egg.key,
       score: egg.score,
       username: egg.username,
-      // improvedBy: document.improvedBy,
-      // lastTimeImproved: document.lastTimeImproved
     }))
   }
-
-  // public improve (incubatedKey: string, incubatorKey: string) {
-  //   this.collection.updateOne(
-  //     { incubatedKey },
-  //     {
-  //       $push: { improvedBy: { key: incubatorKey, timestamp: Date.now() } },
-  //       lastTimeImproved: Date.now()
-  //     }
-  //   )
-  // }
 }

@@ -1,4 +1,5 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
+
 import { Egg, ClaimEggParams } from '../types'
 import { EggRepository } from '../repositories/egg'
 

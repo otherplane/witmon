@@ -42,9 +42,6 @@ teardown(async () => {
 
 beforeEach(async (t) => {
   // Drop mongodb `eggs` collection
-  // process.env.INCUBATION_COOLDOWN = "2000"
-  // process.env.INCUBATION_DURATION = "2000"
-
   try {
     await client.db(process.env.MONGO_INITDB_DATABASE).collection('eggs').drop()
   } catch (err) {
