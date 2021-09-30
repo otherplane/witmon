@@ -157,11 +157,13 @@ test('should get EGG #1 - get after claimed', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.same(response.json().key, initialEggs[0].key)
-        t.same(response.json().index, initialEggs[0].index)
-        t.same(response.json().score, initialEggs[0].score)
-        t.same(response.json().username, initialEggs[0].username)
-        t.notOk(response.json().token)
+        t.same(response.json().egg.key, initialEggs[0].key)
+        t.same(response.json().egg.index, initialEggs[0].index)
+        t.same(response.json().egg.score, initialEggs[0].score)
+        t.same(response.json().egg.username, initialEggs[0].username)
+        t.notOk(response.json().incubating)
+        t.notOk(response.json().incubatedBy)
+        t.notOk(response.json().egg.token)
         t.end()
 
         resolve(true)
