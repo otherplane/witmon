@@ -215,3 +215,55 @@ test('should NOT list EGGs - valid token but non-existent egg', (t) => {
     }
   )
 })
+
+test('should get EGG #1 - get after incubation', async (t) => {
+  // Before test: Claim an egg
+  const token = await claimEgg(t)(0)
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'POST',
+        url: '/eggs/incubate',
+        payload: {
+          target: initialEggs[0].key,
+        },
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        resolve(true)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs/${initialEggs[0].key}`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        // TODO: improve asserts
+        t.ok(response.json().incubating)
+        t.ok(response.json().incubatedBy)
+        t.ok(response.json().egg)
+        t.end()
+
+        resolve(true)
+      }
+    )
+  })
+})

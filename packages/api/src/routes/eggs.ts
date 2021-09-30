@@ -10,6 +10,7 @@ import {
   GetByKeyParams,
   JwtVerifyPayload,
 } from '../types'
+import { getIncubationExtendedFromBase } from '../utils'
 
 const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
@@ -83,8 +84,9 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
             username: egg.username,
             score: egg.score,
           },
-          incubatedBy,
-          incubating,
+          incubatedBy:
+            incubatedBy && getIncubationExtendedFromBase(incubatedBy),
+          incubating: incubating && getIncubationExtendedFromBase(incubating),
         }
 
         return reply.status(200).send(extendedEgg)

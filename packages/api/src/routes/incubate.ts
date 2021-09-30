@@ -14,6 +14,7 @@ import {
   Incubation,
   JwtVerifyPayload,
 } from '../types'
+import { calculateRemainingCooldown } from '../utils'
 
 const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
@@ -109,9 +110,10 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           incubationLast &&
           currentTimestamp < incubationLast.ends + INCUBATION_COOLDOWN
         ) {
-          const remainingCooldown =
-            (currentTimestamp - incubationLast.ends - INCUBATION_COOLDOWN) /
-            (1000 * 60)
+          const remainingCooldown = calculateRemainingCooldown(
+            incubationLast.ends
+          )
+
           return reply
             .status(409)
             .send(

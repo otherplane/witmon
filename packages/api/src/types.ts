@@ -51,10 +51,21 @@ export const Incubation = Type.Object({
 })
 export type Incubation = Static<typeof Incubation>
 
+export const ExtendedIncubation = Type.Object({
+  to: Type.String(),
+  from: Type.String(),
+  timestamp: Type.Number(),
+  ends: Type.Number(),
+  points: Type.Number(),
+  remainingDuration: Type.Number(),
+  remainingCooldown: Type.Number(),
+})
+export type ExtendedIncubation = Static<typeof ExtendedIncubation>
+
 export const ExtendedEgg = Type.Object({
   egg: Egg,
-  incubatedBy: Type.Optional(Incubation),
-  incubating: Type.Optional(Incubation),
+  incubatedBy: Type.Optional(ExtendedIncubation),
+  incubating: Type.Optional(ExtendedIncubation),
 })
 
 export type ExtendedEgg = Static<typeof ExtendedEgg>
