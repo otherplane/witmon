@@ -11,13 +11,6 @@ export const Egg = Type.Object({
   username: Type.Optional(Type.String()),
   token: Type.Optional(Type.String()),
   score: Type.Number(),
-  // lastTimeImproved: Type.Number(),
-  // improvedBy: Type.Array(
-  //   Type.Object({
-  //     key: Type.String(),
-  //     timestamp: Type.Number()
-  //   })
-  // )
 })
 export type Egg = Static<typeof Egg>
 
@@ -53,7 +46,15 @@ export const Incubation = Type.Object({
   to: Type.String(),
   from: Type.String(),
   timestamp: Type.Number(),
-  duration: Type.Number(),
+  ends: Type.Number(),
   points: Type.Number(),
 })
 export type Incubation = Static<typeof Incubation>
+
+export const ExtendedEgg = Type.Object({
+  egg: Egg,
+  incubatedBy: Type.Optional(Incubation),
+  incubating: Type.Optional(Incubation),
+})
+
+export type ExtendedEgg = Static<typeof ExtendedEgg>
