@@ -27,6 +27,7 @@ coverage
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
+build/contracts
 
 # Dependency directories
 node_modules
@@ -71,3 +72,7 @@ stickers/qr_codes
 
 # python deps
 stickers/src
+
+# package lock files
+package-lock.json
+yarn.lock

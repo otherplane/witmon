@@ -23,5 +23,9 @@
   "volta": {
     "node": "14.17.6",
     "yarn": "1.22.10"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "witnet-ethereum-bridge": "~0.4.6"
   }
 }
