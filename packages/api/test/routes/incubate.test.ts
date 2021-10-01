@@ -3,6 +3,7 @@ import {
   INCUBATION_COOLDOWN,
   INCUBATION_DURATION,
   INCUBATION_POINTS_OTHERS,
+  INCUBATION_POINTS_SELF,
 } from '../../src/constants'
 
 import {
@@ -45,7 +46,30 @@ test('should return incubation object after incubate itself', async (t) => {
           response.json().ends,
           response.json().timestamp + INCUBATION_DURATION
         )
-        t.same(response.json().points, 20)
+        t.same(response.json().points, INCUBATION_POINTS_SELF)
+
+        resolve(true)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        t.same(response.json()[0].score, INCUBATION_POINTS_SELF)
 
         t.end()
 
@@ -55,7 +79,7 @@ test('should return incubation object after incubate itself', async (t) => {
   })
 })
 
-test('should sum poionts to incubator and incubated', async (t) => {
+test('should sum points to incubator and incubated', async (t) => {
   // Before test: Claim an egg
   const token0 = await claimEgg(t)(0)
   await claimEgg(t)(1)
@@ -78,7 +102,7 @@ test('should sum poionts to incubator and incubated', async (t) => {
         t.equal(
           response.headers['content-type'],
           'application/json; charset=utf-8'
-        )
+          )
         t.same(response.json().points, INCUBATION_POINTS_OTHERS)
 
         resolve(true)
@@ -102,7 +126,7 @@ test('should sum poionts to incubator and incubated', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.same(response.json()[0].score, INCUBATION_POINTS_OTHERS)
+        t.same(response.json()[0].score, 0)
         t.same(response.json()[1].score, INCUBATION_POINTS_OTHERS)
 
         t.end()
