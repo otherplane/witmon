@@ -1,37 +1,38 @@
 <template>
-  <div class="egg-container">
-    <p class="subtitle item">{{ egg.index }}</p>
+  <div class="egg-container" :class="{ dark: dark }">
+    <p class="subtitle item">{{ index }}</p>
     <div class="small-title item user">
       <img
         class="small-title egg-image"
         src="@/assets/egg-example.png"
         alt="Witty Creature egg"
       />
-      <p>{{ egg.username }}</p>
+      <p>{{ username }}</p>
     </div>
-    <p class="small-title item">{{ egg.score }}</p>
-    <p class="small-title item">{{ 0 }}</p>
+    <p class="small-title item">{{ score }}</p>
+    <p class="small-title item">{{ rarityIndex }}</p>
   </div>
 </template>
 
 <script>
-import { useEggStore } from '@/stores/egg'
-
 export default {
-  setup () {
-    const egg = useEggStore()
-    return { egg }
-  },
-  created () {
-    this.egg.getEggInfo()
+  props: {
+    index: Number,
+    username: String,
+    score: Number,
+    rarityIndex: Number,
+    dark: Number
   }
 }
 </script>
 
 <style scoped lang="scss">
+.dark {
+  background: rgb(237, 240, 247);
+}
 .egg-container {
   display: grid;
-  grid-template-columns: 50px 220px 50px 50px;
+  grid-template-columns: 50px 200px 50px 50px;
   grid-template-rows: max-content;
   justify-content: center;
   align-items: center;

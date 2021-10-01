@@ -11,7 +11,7 @@ export const useEggStore = defineStore('egg', {
       username: null,
       score: null,
       rarityIndex: null,
-      timeToBirth: null,
+      timeToBirth: 1635080212000,
       incubatedTimeLeft: null,
       incubator: null,
       incubatingTimeLeft: null,
@@ -25,9 +25,22 @@ export const useEggStore = defineStore('egg', {
       }
     }
   },
+  mutations: {},
   actions: {
+    saveClaimInfo (info) {
+      localStorage.setItem('tokenInfo', JSON.stringify(info))
+    },
+    getToken () {
+      return JSON.parse(localStorage.getItem('tokenInfo'))
+    },
+    filterEggList (label) {
+      this.list.sort((e1, e2) =>
+        label === 'score' || label === 'rarityIndex'
+          ? e2[label] - e1[label]
+          : e1[label] - e2[label]
+      )
+    },
     async claim ({ key }) {
-      console.log('claim')
       const request = await this.api.claim({ key })
       if (request.token) {
         await this.saveClaimInfo(request)
@@ -37,24 +50,24 @@ export const useEggStore = defineStore('egg', {
       }
     },
     async incubateEgg ({ key }) {
-      const request = await this.api.incubate({ key })
+      const tokenInfo = this.getToken()
+      const request = await this.api.incubate({
+        token: tokenInfo.token,
+        key: key
+      })
+      console.log('Incubate egg request:', request)
       if (request) {
         router.push('/my-egg')
-        console.log('Incubate egg request:', request)
       } else if (request.error) {
         this.errors['incubate'] = request.error.response.data.message
       }
     },
-    saveClaimInfo (info) {
-      localStorage.setItem('tokenInfo', JSON.stringify(info))
-    },
-    getToken () {
-      return JSON.parse(localStorage.getItem('tokenInfo'))
-    },
     async getEggList () {
-      const request = await this.api.getEggList()
+      const tokenInfo = this.getToken()
+      const request = await this.api.getEggList({ token: tokenInfo.token })
       if (request) {
         this.list = request
+        this.filterEggList('score')
       } else if (request.error) {
         this.errors['list'] = request.error.response.data.message
       }
@@ -65,11 +78,19 @@ export const useEggStore = defineStore('egg', {
         token: tokenInfo.token,
         id: tokenInfo.key
       })
+      console.log('eggInfo:', request)
       if (request) {
-        this.username = request.username
-        this.score = request.score
-        this.id = request.key
-        this.index = request.index
+        const { username, score, key, index } = request.egg
+        const { incubatedBy, incubating } = request
+        console.log(incubatedBy)
+        this.username = username
+        this.score = score
+        this.id = key
+        this.index = index
+        this.incubated = incubatedBy ? incubatedBy.from : null
+        this.incubator = incubating ? incubating.to : null
+        this.incubatedTimeLeft = incubatedBy ? incubatedBy.ends : null
+        this.incubatingTimeLeft = incubating ? incubating.ends : null
       } else if (request.error) {
         this.errors['info'] = request.error.response.data.message
       }

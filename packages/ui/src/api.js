@@ -22,15 +22,17 @@ export class WittyCreaturesApi {
       .catch(this._handleError)
   }
 
-  _post ({ url, params }) {
+  _post ({ url, data, params }) {
+    console.log('PARAMS', params)
+    console.log('URL', url)
     return axios
-      .post(url, params)
+      .post(url, data, params)
       .then(this._handleResponse)
       .catch(this._handleError)
   }
 
   claim (params) {
-    return this._post({ url: `${this.baseUrl}/claim`, params })
+    return this._post({ url: `${this.baseUrl}/claim`, data: params })
   }
 
   getEggInfo (params) {
@@ -43,27 +45,19 @@ export class WittyCreaturesApi {
   }
 
   getEggList (params) {
-    return [
-      {
-        index: 1,
-        key: '8765',
-        username: 'pretty-liar',
-        score: 80,
-        rarityIndex: 50
-      },
-      {
-        index: 2,
-        key: '8765',
-        username: 'pretty-liar',
-        score: 80,
-        rarityIndex: 50
+    return this._get({
+      url: `${this.baseUrl}/eggs`,
+      params: {
+        headers: { authorization: params.token }
       }
-    ]
-    // return this._get({ url: ``, params })
+    })
   }
 
   incubate (params) {
-    return true
-    // return this._get({ url: ``, params })
+    return this._post({
+      url: `${this.baseUrl}/eggs/incubate`,
+      data: { target: params.key },
+      params: { headers: { authorization: params.token } }
+    })
   }
 }

@@ -40,10 +40,10 @@ export default {
   },
   methods: {
     submitAndRedirect () {
-      if (this.previouRoute === '/init-game') {
-        this.claimEgg()
-      } else if (this.previousRoute === '/my-egg') {
+      if (this.previousRoute === '/my-egg') {
         this.incubateEgg()
+      } else {
+        this.claimEgg()
       }
     },
     claimEgg () {

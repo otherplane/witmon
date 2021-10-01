@@ -18,11 +18,11 @@
       Join us in the funiest and most gamified NFT minting ceremony even,
       featuring the cutest creatures in crypto
     </p>
-    <Button class="btn" color="black">
-      <router-link to="/scan-egg">
+    <router-link to="/scan-egg" class="link">
+      <Button class="btn" color="black">
         Play now
-      </router-link>
-    </Button>
+      </Button>
+    </router-link>
   </div>
 </template>
 
@@ -39,6 +39,9 @@
   text-align: center;
   .witnet-logo {
     width: 150px;
+  }
+  .link {
+    width: 100%;
   }
   .logo {
     width: 300px;

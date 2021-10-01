@@ -31,7 +31,16 @@ const routes = [
   },
   {
     path: '/my-egg',
-    component: MyEgg
+    component: MyEgg,
+    beforeEnter: async (to, from, next) => {
+      const store = useEggStore()
+
+      if (store.getToken()) {
+        next()
+      } else {
+        next('init-game')
+      }
+    }
   },
   {
     path: '/scan-egg',
@@ -39,7 +48,16 @@ const routes = [
   },
   {
     path: '/scores',
-    component: ListScores
+    component: ListScores,
+    beforeEnter: async (to, from, next) => {
+      const store = useEggStore()
+
+      if (store.getToken()) {
+        next()
+      } else {
+        next('init-game')
+      }
+    }
   },
   {
     path: '/init-game',

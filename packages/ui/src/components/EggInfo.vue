@@ -5,7 +5,7 @@
     <p class="label">TIME TO BIRTH</p>
     <p class="info">{{ score }}</p>
     <p class="info">{{ rarityIndex }}</p>
-    <p class="info">{{ timeToBirth }}</p>
+    <!-- <TimeLeft v-if="timeToBirth" class="info time" :timestamp="timeToBirth" :seconds="false" /> -->
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   props: {
     score: Number,
     rarityIndex: Number,
-    timeToBirth: String
+    timeToBirth: Number
   }
 }
 </script>
@@ -22,7 +22,8 @@ export default {
 <style scoped lang="scss">
 .info-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, max-content);
   grid-template-rows: repeat(2, max-content);
+  column-gap: 38px;
 }
 </style>

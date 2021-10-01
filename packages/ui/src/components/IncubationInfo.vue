@@ -2,10 +2,25 @@
   <div class="incubations">
     <p class="label">CURRENTLY INCUBATED BY</p>
     <p class="label">CURRENTLY INCUBATING</p>
-    <p class="time">{{ incubatedTimeLeft }}</p>
-    <p class="time">{{ incubatingTimeLeft }}</p>
-    <p class="small-title">{{ incubator }}</p>
-    <p class="small-title">{{ incubated }}</p>
+    <TimeLeft
+      v-if="incubatedTimeLeft"
+      class="time"
+      :timestamp="incubatedTimeLeft"
+      :seconds="true"
+    />
+    <p v-else class="time">0</p>
+    <TimeLeft
+      v-if="incubatingTimeLeft"
+      class="time"
+      :timestamp="incubatingTimeLeft"
+      :seconds="true"
+      @clear-incubation="clear"
+    />
+    <p v-else class="time">0</p>
+    <p v-if="incubated" class="small-title">{{ incubated }}</p>
+    <p v-else class="small-title">No incubation</p>
+    <p v-if="incubator" class="small-title">{{ incubator }}</p>
+    <p v-else class="small-title">No incubation</p>
   </div>
 </template>
 
@@ -16,6 +31,11 @@ export default {
     incubator: String,
     incubatingTimeLeft: Number,
     incubated: String
+  },
+  methods: {
+    clear () {
+      console.log('clearIncubationInfo')
+    }
   }
 }
 </script>

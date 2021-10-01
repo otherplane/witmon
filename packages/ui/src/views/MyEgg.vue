@@ -16,9 +16,9 @@
     />
     <IncubationInfo
       :incubatedTimeLeft="egg.incubatedTimeLeft || 0"
-      :incubator="egg.incubator || 'none'"
+      :incubator="egg.incubator || null"
       :incubatingTimeLeft="egg.incubatingTimeLeft || 0"
-      :incubated="egg.incubated || 'none'"
+      :incubated="egg.incubated || null"
     />
     <div class="buttons">
       <router-link to="/scan-egg" class="center-item">
