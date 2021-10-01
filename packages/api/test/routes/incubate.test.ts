@@ -41,7 +41,6 @@ test('should return incubation object after incubate itself', async (t) => {
         t.same(response.json().to, initialEggs[0].key)
         t.same(response.json().from, initialEggs[0].key)
         t.ok(response.json().timestamp)
-        console.log('INCUBATION_DURATION test: ', INCUBATION_DURATION)
         t.same(
           response.json().ends,
           response.json().timestamp + INCUBATION_DURATION
@@ -102,7 +101,7 @@ test('should sum points to incubator and incubated', async (t) => {
         t.equal(
           response.headers['content-type'],
           'application/json; charset=utf-8'
-          )
+        )
         t.same(response.json().points, INCUBATION_POINTS_OTHERS)
 
         resolve(true)

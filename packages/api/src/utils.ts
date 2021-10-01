@@ -6,7 +6,9 @@ export function calculateRemainingCooldown(
   currentTimestamp = Date.now(),
   incubationCooldown: number = INCUBATION_COOLDOWN
 ) {
-  return (currentTimestamp - incubationEnds - incubationCooldown) / (1000 * 60)
+  const remainingMillis = incubationEnds + incubationCooldown - currentTimestamp
+
+  return remainingMillis > 0 ? remainingMillis : 0
 }
 
 export function calculateRemainingDuration(
@@ -14,7 +16,9 @@ export function calculateRemainingDuration(
   currentTimestamp = Date.now(),
   incubationDuration: number = INCUBATION_DURATION
 ) {
-  return (currentTimestamp - incubationEnds - incubationDuration) / (1000 * 60)
+  const remainingMillis = incubationEnds - currentTimestamp
+
+  return remainingMillis > 0 ? remainingMillis : 0
 }
 
 export function getIncubationExtendedFromBase(incubation: Incubation) {

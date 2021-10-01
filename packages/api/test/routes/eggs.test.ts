@@ -1,4 +1,5 @@
 import { test } from 'tap'
+import { INCUBATION_COOLDOWN, INCUBATION_DURATION } from '../../src/constants'
 
 import {
   claimEgg,
@@ -256,10 +257,38 @@ test('should get EGG #1 - get after incubation', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        // TODO: improve asserts
         t.ok(response.json().incubating)
         t.ok(response.json().incubatedBy)
         t.ok(response.json().egg)
+
+        // Check incubated by (self-incubation)
+        t.same(response.json().incubatedBy.from, initialEggs[0].key)
+        t.same(response.json().incubatedBy.to, initialEggs[0].key)
+        t.ok(response.json().incubatedBy.remainingDuration > 0)
+        t.ok(
+          response.json().incubatedBy.remainingDuration <= INCUBATION_DURATION
+        )
+        t.ok(
+          response.json().incubatedBy.remainingCooldown > INCUBATION_DURATION
+        )
+        t.ok(
+          response.json().incubatedBy.remainingCooldown <=
+            INCUBATION_DURATION + INCUBATION_COOLDOWN
+        )
+
+        // Check incubating (self-incubation)
+        t.same(response.json().incubating.from, initialEggs[0].key)
+        t.same(response.json().incubating.to, initialEggs[0].key)
+        t.ok(response.json().incubating.remainingDuration > 0)
+        t.ok(
+          response.json().incubating.remainingDuration <= INCUBATION_DURATION
+        )
+        t.ok(response.json().incubating.remainingCooldown > INCUBATION_DURATION)
+        t.ok(
+          response.json().incubating.remainingCooldown <=
+            INCUBATION_DURATION + INCUBATION_COOLDOWN
+        )
+
         t.end()
 
         resolve(true)
