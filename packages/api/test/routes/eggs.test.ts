@@ -6,6 +6,7 @@ import {
   initialEggs,
   INVALID_HEADER_TOKEN,
   server,
+  sleep,
   VALID_HEADER_TOKEN_EGG_0,
   VALID_HEADER_TOKEN_EGG_12345,
 } from './helper'
@@ -131,6 +132,7 @@ test('should get EGG #1 - get after claimed', async (t) => {
         t.same(response.json().egg.index, initialEggs[0].index)
         t.same(response.json().egg.score, initialEggs[0].score)
         t.same(response.json().egg.username, initialEggs[0].username)
+        t.same(response.json().egg.rarityIndex, 0)
         t.notOk(response.json().incubating)
         t.notOk(response.json().incubatedBy)
         t.notOk(response.json().egg.token)
@@ -166,7 +168,7 @@ test('should list EGGs - list after claiming', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.same(response.json(), [{ index, username, score }])
+        t.same(response.json(), [{ index, username, score, rarityIndex: 0 }])
         t.notOk(response.json()[0].token)
         t.notOk(response.json()[0].key)
         t.end()
@@ -260,6 +262,7 @@ test('should get EGG #1 - get after incubation', async (t) => {
         t.ok(response.json().incubating)
         t.ok(response.json().incubatedBy)
         t.ok(response.json().egg)
+        t.same(response.json().egg.rarityIndex, 0)
 
         // Check incubated by (self-incubation)
         t.same(response.json().incubatedBy.from, initialEggs[0].key)
@@ -289,6 +292,94 @@ test('should get EGG #1 - get after incubation', async (t) => {
             INCUBATION_DURATION + INCUBATION_COOLDOWN
         )
 
+        t.end()
+
+        resolve(true)
+      }
+    )
+  })
+})
+
+test('should return correct rarity index after incubate', async (t) => {
+  // Before test: Claim an egg
+  const token = await claimEgg(t)(0)
+  const token2 = await claimEgg(t)(1)
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'POST',
+        url: '/eggs/incubate',
+        payload: {
+          target: initialEggs[1].key,
+        },
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+
+        resolve(true)
+      }
+    )
+  })
+
+  await sleep(INCUBATION_DURATION + INCUBATION_COOLDOWN)
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.same(response.json()[0].rarityIndex, 0)
+        t.same(response.json()[1].rarityIndex, 1)
+
+        resolve(true)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs/${initialEggs[0].key}`,
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.same(response.json().egg.rarityIndex, 0)
+
+        resolve(true)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs/${initialEggs[1].key}`,
+        headers: {
+          Authorization: `${token2}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.same(response.json().egg.rarityIndex, 1)
         t.end()
 
         resolve(true)

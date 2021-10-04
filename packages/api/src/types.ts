@@ -14,6 +14,12 @@ export const Egg = Type.Object({
 })
 export type Egg = Static<typeof Egg>
 
+export const IndexedEgg = Type.Intersect([
+  Egg,
+  Type.Object({ rarityIndex: Type.Number() }),
+])
+export type IndexedEgg = Static<typeof IndexedEgg>
+
 export const AuthorizationHeader = Type.Object({
   Authorization: Type.String(),
 })
@@ -34,6 +40,7 @@ export const EggProtected = Type.Object({
   index: Type.Number(),
   username: Type.Optional(Type.String()),
   score: Type.Number(),
+  rarityIndex: Type.Number(),
 })
 export type EggProtected = Static<typeof EggProtected>
 
@@ -63,7 +70,7 @@ export const ExtendedIncubation = Type.Object({
 export type ExtendedIncubation = Static<typeof ExtendedIncubation>
 
 export const ExtendedEgg = Type.Object({
-  egg: Egg,
+  egg: IndexedEgg,
   incubatedBy: Type.Optional(ExtendedIncubation),
   incubating: Type.Optional(ExtendedIncubation),
 })

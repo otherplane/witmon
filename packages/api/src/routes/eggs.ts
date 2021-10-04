@@ -4,10 +4,10 @@ import { EggRepository } from '../repositories/egg'
 import { IncubationRepository } from '../repositories/incubation'
 import {
   AuthorizationHeader,
-  Egg,
   EggProtected,
   ExtendedEgg,
   GetByKeyParams,
+  IndexedEgg,
   JwtVerifyPayload,
 } from '../types'
 import { getIncubationExtendedFromBase } from '../utils'
@@ -83,6 +83,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
             index: egg.index,
             username: egg.username,
             score: egg.score,
+            rarityIndex: await eggRepository.calculateRarityIndex(egg),
           },
           incubatedBy:
             incubatedBy && getIncubationExtendedFromBase(incubatedBy),
@@ -118,13 +119,14 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           .send(new Error(`Egg does not exist (key: ${idFromToken})`))
       }
 
-      const eggsDocument: Array<Egg> = await eggRepository.list()
+      const eggsDocument: Array<IndexedEgg> = await eggRepository.list()
 
       const eggs = eggsDocument.map((egg) => {
         const eggSafe: EggProtected = {
           index: egg.index,
           username: egg.username,
           score: egg.score,
+          rarityIndex: egg.rarityIndex,
         }
 
         return eggSafe

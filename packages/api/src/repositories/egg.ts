@@ -7,7 +7,7 @@ import {
 } from 'unique-names-generator'
 
 import { EGG_KEY_LENGTH_BYTES, EGG_KEY_SALT } from '../constants'
-import { Egg } from '../types'
+import { Egg, IndexedEgg } from '../types'
 
 export class EggRepository {
   private collection: Collection
@@ -99,17 +99,19 @@ export class EggRepository {
     return ((await this.collection.findOne({ key })) as Egg) || null
   }
 
-  public async list(): Promise<Array<Egg>> {
+  public async list(): Promise<Array<IndexedEgg>> {
     // Get only claimed eggs
-    const eggs = await this.collection.find({
-      token: { $exists: true },
-    })
+    const eggs = await this.getListSortByScore()
 
-    return (await eggs.toArray()).map((egg) => ({
+    const eggsArray: Array<Egg> = (await eggs.toArray()) as Array<Egg>
+    console.log('eggs inside list', eggsArray)
+
+    return eggsArray.map((egg, index) => ({
       index: egg.index,
       key: egg.key,
       score: egg.score,
       username: egg.username,
+      rarityIndex: index,
     }))
   }
 
@@ -117,5 +119,21 @@ export class EggRepository {
     await this.collection.updateOne({ key }, { $inc: { score: points } })
 
     return await this.get(key)
+  }
+
+  // TODO: use a cache to store realtime scores and improve performance
+  public async calculateRarityIndex(egg: Egg): Promise<number> {
+    const eggs = await this.getListSortByScore()
+
+    return (await eggs.toArray()).findIndex(
+      (eggSorted) => eggSorted.key === egg.key
+    )
+  }
+
+  private async getListSortByScore() {
+    return await this.collection.find(
+      { token: { $exists: true } },
+      { sort: { score: 1 } }
+    )
   }
 }
