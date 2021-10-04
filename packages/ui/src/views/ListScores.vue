@@ -4,7 +4,7 @@
       <div class="label" @click="orderBy('index')">IDX</div>
       <div class="label" @click="orderBy('username')">USER</div>
       <div class="label" @click="orderBy('score')">SCORE</div>
-      <div class="label" @click="orderBy('rarityIndex')">RARITY</div>
+      <div class="label" @click="orderBy('rarityIndex')">RARITY IDX</div>
     </div>
     <Egg
       v-for="(egg, index) in egg.list"

@@ -1,0 +1,87 @@
+<template>
+  <transition name="slide">
+    <div v-if="toggle" class="notification">
+      <p class="message">
+        {{ message }}
+      </p>
+      <p class="warning">⚠️</p>
+    </div>
+  </transition>
+</template>
+
+<script>
+import { getCurrentInstance, onMounted, ref } from 'vue'
+
+export default {
+  setup () {
+    const toggle = ref(false)
+    const message = ref('')
+    const counter = ref(0)
+
+    const show = payload => {
+      message.value = payload.message
+      console.log(message.value)
+      toggle.value = true
+      counter.value += 1
+
+      setTimeout(() => {
+        counter.value -= 1
+        toggle.value = counter.value !== 0
+      }, 4000)
+    }
+    onMounted(() => {
+      getCurrentInstance().appContext.config.globalProperties.$notify = show
+      console.log('current', getCurrentInstance().appContext.config)
+    })
+    return { toggle, message, counter }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.slide-enter-active {
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in;
+}
+
+.slide-leave-active {
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.slide-enter-to,
+.slide-leave {
+  opacity: 1;
+}
+
+.slide-enter,
+.slide-leave-to {
+  opacity: 0;
+}
+
+.notification {
+  background-color: black;
+  border-radius: 4px;
+  top: 40px;
+  display: flex;
+  left: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  right: 0;
+  width: max-content;
+  max-width: 250px;
+
+  .warning {
+    font-size: 24px;
+    color: white;
+    margin-right: 8px;
+  }
+
+  .message {
+    color: white;
+    font-size: 14px;
+    padding: 8px 8px 8px 16px;
+  }
+}
+</style>

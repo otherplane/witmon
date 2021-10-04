@@ -1,5 +1,6 @@
 <template>
   <router-view />
+  <Notification />
 </template>
 
 <style lang="scss" scoped>

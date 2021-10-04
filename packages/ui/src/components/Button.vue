@@ -1,12 +1,19 @@
 <template>
-  <button class="btn" :class="color">
+  <button class="btn" :class="[color, type]">
     <slot class="btn-content"> </slot>
   </button>
 </template>
 
 <script setup>
 defineProps({
-  color: String
+  color: String,
+  type: {
+    type: String,
+    default: 'default',
+    validator (value) {
+      return ['default', 'disable'].includes(value)
+    }
+  }
 })
 </script>
 
@@ -30,6 +37,10 @@ defineProps({
   }
   &.grey {
     background: rgb(128, 128, 128);
+  }
+  &.disable {
+    opacity: 0.6;
+    cursor: no-drop;
   }
 }
 </style>

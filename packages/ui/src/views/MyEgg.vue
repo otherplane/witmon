@@ -21,13 +21,19 @@
       :incubated="egg.incubated || null"
     />
     <div class="buttons">
-      <router-link to="/scan-egg" class="center-item">
-        <Button color="green">
-          Incubate my egg
-        </Button>
-      </router-link>
-      <router-link to="/scan-egg" class="center-item">
-        <Button color="purple">
+      <Button
+        color="green"
+        :type="type"
+        @click="incubateMyEgg"
+        class="center-item"
+      >
+        Incubate my egg
+      </Button>
+      <router-link
+        :to="type === 'disable' ? '' : '/scan-egg'"
+        class="center-item"
+      >
+        <Button color="purple" :type="type">
           Incubate somebody's egg
         </Button>
       </router-link>
@@ -45,11 +51,21 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
+import { computed } from 'vue'
 
 export default {
   setup () {
     const egg = useEggStore()
-    return { egg }
+    const type = computed(() =>
+      egg && (egg.incubator || egg.incubated) ? 'disable' : 'default'
+    )
+    const incubateMyEgg = () => {
+      if (type.value !== 'disable') {
+        egg.incubateEgg({ key: egg.id })
+        this.egg.getEggInfo()
+      }
+    }
+    return { egg, type, incubateMyEgg }
   },
   created () {
     this.egg.getEggInfo()

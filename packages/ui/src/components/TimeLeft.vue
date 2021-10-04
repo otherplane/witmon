@@ -35,6 +35,7 @@ export default {
       formatDistance: (token, count) =>
         formatDistanceLocale[token].replace('{{count}}', count)
     }
+
     watch(dateNow, () => {
       const duration = intervalToDuration({
         start: utcToZonedTime(dateNow.value, timeZone),

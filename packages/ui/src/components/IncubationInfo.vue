@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { useEggStore } from '@/stores/egg'
 export default {
   props: {
     incubatedTimeLeft: Number,
@@ -32,9 +33,13 @@ export default {
     incubatingTimeLeft: Number,
     incubated: String
   },
+  setup () {
+    const egg = useEggStore()
+    return { egg }
+  },
   methods: {
     clear () {
-      console.log('clearIncubationInfo')
+      this.egg.getEggInfo()
     }
   }
 }
