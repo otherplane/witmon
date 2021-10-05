@@ -82,7 +82,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
         // Check 6: incubator can incubate (is free)
         const incubatingLast = await incubationRepository.getLast({
-          from: fromId,
+          from: fromEgg.username,
         })
         if (incubatingLast && incubatingLast.ends > currentTimestamp) {
           return reply
@@ -92,7 +92,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
         // Check 7: target egg can be incubated (is free)
         const incubatedByLast = await incubationRepository.getLast({
-          to: toEgg.key,
+          to: toEgg.username,
         })
         if (incubatedByLast && incubatedByLast.ends > currentTimestamp) {
           return reply
@@ -102,8 +102,8 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
         // Check 8: cooldown period from incubator to target has elapsed
         const incubationLast = await incubationRepository.getLast({
-          from: fromId,
-          to: toEgg.key,
+          from: fromEgg.username,
+          to: toEgg.username,
         })
 
         if (
@@ -125,7 +125,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
         // Compute points:
         let points
-        if (fromId === toEgg.key) {
+        if (fromEgg.username === toEgg.username) {
           points = INCUBATION_POINTS_SELF
         } else {
           // TODO: Add factor to decrease points if previous incubations exist
@@ -137,10 +137,10 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         // Create and return `incubation` object
         const incubation = await incubationRepository.create({
           ends: currentTimestamp + INCUBATION_DURATION,
-          from: fromId,
+          from: fromEgg.username,
           points,
           timestamp: currentTimestamp,
-          to: toEgg.key,
+          to: toEgg.username,
         })
 
         return reply.status(200).send(incubation)

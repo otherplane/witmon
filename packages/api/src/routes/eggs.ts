@@ -7,6 +7,7 @@ import {
   EggProtected,
   ExtendedEgg,
   GetByKeyParams,
+  Incubation,
   IndexedEgg,
   JwtVerifyPayload,
 } from '../types'
@@ -63,20 +64,23 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
         // Get last ongoing incubations
         const incubatedByLast = await incubationRepository.getLast({
-          to: eggId,
+          to: egg.username,
         })
         const incubatingLast = await incubationRepository.getLast({
-          from: eggId,
+          from: egg.username,
         })
+
+        const isIncubationActive = (incubation: Incubation) =>
+          incubation.ends > Date.now()
+
         const incubatedBy =
-          incubatedByLast && incubatedByLast.ends > Date.now()
-            ? incubatedByLast
+          incubatedByLast && isIncubationActive(incubatedByLast)
+            ? getIncubationExtendedFromBase(incubatedByLast)
             : undefined
         const incubating =
-          incubatingLast && incubatingLast.ends > Date.now()
-            ? incubatingLast
+          incubatingLast && isIncubationActive(incubatingLast)
+            ? getIncubationExtendedFromBase(incubatingLast)
             : undefined
-
         const extendedEgg: ExtendedEgg = {
           egg: {
             key: egg.key,
@@ -85,9 +89,8 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
             score: egg.score,
             rarityIndex: await eggRepository.calculateRarityIndex(egg),
           },
-          incubatedBy:
-            incubatedBy && getIncubationExtendedFromBase(incubatedBy),
-          incubating: incubating && getIncubationExtendedFromBase(incubating),
+          incubatedBy,
+          incubating,
         }
 
         return reply.status(200).send(extendedEgg)

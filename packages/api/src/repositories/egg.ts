@@ -104,7 +104,6 @@ export class EggRepository {
     const eggs = await this.getListSortByScore()
 
     const eggsArray: Array<Egg> = (await eggs.toArray()) as Array<Egg>
-    console.log('eggs inside list', eggsArray)
 
     return eggsArray.map((egg, index) => ({
       index: egg.index,

@@ -265,8 +265,8 @@ test('should get EGG #1 - get after incubation', async (t) => {
         t.same(response.json().egg.rarityIndex, 0)
 
         // Check incubated by (self-incubation)
-        t.same(response.json().incubatedBy.from, initialEggs[0].key)
-        t.same(response.json().incubatedBy.to, initialEggs[0].key)
+        t.same(response.json().incubatedBy.from, initialEggs[0].username)
+        t.same(response.json().incubatedBy.to, initialEggs[0].username)
         t.ok(response.json().incubatedBy.remainingDuration > 0)
         t.ok(
           response.json().incubatedBy.remainingDuration <= INCUBATION_DURATION
@@ -280,8 +280,8 @@ test('should get EGG #1 - get after incubation', async (t) => {
         )
 
         // Check incubating (self-incubation)
-        t.same(response.json().incubating.from, initialEggs[0].key)
-        t.same(response.json().incubating.to, initialEggs[0].key)
+        t.same(response.json().incubating.from, initialEggs[0].username)
+        t.same(response.json().incubating.to, initialEggs[0].username)
         t.ok(response.json().incubating.remainingDuration > 0)
         t.ok(
           response.json().incubating.remainingDuration <= INCUBATION_DURATION

@@ -38,8 +38,8 @@ test('should return incubation object after incubate itself', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.same(response.json().to, initialEggs[0].key)
-        t.same(response.json().from, initialEggs[0].key)
+        t.same(response.json().to, initialEggs[0].username)
+        t.same(response.json().from, initialEggs[0].username)
         t.ok(response.json().timestamp)
         t.same(
           response.json().ends,
