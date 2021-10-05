@@ -4,21 +4,33 @@
       <p class="subtitle">EGG ID: {{ egg.username }}</p>
       <p class="title">My Witty Creature</p>
     </div>
-    <img
+    <QRCodeVue3
       class="egg-image"
-      src="@/assets/egg-example.png"
-      alt="Witty Creature egg"
+      :value="egg.id || ''"
+      :image="imageUrl"
+      :dotsOptions="{
+        type: 'dots',
+        color: '#000000',
+        gradient: {
+          type: 'linear',
+          rotation: 0,
+          colorStops: [
+            { offset: 0, color: '#000000' },
+            { offset: 1, color: '#000000' }
+          ]
+        }
+      }"
     />
     <EggInfo
-      :score="egg.score || 0"
-      :rarityIndex="egg.rarityIndex || 0"
-      :timeToBirth="egg.timeToBirth || 0"
+      :score="egg.score"
+      :rarityIndex="egg.rarityIndex"
+      :timeToBirth="egg.timeToBirth"
     />
     <IncubationInfo
-      :incubatedTimeLeft="egg.incubatedTimeLeft || 0"
-      :incubator="egg.incubator || null"
-      :incubatingTimeLeft="egg.incubatingTimeLeft || 0"
-      :incubated="egg.incubated || null"
+      :incubatedTimeLeft="egg.incubatedTimeLeft"
+      :incubator="egg.incubator"
+      :incubatingTimeLeft="egg.incubatingTimeLeft"
+      :incubated="egg.incubated"
     />
     <div class="buttons">
       <Button
@@ -51,24 +63,30 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
-import { computed } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
+import QRCodeVue3 from 'qrcode-vue3'
+import imageUrl from '@/assets/egg-example.png'
 
 export default {
+  components: {
+    QRCodeVue3
+  },
   setup () {
-    const egg = useEggStore()
+    const egg = ref(useEggStore())
+    onBeforeMount(() => {
+      egg.value.getEggInfo()
+    })
     const type = computed(() =>
-      egg && (egg.incubator || egg.incubated) ? 'disable' : 'default'
+      egg.value && (egg.value.incubator || egg.value.incubated)
+        ? 'disable'
+        : 'default'
     )
     const incubateMyEgg = () => {
       if (type.value !== 'disable') {
-        egg.incubateEgg({ key: egg.id })
-        this.egg.getEggInfo()
+        egg.value.incubateEgg({ key: egg.value.id })
       }
     }
-    return { egg, type, incubateMyEgg }
-  },
-  created () {
-    this.egg.getEggInfo()
+    return { egg, type, incubateMyEgg, imageUrl }
   }
 }
 </script>

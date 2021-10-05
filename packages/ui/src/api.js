@@ -23,8 +23,6 @@ export class WittyCreaturesApi {
   }
 
   _post ({ url, data, params }) {
-    console.log('PARAMS', params)
-    console.log('URL', url)
     return axios
       .post(url, data, params)
       .then(this._handleResponse)

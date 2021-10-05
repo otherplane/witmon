@@ -1,37 +1,41 @@
 <template>
   <div class="container">
-    <img
-      src="@/assets/witty-creatures-logo.svg"
-      alt="Witty creatures logo"
-      class="logo"
-    />
-    <input
-      v-model="value"
-      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      id="username"
-      type="text"
-      placeholder="Egg ID"
-    />
-    <Button color="black" @click="submitAndRedirect()">
-      Submit
-    </Button>
-    <p v-if="egg.errors.claim" class="error">{{ egg.errors.claim }}</p>
+    <div>
+      <!-- <img
+        src="@/assets/witty-creatures-logo.svg"
+        alt="Witty creatures logo"
+        class="logo"
+      /> -->
+      <img
+        src="@/assets/witty-creatures-logo.svg"
+        alt="Witty creatures logo"
+        class="logo"
+        @click="egg.claim({ key: 'e9d8e88334820666' })"
+      />
+      <p class="small-title">Scan your QR code</p>
+    </div>
+    <QrStream @decode="onDecode"></QrStream>
   </div>
 </template>
 
 <script>
 import { useEggStore } from '@/stores/egg'
+import { QrStream } from 'vue3-qr-reader'
 
 export default {
   data () {
     return {
-      previousRoute: null
+      previousRoute: null,
+      value: null
     }
+  },
+  components: {
+    QrStream
   },
   setup () {
     const egg = useEggStore()
     const value = ''
-    return { egg, value }
+    return { egg }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -39,6 +43,10 @@ export default {
     })
   },
   methods: {
+    onDecode (decodedString) {
+      this.value = decodedString
+      this.submitAndRedirect()
+    },
     submitAndRedirect () {
       if (this.previousRoute === '/my-egg') {
         this.incubateEgg()
@@ -61,15 +69,16 @@ export default {
   margin: 0 auto;
   padding: 16px;
   max-width: 600px;
+  min-height: 100vh;
   row-gap: 18px;
   display: grid;
-  grid-template-rows: repeat(2, max-content);
+  grid-template-rows: max-content 1fr;
   justify-items: center;
   align-content: center;
   text-align: center;
   .logo {
     width: 300px;
-    margin-bottom: 32px;
+    margin-bottom: 8px;
   }
 }
 </style>

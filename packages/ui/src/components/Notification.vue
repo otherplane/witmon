@@ -20,7 +20,6 @@ export default {
 
     const show = payload => {
       message.value = payload.message
-      console.log(message.value)
       toggle.value = true
       counter.value += 1
 
@@ -31,7 +30,6 @@ export default {
     }
     onMounted(() => {
       getCurrentInstance().appContext.config.globalProperties.$notify = show
-      console.log('current', getCurrentInstance().appContext.config)
     })
     return { toggle, message, counter }
   }

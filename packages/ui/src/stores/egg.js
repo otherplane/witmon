@@ -40,7 +40,6 @@ export const useEggStore = defineStore('egg', {
     },
     setError (name, error) {
       router.push('/')
-      console.log(error)
       this.errors[name] = error.response.data.message
       this.notify({ message: this.errors[name] })
     },
@@ -56,6 +55,7 @@ export const useEggStore = defineStore('egg', {
       if (request.token) {
         await this.saveClaimInfo(request)
         this.clearError('claim')
+        router.push('/')
       } else if (request.error) {
         this.setError('claim', request.error)
       }
@@ -66,11 +66,12 @@ export const useEggStore = defineStore('egg', {
         token: tokenInfo.token,
         key: key
       })
-      console.log('Incubate egg request:', request)
       if (request.error) {
         this.setError('incubate', request.error)
       } else {
         this.clearError('incubate')
+        this.getEggInfo()
+        router.push('/')
       }
     },
     async getEggList () {
@@ -90,14 +91,12 @@ export const useEggStore = defineStore('egg', {
         token: tokenInfo.token,
         id: tokenInfo.key
       })
-      console.log('eggInfo:', request)
       if (request.error) {
         this.setError('info', request.error)
       } else {
         this.clearError('info')
         const { username, score, key, index } = request.egg
         const { incubatedBy, incubating } = request
-        console.log(incubatedBy)
         this.username = username
         this.score = score
         this.id = key
