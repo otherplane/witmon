@@ -3,18 +3,28 @@ const witmonAddresses = require("./witmon.addresses.json")
 const witnetAddresses = require("witnet-solidity-bridge/migrations/witnet.addresses")
 const WitmonERC721 = artifacts.require("WitmonERC721");
 const WitmonLiscon21 = artifacts.require("WitmonLiscon21");
+const WitnetRequestBoard = artifacts.require("WitnetRequestBoard")
 module.exports = async function (deployer, network, accounts) {  
   network = network.split("-")[0]
-  if (!witmonAddresses[network]) {
-    witmonAddresses[network] = {}
+  if (network !== "test") {
+    if (!witmonAddresses[network]) {
+      witmonAddresses[network] = {}
+    }
+    if (!witmonAddresses[network].WitmonERC721) {
+      witmonAddresses[network].WitmonERC721 = ""
+    }
+    WitnetRequestBoard.address = witnetAddresses.default[network].WitnetRequestBoard
+  } else {
+    const WitnetRequestBoardMock = artifacts.require("WitnetRequestBoardMock")
+    if (!WitnetRequestBoardMock.isDeployed()) {
+      await deployer.deploy(WitnetRequestBoardMock)
+    }
+    WitnetRequestBoard.address = WitnetRequestBoardMock.address; 
   }
-  if (!witmonAddresses[network].WitmonERC721) {
-    witmonAddresses[network].WitmonERC721 = ""
-  }
-  if (witmonAddresses[network].WitmonERC721 === "") {
+  if (network === "test" || witmonAddresses[network].WitmonERC721 === "") {
     await deployer.deploy(
       WitmonERC721,
-      witnetAddresses.default[network].WitnetRequestBoard,
+      WitnetRequestBoard.address,
       "Witty Creatures 2.0",            // name
       "WITMON",                         // symbol
       accounts[0],                      // signator
@@ -23,10 +33,12 @@ module.exports = async function (deployer, network, accounts) {
       80640,                            // expirationDays (~ 14 days)
       525                               // totalEggs
     )
-    witmonAddresses[network].WitmonERC721 = WitmonERC721.address
-    fs.writeFileSync("./migrations/witmon.addresses.json", JSON.stringify(witmonAddresses, null, 4), { flag: 'w+' })
+    if (network !== "test") {
+      witmonAddresses[network].WitmonERC721 = WitmonERC721.address
+      fs.writeFileSync("./migrations/witmon.addresses.json", JSON.stringify(witmonAddresses, null, 4), { flag: 'w+' })
+    }
   } else {
     WitmonERC721.address = witmonAddresses[network].WitmonERC721
     console.info("   > Skipped: presumably deployed at", WitmonERC721.address)
-  }
+  }  
 };
