@@ -1,7 +1,7 @@
 <template>
   <div class="incubations">
-    <div class="incubation" v-if="incubatedTimeLeft && selfIncubation">
-      <p class="label">CURRENTLY INCUBATED BY</p>
+    <div class="incubation" v-if="selfIncubation">
+      <p class="label">CURRENTLY INCUBATING</p>
       <TimeLeft
         class="time"
         :timestamp="incubatedTimeLeft"
@@ -49,7 +49,9 @@ export default {
   setup (props) {
     const egg = useEggStore()
     const clear = () => egg.getEggInfo()
-    const selfIncubation = computed(() => props.incubator === props.incubated)
+    const selfIncubation = computed(() => {
+      return props.incubator && props.incubator === props.incubated
+    })
     return { clear, selfIncubation }
   }
 }

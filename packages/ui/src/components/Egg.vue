@@ -32,18 +32,21 @@ export default {
 }
 .egg-container {
   display: grid;
-  grid-template-columns: 50px 200px 50px 50px;
+  grid-template-columns: 45px 200px 60px 50px;
+  justify-items: center;
   grid-template-rows: max-content;
   justify-content: center;
   align-items: center;
   .item {
-    padding: 16px;
+    padding: 8px;
   }
   .user {
-    display: flex;
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    column-gap: 16px;
     align-items: center;
+    justify-self: flex-start;
     .egg-image {
-      margin-right: 24px;
       width: 50px;
     }
   }

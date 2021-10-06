@@ -102,9 +102,10 @@ export const useEggStore = defineStore('egg', {
         this.id = key
         this.index = index
         this.incubated = incubatedBy ? incubatedBy.from : null
-        this.incubator = incubating ? incubating.to : null
+        this.incubator = incubating ? incubating.from : null
         this.incubatedTimeLeft = incubatedBy ? incubatedBy.ends : null
         this.incubatingTimeLeft = incubating ? incubating.ends : null
+        console.log('getEggIngo', request)
       }
     }
   }

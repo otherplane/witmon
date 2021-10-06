@@ -1,19 +1,6 @@
 <template>
   <div class="container">
-    <div>
-      <!-- <img
-        src="@/assets/witty-creatures-logo.svg"
-        alt="Witty creatures logo"
-        class="logo"
-      /> -->
-      <img
-        src="@/assets/witty-creatures-logo.svg"
-        alt="Witty creatures logo"
-        class="logo"
-        @click="egg.claim({ key: 'e9d8e88334820666' })"
-      />
-      <p class="small-title">Scan your QR code</p>
-    </div>
+    <SectionHeader>SCAN YOUR QR CODE</SectionHeader>
     <QrStream @decode="onDecode"></QrStream>
   </div>
 </template>
@@ -48,7 +35,7 @@ export default {
       this.submitAndRedirect()
     },
     submitAndRedirect () {
-      if (this.previousRoute === '/my-egg') {
+      if (this.previousRoute.includes('/egg')) {
         this.incubateEgg()
       } else {
         this.claimEgg()
@@ -67,10 +54,8 @@ export default {
 <style scoped lang="scss">
 .container {
   margin: 0 auto;
-  padding: 16px;
   max-width: 600px;
   min-height: 100vh;
-  row-gap: 18px;
   display: grid;
   grid-template-rows: max-content 1fr;
   justify-items: center;

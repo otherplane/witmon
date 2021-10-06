@@ -1,10 +1,11 @@
 <template>
   <div class="scores-container">
-    <div class="header">
-      <div class="label" @click="orderBy('index')">IDX</div>
+    <SectionHeader>LEADER BOARD</SectionHeader>
+    <div class="table-header">
+      <div class="label" @click="orderBy('index')">INDEX</div>
       <div class="label" @click="orderBy('username')">USER</div>
-      <div class="label" @click="orderBy('score')">SCORE</div>
-      <div class="label" @click="orderBy('rarityIndex')">RARITY IDX</div>
+      <div class="label" @click="orderBy('score')">SCORE ™</div>
+      <div class="label" @click="orderBy('rarityIndex')">RARITY INDEX</div>
     </div>
     <Egg
       v-for="(egg, index) in egg.list"
@@ -39,18 +40,19 @@ export default {
 
 <style scoped lang="scss">
 .scores-container {
-  .header {
+  .table-header {
     display: grid;
-    background-color: #f8971e;
-    grid-template-columns: 50px 200px 50px 50px;
+    background-color: rgb(237, 240, 247);
+    grid-template-columns: 45px 200px 60px 50px;
+    padding: 16px 0;
     grid-template-rows: max-content;
     justify-content: center;
     align-items: center;
     .label {
       cursor: pointer;
-      color: white;
-      font-weight: bold;
-      padding: 8px;
+      color: black;
+      text-align: center;
+      font-weight: lighter;
     }
   }
 }

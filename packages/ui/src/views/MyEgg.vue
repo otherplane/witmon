@@ -54,9 +54,11 @@
           LeaderBoard
         </Button>
       </router-link>
-      <Button color="grey" class="center-item">
-        Help
-      </Button>
+      <router-link to="/help" class="center-item">
+        <Button color="grey" class="center-item">
+          Help
+        </Button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -74,12 +76,11 @@ export default {
   setup () {
     const egg = ref(useEggStore())
     onBeforeMount(() => {
+      console.log('get info')
       egg.value.getEggInfo()
     })
     const type = computed(() =>
-      egg.value && (egg.value.incubator || egg.value.incubated)
-        ? 'disable'
-        : 'default'
+      egg.value && egg.value.incubator ? 'disable' : 'default'
     )
     const incubateMyEgg = () => {
       if (type.value !== 'disable') {
