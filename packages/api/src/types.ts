@@ -76,3 +76,24 @@ export const ExtendedEgg = Type.Object({
 })
 
 export type ExtendedEgg = Static<typeof ExtendedEgg>
+
+export const MintParams = Type.Object({
+  address: Type.String(),
+})
+export type MintParams = Static<typeof MintParams>
+
+export const MintOutput = Type.Object({
+  envelopedSignature: Type.Object({
+    message: Type.String(),
+    messageHash: Type.Optional(Type.String()),
+    signature: Type.String(),
+  }),
+  data: Type.Object({
+    address: Type.String(),
+    index: Type.Number(),
+    rank: Type.Number(),
+    total: Type.Number(),
+    // eggColor: Type.Number(),
+  }),
+})
+export type MintOutput = Static<typeof MintOutput>

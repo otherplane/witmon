@@ -114,6 +114,10 @@ export class EggRepository {
     }))
   }
 
+  public async countClaimed(): Promise<number> {
+    return await this.collection.countDocuments({ token: { $exists: true } })
+  }
+
   public async addPoints(key: string, points: number): Promise<Egg | null> {
     await this.collection.updateOne({ key }, { $inc: { score: points } })
 

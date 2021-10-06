@@ -34,3 +34,8 @@ export const INCUBATION_POINTS_SELF = process.env.INCUBATION_POINTS_SELF
 export const INCUBATION_POINTS_OTHERS = process.env.INCUBATION_POINTS_OTHERS
   ? parseInt(process.env.INCUBATION_POINTS_OTHERS)
   : 100
+
+// Secp256k1 private key used for signing in the `mint` endpoint
+export const MINT_PRIVATE_KEY =
+  process.env.MINT_PRIVATE_KEY ||
+  '0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7'

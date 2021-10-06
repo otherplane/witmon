@@ -29,7 +29,8 @@
     "mongodb": "^4.1.2",
     "nodemon": "^2.0.13",
     "pino-pretty": "^7.0.1",
-    "unique-names-generator": "^4.6.0"
+    "unique-names-generator": "^4.6.0",
+    "web3": "^1.6.0"
   },
   "devDependencies": {
     "@types/node": "^15.0.0",
