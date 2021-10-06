@@ -1,5 +1,5 @@
-import { pinia } from './stores'
 import { createApp } from 'vue'
+import { pinia } from './stores'
 import App from './App.vue'
 import './index.css'
 import './main.scss'

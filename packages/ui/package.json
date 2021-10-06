@@ -8,6 +8,7 @@
     "lint": "prettier-standard --format"
   },
   "dependencies": {
+    "@vueuse/core": "^6.5.3",
     "axios": "^0.21.4",
     "date-fns": "^2.24.0",
     "date-fns-tz": "^1.1.6",

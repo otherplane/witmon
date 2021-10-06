@@ -49,6 +49,13 @@
           Help
         </Button>
       </router-link>
+
+      <Button @click="modal.showModal" color="grey" class="center-item">
+        Export
+      </Button>
+      <ModalDialog :show="modal.visible.value" v-on:close="modal.hideModal">
+        <ModalExport />
+      </ModalDialog>
     </div>
   </div>
 </template>
@@ -56,7 +63,9 @@
 <script>
 import { useEggStore } from '@/stores/egg'
 import { computed, onBeforeMount } from 'vue'
+
 import imageUrl from '@/assets/egg-example.png'
+import { useModal } from '@/composables/useModal'
 
 export default {
   setup () {
@@ -68,17 +77,18 @@ export default {
       { baseColor: '#fff', mainColor: '#fd2' },
       { baseColor: '#fff', mainColor: '#00d' }
     ]
+    const modal = useModal()
     const egg = useEggStore()
     onBeforeMount(() => {
       egg.getEggInfo()
     })
-    const type = computed(() => (egg && egg.incubator ? 'disable' : 'default'))
-    const incubateMyEgg = () => {
+    const type = computed(() => (egg.incubator ? 'disable' : 'default'))
+    function incubateMyEgg () {
       if (type.value !== 'disable') {
         egg.incubateEgg({ key: egg.id })
       }
     }
-    return { egg, type, incubateMyEgg, imageUrl, colors }
+    return { egg, type, incubateMyEgg, imageUrl, colors, modal }
   }
 }
 </script>
@@ -114,7 +124,7 @@ export default {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: repeat(4, max-content);
+  grid-template-rows: repeat(5, max-content);
   row-gap: 8px;
   .center-item {
     justify-self: center;
