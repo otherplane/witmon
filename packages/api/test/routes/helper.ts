@@ -12,16 +12,18 @@ let client: MongoClient
 
 const initialEggs = [
   {
-    key: 'ef12efbd765f9ad3',
+    color: 0,
     index: 0,
-    username: 'calm-bison',
+    key: 'ef12efbd765f9ad3',
     score: 0,
+    username: 'calm-bison',
   },
   {
-    key: 'b75c34545e8cb4d2',
+    color: 1,
     index: 1,
-    username: 'particular-newt',
+    key: 'b75c34545e8cb4d2',
     score: 0,
+    username: 'particular-newt',
   },
 ]
 

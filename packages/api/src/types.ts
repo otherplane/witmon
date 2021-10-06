@@ -6,11 +6,12 @@ export const ClaimEggParams = Type.Object({
 export type ClaimEggParams = Static<typeof ClaimEggParams>
 
 export const Egg = Type.Object({
-  key: Type.String(),
+  color: Type.Number(),
   index: Type.Number(),
-  username: Type.String(),
-  token: Type.Optional(Type.String()),
+  key: Type.String(),
   score: Type.Number(),
+  token: Type.Optional(Type.String()),
+  username: Type.String(),
 })
 export type Egg = Static<typeof Egg>
 
@@ -37,10 +38,11 @@ export const JwtVerifyPayload = Type.Object({
 export type JwtVerifyPayload = Static<typeof JwtVerifyPayload>
 
 export const EggProtected = Type.Object({
+  color: Type.Number(),
   index: Type.Number(),
-  username: Type.Optional(Type.String()),
-  score: Type.Number(),
   rarityIndex: Type.Number(),
+  score: Type.Number(),
+  username: Type.Optional(Type.String()),
 })
 export type EggProtected = Static<typeof EggProtected>
 

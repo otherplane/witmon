@@ -1,4 +1,8 @@
-import { INCUBATION_COOLDOWN, INCUBATION_DURATION } from './constants'
+import {
+  EGG_COLORS_LENGTH,
+  INCUBATION_COOLDOWN,
+  INCUBATION_DURATION,
+} from './constants'
 import { Incubation } from './types'
 
 export function calculateRemainingCooldown(
@@ -30,3 +34,8 @@ export function getIncubationExtendedFromBase(incubation: Incubation) {
     }
   )
 }
+
+export function getColorFromIndex(index: number) {
+  return index % EGG_COLORS_LENGTH
+}
+

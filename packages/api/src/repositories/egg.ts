@@ -8,6 +8,7 @@ import {
 
 import { EGG_KEY_LENGTH_BYTES, EGG_KEY_SALT } from '../constants'
 import { Egg, IndexedEgg } from '../types'
+import { getColorFromIndex } from '../utils'
 
 export class EggRepository {
   private collection: Collection
@@ -52,8 +53,9 @@ export class EggRepository {
         separator: '-',
         style: 'lowerCase',
       })
+      const color = getColorFromIndex(index)
       // Create an egg based on that egg data and push it to our collection
-      const egg: Egg = { key, index, username, score: 0 }
+      const egg: Egg = { color, key, index, username, score: 0 }
       await this.create(egg)
       eggs.push(egg)
     }
@@ -106,11 +108,12 @@ export class EggRepository {
     const eggsArray: Array<Egg> = (await eggs.toArray()) as Array<Egg>
 
     return eggsArray.map((egg, index) => ({
+      color: egg.color,
       index: egg.index,
       key: egg.key,
+      rarityIndex: index,
       score: egg.score,
       username: egg.username,
-      rarityIndex: index,
     }))
   }
 

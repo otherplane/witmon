@@ -83,11 +83,12 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
             : undefined
         const extendedEgg: ExtendedEgg = {
           egg: {
-            key: egg.key,
+            color: egg.color,
             index: egg.index,
-            username: egg.username,
-            score: egg.score,
+            key: egg.key,
             rarityIndex: await eggRepository.calculateRarityIndex(egg),
+            score: egg.score,
+            username: egg.username,
           },
           incubatedBy,
           incubating,
@@ -126,10 +127,11 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
       const eggs = eggsDocument.map((egg) => {
         const eggSafe: EggProtected = {
+          color: egg.color,
           index: egg.index,
-          username: egg.username,
-          score: egg.score,
           rarityIndex: egg.rarityIndex,
+          score: egg.score,
+          username: egg.username,
         }
 
         return eggSafe

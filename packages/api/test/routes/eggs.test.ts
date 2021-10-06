@@ -128,6 +128,7 @@ test('should get EGG #1 - get after claimed', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
+        t.same(response.json().egg.color, initialEggs[0].color)
         t.same(response.json().egg.key, initialEggs[0].key)
         t.same(response.json().egg.index, initialEggs[0].index)
         t.same(response.json().egg.score, initialEggs[0].score)
@@ -148,6 +149,7 @@ test('should list EGGs - list after claiming', async (t) => {
   let username: string = initialEggs[0].username
   let index: number = initialEggs[0].index
   let score: number = initialEggs[0].index
+  let color: number = initialEggs[0].color
 
   // Before test: Claim an egg
   const token = await claimEgg(t)(0)
@@ -168,7 +170,9 @@ test('should list EGGs - list after claiming', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.same(response.json(), [{ index, username, score, rarityIndex: 0 }])
+        t.same(response.json(), [
+          { index, color, username, score, rarityIndex: 0 },
+        ])
         t.notOk(response.json()[0].token)
         t.notOk(response.json()[0].key)
         t.end()
