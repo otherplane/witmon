@@ -20,9 +20,10 @@
   margin: 0 auto;
   padding: 0 32px;
   max-width: 600px;
+  height: 70vh;
   row-gap: 18px;
   display: grid;
-  grid-template-rows: repeat(8, max-content);
+  grid-template-rows: repeat(2, max-content);
   justify-items: center;
   align-content: center;
   text-align: center;

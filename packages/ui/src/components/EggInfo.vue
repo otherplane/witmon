@@ -1,6 +1,6 @@
 <template>
   <div class="info-container">
-    <p class="label">EGG SCORE</p>
+    <p class="label">EggScore ™</p>
     <p class="label">RARITY IDX</p>
     <p class="label">TIME TO BIRTH</p>
     <p class="info">{{ score }}</p>

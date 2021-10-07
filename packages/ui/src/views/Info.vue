@@ -1,6 +1,6 @@
 <template>
+  <SectionHeader>INSTRUCTIONS</SectionHeader>
   <div class="container">
-    <SectionHeader>INSTRUCTIONS</SectionHeader>
     <div class="content">
       <p class="text">
         At the beginning of the Liscon conference, attendees who visit the
@@ -69,7 +69,7 @@
 .container {
   display: grid;
   margin: 0 auto;
-  grid-template-rows: max-content 1fr;
+  grid-template-rows: 1fr;
   max-width: 600px;
   min-height: 100vh;
 }
@@ -78,7 +78,7 @@
   display: grid;
   grid-template-rows: 1fr;
   text-align: left;
-  padding: 0 32px 32px 32px;
+  padding: 32px;
   .list {
     list-style-type: disc;
     margin: 16px;

@@ -13,7 +13,7 @@
 <style scoped lang="scss">
 .header {
   display: flex;
-  padding: 24px 32px;
+  padding: 8px 24px;
   justify-content: space-between;
   align-items: center;
   width: 100%;

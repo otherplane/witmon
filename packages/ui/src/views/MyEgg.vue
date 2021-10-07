@@ -1,37 +1,27 @@
 <template>
-  <div class="container">
-    <div>
-      <p class="subtitle">EGG ID: {{ egg.username }}</p>
-      <p class="title">My Witty Creature</p>
+  <div class="container-egg">
+    <div class="egg-content">
+      <div>
+        <p class="subtitle">EGG ID: {{ egg.username }}</p>
+        <p class="title">My Witty Creature</p>
+      </div>
+      <EggSvg
+        class="egg-image"
+        :mainColor="egg.color && egg.color.mainColor"
+        :baseColor="egg.color && egg.color.baseColor"
+      />
+      <EggInfo
+        :score="egg.score"
+        :rarityIndex="egg.rarityIndex"
+        :timeToBirth="egg.timeToBirth"
+      />
+      <IncubationInfo
+        :incubatedTimeLeft="egg.incubatedTimeLeft"
+        :incubator="egg.incubator"
+        :incubatingTimeLeft="egg.incubatingTimeLeft"
+        :incubated="egg.incubated"
+      />
     </div>
-    <QRCodeVue3
-      class="egg-image"
-      :value="egg.id || ''"
-      :image="imageUrl"
-      :dotsOptions="{
-        type: 'dots',
-        color: '#000000',
-        gradient: {
-          type: 'linear',
-          rotation: 0,
-          colorStops: [
-            { offset: 0, color: '#000000' },
-            { offset: 1, color: '#000000' }
-          ]
-        }
-      }"
-    />
-    <EggInfo
-      :score="egg.score"
-      :rarityIndex="egg.rarityIndex"
-      :timeToBirth="egg.timeToBirth"
-    />
-    <IncubationInfo
-      :incubatedTimeLeft="egg.incubatedTimeLeft"
-      :incubator="egg.incubator"
-      :incubatingTimeLeft="egg.incubatingTimeLeft"
-      :incubated="egg.incubated"
-    />
     <div class="buttons">
       <Button
         color="green"
@@ -66,17 +56,12 @@
 <script>
 import { useEggStore } from '@/stores/egg'
 import { computed, onBeforeMount, ref } from 'vue'
-import QRCodeVue3 from 'qrcode-vue3'
 import imageUrl from '@/assets/egg-example.png'
 
 export default {
-  components: {
-    QRCodeVue3
-  },
   setup () {
     const egg = ref(useEggStore())
     onBeforeMount(() => {
-      console.log('get info')
       egg.value.getEggInfo()
     })
     const type = computed(() =>
@@ -93,37 +78,42 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.container {
-  margin: 0 auto;
+.container-egg {
+  min-height: 100vh;
+  width: 100vw;
+  display: grid;
+  justify-items: center;
+}
+.egg-content {
+  width: 100%;
+  height: 100%;
   padding: 16px;
   max-width: 600px;
   display: grid;
-  grid-template-rows: repeat(5, max-content);
+  grid-template-rows: repeat(4, max-content);
   align-content: center;
   text-align: left;
   row-gap: 16px;
   .egg-image {
     width: 40%;
+    max-height: 150px;
     justify-self: center;
   }
+}
+.buttons {
+  background-color: rgb(237, 240, 247);
+  padding: 16px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(4, max-content);
+  row-gap: 8px;
   .center-item {
     justify-self: center;
     max-width: 600px;
     width: 100%;
-  }
-  .buttons {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgb(237, 240, 247);
-    padding: 16px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    width: 100%;
-    display: grid;
-    grid-template-rows: repeat(4, max-content);
-    row-gap: 8px;
   }
 }
 </style>

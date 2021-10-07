@@ -9,8 +9,7 @@
       />
       <p>{{ username }}</p>
     </div>
-    <p class="small-title item">{{ score }}</p>
-    <p class="small-title item">{{ rarityIndex }}</p>
+    <p class="small-title item score">{{ score }}</p>
   </div>
 </template>
 
@@ -32,13 +31,20 @@ export default {
 }
 .egg-container {
   display: grid;
-  grid-template-columns: 45px 200px 60px 50px;
+  grid-template-columns: 50px 1fr 80px;
   justify-items: center;
   grid-template-rows: max-content;
   justify-content: center;
   align-items: center;
   .item {
     padding: 8px;
+    text-align: center;
+  }
+  .score {
+    width: 60px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .user {
     display: grid;

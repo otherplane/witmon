@@ -1,6 +1,6 @@
 <template>
+  <SectionHeader>SCAN YOUR QR CODE</SectionHeader>
   <div class="container">
-    <SectionHeader>SCAN YOUR QR CODE</SectionHeader>
     <QrStream @decode="onDecode"></QrStream>
   </div>
 </template>
@@ -21,7 +21,6 @@ export default {
   },
   setup () {
     const egg = useEggStore()
-    const value = ''
     return { egg }
   },
   beforeRouteEnter (to, from, next) {
@@ -31,7 +30,9 @@ export default {
   },
   methods: {
     onDecode (decodedString) {
-      this.value = decodedString
+      const chunks = decodedString.split('/')
+      this.value = chunks[chunks.length - 1]
+      console.log('value', this.value)
       this.submitAndRedirect()
     },
     submitAndRedirect () {
@@ -53,11 +54,11 @@ export default {
 
 <style scoped lang="scss">
 .container {
-  margin: 0 auto;
   max-width: 600px;
   min-height: 100vh;
   display: grid;
-  grid-template-rows: max-content 1fr;
+  margin: 0 auto;
+  grid-template-rows: 1fr;
   justify-items: center;
   align-content: center;
   text-align: center;

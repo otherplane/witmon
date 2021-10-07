@@ -35,6 +35,7 @@
   margin: 0 auto;
   padding: 32px;
   max-width: 600px;
+  height: 100vh;
   row-gap: 18px;
   display: grid;
   grid-template-rows: repeat(8, max-content);

@@ -1,11 +1,10 @@
 <template>
+  <SectionHeader>LEADER BOARD</SectionHeader>
   <div class="scores-container">
-    <SectionHeader>LEADER BOARD</SectionHeader>
     <div class="table-header">
       <div class="label" @click="orderBy('index')">INDEX</div>
       <div class="label" @click="orderBy('username')">USER</div>
-      <div class="label" @click="orderBy('score')">SCORE ™</div>
-      <div class="label" @click="orderBy('rarityIndex')">RARITY INDEX</div>
+      <div class="label" @click="orderBy('score')">EggScore ™</div>
     </div>
     <Egg
       v-for="(egg, index) in egg.list"
@@ -43,11 +42,11 @@ export default {
   .table-header {
     display: grid;
     background-color: rgb(237, 240, 247);
-    grid-template-columns: 45px 200px 60px 50px;
-    padding: 16px 0;
+    grid-template-columns: 50px 1fr 80px;
     grid-template-rows: max-content;
     justify-content: center;
     align-items: center;
+    padding: 16px 4px;
     .label {
       cursor: pointer;
       color: black;
