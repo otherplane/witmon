@@ -68,7 +68,7 @@ contract WitmonERC721
             _expirationBlocks,
             _totalEggs
         );
-        _state.witnetRNG = new WitnetRequest(hex"");
+        _state.witnetRNG = new WitnetRequest(hex"0a0f120508021a01801a0210022202100b10e807180a200a2833308094ebdc03");
     }
 
     // ========================================================================
