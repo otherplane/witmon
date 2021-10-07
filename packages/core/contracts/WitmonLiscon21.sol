@@ -9,15 +9,6 @@ contract WitmonLiscon21
         WitmonDecoratorBase
 {
     using Strings for uint256;
-
-    // uint8 internal constant _TRAITS_EYES_COLOR_INDEX = 0;
-    // uint8 internal constant _TRAITS_EYESWARE_COLOR_INDEX = 1;
-    // uint8 internal constant _TRAITS_HATS_COLOR_INDEX = 2;
-    // uint8 internal constant _TRAITS_SPECIES_INDEX = 3;
-    // uint8 internal constant _TRAITS_BACKGROUNDS_INDEX = 4;
-    // uint8 internal constant _TRAITS_NECKWARES_INDEX = 5;
-    // uint8 internal constant _TRAITS_EYEWARES_INDEX = 6;
-    // uint8 internal constant _TRAITS_HATS_INDEX = 7;
    
     struct TraitIndexes {
         uint8 baseColor;
@@ -113,7 +104,7 @@ contract WitmonLiscon21
         ];
         string memory _attributes;
         for (uint8 _i = 0; _i < _items.length; _i ++) {
-            if (_items[_i].name == bytes12(0)) {
+            if (_items[_i].name != bytes12(0)) {
                 _attributes = string(abi.encodePacked(
                     _attributes,
                     bytes(_attributes).length == 0 ? '{' : ', {',
@@ -125,12 +116,10 @@ contract WitmonLiscon21
         }
         return string(abi.encodePacked(
             '{',
-                '"name": "Witty Creature #',
-                    _creature.tokenId.toString(), 
-                    ' (', art.species[_traits.species].name, ')",',
+                '"name": "Witty Creature #', _creature.tokenId.toString(), '",',
                 '"description": "Witty Creatures 2.0 at Liscon 2021. Powered by Witnet!",',
                 '"image_data": "', getCreatureImage(_creature), '",',
-                '"external_url": "', baseURI, _creature.eggIndex, '",',
+                '"external_url": "', baseURI, _creature.eggIndex.toString(), '",',
                 '"attributes": [', _attributes, ']',
             '}'
         ));
