@@ -3,10 +3,10 @@ import { test } from 'tap'
 import { claimEgg, initialEggs, server } from './helper'
 
 const VALID_ETH_ADDRESS = '0x184cc5908e1a3d29b4d31df67d99622c4baa7b71'
-// Kecak256 digest for mint with VALID_ETH_ADDRESS and
+// Keccak256 digest for mint with VALID_ETH_ADDRESS and
 // index 0, rank 1 and total eggs 2.
 const MESSAGE_DIGEST =
-  '0x48abc81886acb4da41c6ee925daef9a3470c28957ad51174d2656a2f950156c3'
+  '0b3f11ac7636f7f1c7617b10729f9b4607ba5f155ed69d4b838de323886e0150'
 
 const INVALID_ETH_ADDRESS_1 = '0x00'
 const INVALID_ETH_ADDRESS_2 = 'foo'

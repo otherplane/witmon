@@ -38,3 +38,7 @@ export function getIncubationExtendedFromBase(incubation: Incubation) {
 export function getColorFromIndex(index: number) {
   return index % EGG_COLORS_COUNT
 }
+
+export function fromHexToUint8Array(hex: string) {
+  return Uint8Array.from(Buffer.from(hex.substring(2).padStart(64, '0'), 'hex'))
+}

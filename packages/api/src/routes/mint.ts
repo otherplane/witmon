@@ -1,7 +1,9 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
-import { MINT_PRIVATE_KEY } from '../constants'
+import keccak from 'keccak'
+import secp256k1 from 'secp256k1'
 import Web3 from 'web3'
 
+import { MINT_PRIVATE_KEY } from '../constants'
 import { EggRepository } from '../repositories/egg'
 import {
   AuthorizationHeader,
@@ -9,6 +11,7 @@ import {
   MintOutput,
   MintParams,
 } from '../types'
+import { fromHexToUint8Array } from '../utils'
 
 const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
@@ -74,20 +77,34 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         throw Error('Mint failed because signature message is empty')
       }
 
-      // Sign message (uses keccak256 internally)
-      const envelopedSignature = web3.eth.accounts.sign(
-        message,
-        MINT_PRIVATE_KEY
+      // Compute Keccak256 from data
+      const messageBuffer = Buffer.from(message.substring(2), 'hex')
+      const messageHash = keccak('keccak256').update(messageBuffer).digest()
+
+      // Sign message
+      // Note: web3.eth.accounts.sign is not used because it prefixes the message to sign
+      const signatureObj = secp256k1.ecdsaSign(
+        messageHash,
+        fromHexToUint8Array(MINT_PRIVATE_KEY)
       )
+      // `V` signature component (V = 27 + recid)
+      const signV = (27 + signatureObj.recid).toString(16)
+      // Signature = RS | V 
+      const signature = Buffer.from(signatureObj.signature)
+        .toString('hex')
+        .concat(signV)
 
       const response = {
-        envelopedSignature,
+        envelopedSignature: {
+          message: message.substring(2),
+          messageHash: messageHash.toString('hex'),
+          signature,
+        },
         data: {
           address: request.body.address,
           index: egg.index,
           rank,
           total,
-          // eggColor: 0,
         },
       }
 
