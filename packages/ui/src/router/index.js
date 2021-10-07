@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import MyEgg from '../views/MyEgg.vue'
 import InitGame from '../views/InitGame.vue'
 import ListScores from '../views/ListScores.vue'
+import Disclaimer from '../views/Disclaimer.vue'
 import ScanEgg from '../views/ScanEgg.vue'
 import Info from '../views/Info.vue'
 import { useEggStore } from '@/stores/egg'
@@ -24,7 +25,7 @@ const routes = [
       const store = useEggStore()
       const eggLoginInfo = store.getToken()
 
-      if (eggLoginInfo.token) {
+      if (eggLoginInfo && eggLoginInfo.token) {
         next({ name: 'egg', params: { id: eggLoginInfo.key } })
       } else {
         next('init-game')
@@ -39,7 +40,7 @@ const routes = [
       const store = useEggStore()
       const eggLoginInfo = store.getToken()
 
-      if (eggLoginInfo.token) {
+      if (eggLoginInfo && eggLoginInfo.token) {
         next()
       } else {
         next('init-game')
@@ -54,12 +55,17 @@ const routes = [
       const store = useEggStore()
       const eggLoginInfo = store.getToken()
 
-      if (eggLoginInfo.token) {
+      if (eggLoginInfo && eggLoginInfo.token) {
         next()
       } else {
         next('init-game')
       }
     }
+  },
+  {
+    name: 'disclaimer',
+    path: '/disclaimer',
+    component: Disclaimer
   },
   {
     name: 'egg',

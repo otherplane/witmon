@@ -22,7 +22,7 @@
       Join us in the funiest and most gamified NFT minting ceremony even,
       featuring the cutest creatures in crypto
     </p>
-    <router-link to="/scan-egg" class="link">
+    <router-link to="/disclaimer" class="link">
       <Button class="btn" color="black">
         Play now
       </Button>
