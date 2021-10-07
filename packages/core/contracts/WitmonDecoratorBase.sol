@@ -37,16 +37,16 @@ abstract contract WitmonDecoratorBase
         } while (_number >= _range);
     }
 
-    /// @dev ...
+    /// @dev Generates pseudo-random number uniformly distributed in [0 .. 2^_bits - 1)
     function randomUniformBase2(bytes32 _phenotype, uint256 _seed, uint8 _bits)
         public pure
         virtual
         returns (uint8 _number)
     {
-        assert(_bits <= 8);
+        assert(_bits > 0 && _bits <= 8);
         uint8 _mask = uint8(uint256(2 ** _bits) - 1);
         return uint8(uint256(keccak256(abi.encode(_phenotype, _seed)))) & _mask;
-    }	
+    }
 
     /// @dev Returns size in bits of given value
     function _logBaseBits(uint8 _range) internal pure returns (uint _bits) {
