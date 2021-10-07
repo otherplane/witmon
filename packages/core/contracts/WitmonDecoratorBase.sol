@@ -10,12 +10,16 @@ abstract contract WitmonDecoratorBase
     string public override baseURI;
 
     constructor(string memory _baseURI) {
-        uint _urilen = bytes(_baseURI).length;
+        bytes memory _rawURI = bytes(_baseURI);
         require(
-            _urilen > 0,
+            _rawURI.length > 0,
             "WitmonDecoratorBase: empty URI"
         );
-        // TODO: verify baseURI trailing slash
+        require(
+            _rawURI[_rawURI.length - 1] == "/",
+            "WitmonDecoratorBase: no trailing slash"
+        );
+        baseURI = _baseURI;
     }
 
     /// @dev ...
