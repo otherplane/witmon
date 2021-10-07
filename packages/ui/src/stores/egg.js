@@ -96,15 +96,12 @@ export const useEggStore = defineStore('egg', {
       } else {
         console.log('request', request)
         this.clearError('info')
-        const { username, score, key, index, rarityIndex } = request.egg
+        const { username, score, key, index, rarityIndex, color } = request.egg
         const { incubatedBy, incubating } = request
         this.rarityIndex = rarityIndex
         this.username = username
         this.score = score
-        this.color = {
-          mainColor: '#fd2',
-          baseColor: '#fff'
-        }
+        this.color = color
         this.id = key
         this.index = index
         this.incubated = incubatedBy ? incubatedBy.from : null

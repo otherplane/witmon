@@ -7,8 +7,8 @@
       </div>
       <EggSvg
         class="egg-image"
-        :mainColor="egg.color && egg.color.mainColor"
-        :baseColor="egg.color && egg.color.baseColor"
+        :mainColor="egg.color && colors[egg.color].mainColor"
+        :baseColor="egg.color && colors[egg.color].baseColor"
       />
       <EggInfo
         :score="egg.score"
@@ -60,6 +60,14 @@ import imageUrl from '@/assets/egg-example.png'
 
 export default {
   setup () {
+    const colors = [
+      { baseColor: '#fff', mainColor: '#080' },
+      { baseColor: '#fff', mainColor: '#333' },
+      { baseColor: '#fff', mainColor: '#627' },
+      { baseColor: '#000', mainColor: '#fff' },
+      { baseColor: '#fff', mainColor: '#fd2' },
+      { baseColor: '#fff', mainColor: '#00d' }
+    ]
     const egg = useEggStore()
     onBeforeMount(() => {
       egg.getEggInfo()
@@ -70,7 +78,7 @@ export default {
         egg.incubateEgg({ key: egg.id })
       }
     }
-    return { egg, type, incubateMyEgg, imageUrl }
+    return { egg, type, incubateMyEgg, imageUrl, colors }
   }
 }
 </script>

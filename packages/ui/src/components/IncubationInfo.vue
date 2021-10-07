@@ -63,9 +63,9 @@ export default {
   align-items: center;
   min-height: 80px;
   .incubation {
-    display: flex;
-    margin-right: 32px;
-    flex-direction: column;
+    display: grid;
+    row-gap: 4px;
+    margin-right: 16px;
   }
   .empty-state {
     background-color: rgb(237, 240, 247);
