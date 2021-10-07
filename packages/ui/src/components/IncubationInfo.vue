@@ -60,11 +60,11 @@ export default {
 <style scoped lang="scss">
 .incubations {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   min-height: 80px;
   .incubation {
     display: flex;
+    margin-right: 32px;
     flex-direction: column;
   }
   .empty-state {

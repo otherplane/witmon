@@ -30,9 +30,10 @@ export default {
   },
   methods: {
     onDecode (decodedString) {
+      console.log('Decoded egg info:', decodedString)
       const chunks = decodedString.split('/')
       this.value = chunks[chunks.length - 1]
-      console.log('value', this.value)
+      console.log('Decoded egg info:', this.value)
       this.submitAndRedirect()
     },
     submitAndRedirect () {

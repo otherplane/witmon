@@ -55,21 +55,19 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import imageUrl from '@/assets/egg-example.png'
 
 export default {
   setup () {
-    const egg = ref(useEggStore())
+    const egg = useEggStore()
     onBeforeMount(() => {
-      egg.value.getEggInfo()
+      egg.getEggInfo()
     })
-    const type = computed(() =>
-      egg.value && egg.value.incubator ? 'disable' : 'default'
-    )
+    const type = computed(() => (egg && egg.incubator ? 'disable' : 'default'))
     const incubateMyEgg = () => {
       if (type.value !== 'disable') {
-        egg.value.incubateEgg({ key: egg.value.id })
+        egg.incubateEgg({ key: egg.id })
       }
     }
     return { egg, type, incubateMyEgg, imageUrl }
