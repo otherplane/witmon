@@ -130,12 +130,21 @@ contract WitmonLiscon21
         virtual override
         returns (string memory _svg)
     {
-        // TraitIndexes memory _traits = _splitPhenotype(
-        //     _creature.eggPhenotype,
-        //     _creature.eggCategory,
-        //     _creature.eggColorIndex
-        // );
-        // TODO
+        TraitIndexes memory _traits = _splitPhenotype(
+            _creature.eggPhenotype,
+            _creature.eggCategory,
+            _creature.eggColorIndex
+        );
+        return string(abi.encodePacked(
+            "<svg width='32' height='32' version='1.1' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>",
+                _styles(_creature.tokenId, _traits),
+                "<rect width='32' height='32' class='a'/>",
+                art.backgrounds[_traits.background].svg,
+                art.species[_traits.species].svg,
+                art.hats[_traits.hat].svg,
+                art.eyewears[_traits.eyewear].svg,
+            "</svg"
+        ));
     }
 
     function _styles(uint256 _tokenId, TraitIndexes memory _traits)
