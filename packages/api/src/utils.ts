@@ -1,5 +1,5 @@
 import {
-  EGG_COLORS_LENGTH,
+  EGG_COLORS_COUNT,
   INCUBATION_COOLDOWN,
   INCUBATION_DURATION,
 } from './constants'
@@ -36,6 +36,5 @@ export function getIncubationExtendedFromBase(incubation: Incubation) {
 }
 
 export function getColorFromIndex(index: number) {
-  return index % EGG_COLORS_LENGTH
+  return index % EGG_COLORS_COUNT
 }
-
