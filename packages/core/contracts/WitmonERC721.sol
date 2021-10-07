@@ -55,8 +55,7 @@ contract WitmonERC721
             address _signator,
             IWitmonDecorator _decorator,
             uint8[] memory _percentileMarks,
-            uint256 _expirationBlocks,
-            uint256 _totalEggs
+            uint256 _expirationBlocks
         )
         UsingWitnet(_witnet)
         ERC721(_name, _symbol)
@@ -65,8 +64,7 @@ contract WitmonERC721
             _signator,
             _decorator,
             _percentileMarks,
-            _expirationBlocks,
-            _totalEggs
+            _expirationBlocks
         );
         _state.witnetRNG = new WitnetRequest(hex"0a0f120508021a01801a0210022202100b10e807180a200a2833308094ebdc03");
     }
@@ -108,13 +106,11 @@ contract WitmonERC721
     /// @param _percentileMarks Creature-category ordered percentile marks (common first).
     /// @param _expirationBlocks Number of blocks after Witnet randomness is generated, 
     /// during which creatures may be minted.
-    /// @param _totalEggs Maximum number of eggs that may eventually get minted.
     function setParameters(
             address _signator,
             IWitmonDecorator _decorator,
             uint8[] memory _percentileMarks,
-            uint256 _expirationBlocks,
-            uint256 _totalEggs
+            uint256 _expirationBlocks
         )
         public
         virtual override
@@ -123,8 +119,7 @@ contract WitmonERC721
     {
         require(address(_decorator) != address(0), "WitmonERC721: no decorator");
         require(_signator != address(0), "WitmonERC721: no signator");
-        require(_totalEggs > 0, "WitmonERC721: no eggs?");
-        require(_percentileMarks.length == uint8(Witmons.CreatureCategory.Legendary) + 1, "WitmonERC721: bad percentile marks");
+        require(_percentileMarks.length == uint8(Witmons.CreatureCategory.Common) + 1, "WitmonERC721: bad percentile marks");
         _state.params.percentileMarks = new uint8[](_percentileMarks.length);
         uint8 _checkSum; 
         for (uint8 _i = 0; _i < _percentileMarks.length; _i ++) {
@@ -137,14 +132,12 @@ contract WitmonERC721
         _state.params.signator = _signator;
         _state.params.decorator = address(_decorator);
         _state.params.expirationBlocks = _expirationBlocks;
-        _state.params.totalEggs = _totalEggs;
         
         emit BatchParameters(
             _signator,
             _decorator,
             _percentileMarks,
-            _expirationBlocks,
-            _totalEggs
+            _expirationBlocks
         );
     }
 
@@ -212,7 +205,8 @@ contract WitmonERC721
             uint256 _eggIndex,
             uint256 _eggColorIndex,
             uint256 _eggScore,
-            uint256 _eggRanking, // 1..totalEggs
+            uint256 _eggRanking,
+            uint256 _totalClaimedEggs,
             bytes calldata _signature
         )
         external
@@ -224,8 +218,9 @@ contract WitmonERC721
         bytes32 _eggHash = keccak256(abi.encodePacked(
             _eggOwner,
             _eggIndex,
-            _eggRanking,
-            _state.params.totalEggs
+            // ..
+            _eggRanking,            
+            _totalClaimedEggs
         ));
         require(
             Witmons.recoverAddr(_eggHash, _signature) == _state.params.signator,
@@ -238,19 +233,15 @@ contract WitmonERC721
             "WitmonERC721: already minted"
         );
 
-        // Verify egg index range:
-        require(
-            _eggIndex < _state.params.totalEggs,
-            "WitmonERC721: bad index"
-        );
-
         // Increment token supply:
         _state.totalSupply.increment();
         uint256 _tokenId = _state.totalSupply.current();
 
         // Fulfill creature data:
-        uint256 _totalEggs = _state.params.totalEggs;
-        uint8 _percentile100 = _eggRanking > _totalEggs ? uint8(1) : uint8((_eggRanking * 100) / _totalEggs);
+        uint8 _percentile100 = _eggRanking > _totalClaimedEggs
+            ? 100 
+            : uint8((_eggRanking * 100) / _totalClaimedEggs)
+        ;
         Witmons.Creature memory _creature = Witmons.Creature({
             tokenId: _tokenId,
             eggBirth: block.number,
@@ -302,9 +293,7 @@ contract WitmonERC721
         returns (Witmons.CreatureStatus)
     {
         Witmons.Creature storage _creature = _state.creatures[_eggIndex];
-        if (_creature.eggIndex >= _state.params.totalEggs) {
-            return Witmons.CreatureStatus.Inexistent;
-        } else if (_creature.eggPhenotype != bytes32(0)) {
+        if (_creature.eggPhenotype != bytes32(0)) {
             return Witmons.CreatureStatus.Alive;
         } else {
             Witmons.Status _tenderStatus = _state.status();
@@ -330,12 +319,10 @@ contract WitmonERC721
         public view
         override
         returns (
-            uint256 _totalEggs,
             uint256 _totalSupply
         )
     {
         return (
-            _state.params.totalEggs,
             _state.totalSupply.current()
         );
     }

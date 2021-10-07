@@ -10,13 +10,11 @@ interface IWitmonAdmin {
     /// @param _percentileMarks Creature-category ordered percentile marks (common first).
     /// @param _expirationBlocks Number of blocks after Witnet randomness is generated, 
     /// during which creatures may be minted.
-    /// @param _totalEggs Maximum number of eggs that may eventually get minted.
     function setParameters(
         address _signator,
         IWitmonDecorator _decorator,
         uint8[] calldata _percentileMarks,
-        uint256 _expirationBlocks,
-        uint256 _totalEggs
+        uint256 _expirationBlocks
     ) external;
 
     /// Stops batching, which means: (a) parameters cannot change anymore, and (b) a 
