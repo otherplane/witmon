@@ -29,9 +29,8 @@ module.exports = async function (deployer, network, accounts) {
       "WITMON",                         // symbol
       accounts[0],                      // signator
       WitmonLiscon21.address,           // decorator    
-      [60, 30, 10],                     // percentile marks
-      80640,                            // expirationDays (~ 14 days)
-      525                               // totalEggs
+      [10, 30, 60],                     // percentile marks
+      80640                             // expirationDays (~ 14 days)
     )
     if (network !== "test") {
       witmonAddresses[network].WitmonERC721 = WitmonERC721.address

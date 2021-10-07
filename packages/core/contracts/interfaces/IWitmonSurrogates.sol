@@ -8,6 +8,7 @@ interface IWitmonSurrogates {
         uint256 _eggColor,
         uint256 _eggScore,
         uint256 _eggRanking,
+        uint256 _totalClaimedEggs,
         bytes calldata _signature
     ) external;
 }

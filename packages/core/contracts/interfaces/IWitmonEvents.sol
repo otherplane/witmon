@@ -8,8 +8,7 @@ interface IWitmonEvents {
         address signator,
         IWitmonDecorator decorator,
         uint8[] percentileMarks,
-        uint256 expirationBlocks,
-        uint256 totalEggs
+        uint256 expirationBlocks
     );
     event WitnetResult(bytes32 randomness);
     event WitnetError(string reason);

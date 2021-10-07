@@ -22,7 +22,6 @@ library Witmons {
         address decorator;
         uint8[] percentileMarks;      
         uint256 expirationBlocks;
-        uint256 totalEggs;
     }
 
     enum Status {
@@ -44,9 +43,9 @@ library Witmons {
     }
 
     enum CreatureCategory {
-        Common,
-        Rare,
-        Legendary
+        Legendary,  // 0
+        Rare,       // 1
+        Common      // 2
     }
 
     enum CreatureStatus {
@@ -83,14 +82,14 @@ library Witmons {
     }
 
     /// Calculate creature category.
-    function creatureCategory(State storage _self, uint8 _percentile100)
+    function creatureCategory(State storage _self, uint8 _percentile100)  
         internal view
         returns (CreatureCategory)
     {
         uint8 _i; uint8 _cumuled;
         for (; _i < _self.params.percentileMarks.length; _i ++) {
             _cumuled += _self.params.percentileMarks[_i];
-            if (_percentile100 >= _cumuled) {
+            if (_percentile100 <= _cumuled) {
                 break;
             }
         }
