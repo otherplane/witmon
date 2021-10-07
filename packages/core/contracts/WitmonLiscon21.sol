@@ -14,20 +14,20 @@ contract WitmonLiscon21
         uint8 baseColor;
         uint8 background;
         uint8 eyesColor;
-        uint8 eyeware;
-        uint8 eyewareColor;
+        uint8 eyewear;
+        uint8 eyewearColor;
         uint8 hat;
         uint8 hatColor;
-        uint8 neckware;
+        uint8 neckwear;
         uint8 species;
     }
    struct Art {
         string[] colors;
         mapping(uint256 => Item) species;
         mapping(uint256 => Item) backgrounds;
-        mapping(uint256 => Item) eyewares;
+        mapping(uint256 => Item) eyewears;
         mapping(uint256 => Item) hats;
-        mapping(uint256 => Item) neckwares;
+        mapping(uint256 => Item) neckwears;
     }
 
     struct Item {
@@ -62,10 +62,10 @@ contract WitmonLiscon21
         art.backgrounds[5] = Item("Hell", "...");
         // ...
 
-        art.eyewares[0] = Item("Thug Life", "<path d='m6 13v1h1v1h1v1h1v1h3v-1h1v-1h1v-1h2v1h1v1h1v1h3v-1h1v-1h1v-1h1v-1h-18z' class='c'/><path d='m7 13v1h1v-1h-1zm1 1v1h1v-1h-1zm1 0h1v-1h-1v1zm1 0v1h1v-1h-1zm1 1v1h1v-1h-1zm-1 0h-1v1h1v-1zm6-2v1h1v-1h-1zm1 1v1h1v-1h-1zm1 0h1v-1h-1v1zm1 0v1h1v-1h-1zm1 1v1h1v-1h-1zm-1 0h-1v1h1v-1z' fill='#fff'/>");
-        art.eyewares[1] = Item("Groucho", "<path d='m8 8v3h6v-3zm8 0v3h6v-3zm-7 9v4h2v-1h8v1h2v-4z' fill='333'/><path d='m14 11v5h-1v1h1v1h2v-1h1v-1h-1v-5z' fill='#fda'/><path class='c' d='m9 11v1h4v-1zm4 1v4h1v-3h2v3h1v-4zm4 0h4v-1h-4zm4 0v4h1v-4zm0 4h-4v1h4zm-8 0h-4v1h4zm-4 0v-4h-1v4z'/><path d='m9 12v4h4v-4zm8 0v4h4v-4z' fill='#fff' opacity='.2'/>");
-        art.eyewares[2] = Item("John Lennon", "<path d='m9 11v1h3v-1zm3 1v1h1v-1zm1 1v2h1v-1h2v1h1v-2zm4 0h1v-1h-1zm1-1h3v-1h-3zm3 0v1h1v-1zm1 1v2h1v-2zm0 2h-1v1h1zm-1 1h-3v1h3zm-3 0v-1h-1v1zm-5-1h-1v1h1zm-1 1h-3v1h3zm-3 0v-1h-1v1zm-1-1v-2h-1v2zm0-2h1v-1h-1z' fill='#fc3'/><path class='c' d='m12 12h-3v1h-1v2h1v1h3v-1h1v-2h-1zm9 1h1v2h-1v1h-3v-1h-1v-2h1v-1h3z' opacity='.5'/>");
-        art.eyewares[3] = Item("Laser eyes", "<g class='b'><path d='m13 11h-5v1h-1v3h1v1h5v-1h1v-3h-1zm9 0h-5v1h-1v3h1v1h5v-1h1v-3h-1z' opacity='.7'/><path d='m13 12h1v3h1v2h3v-1h-1v-1h-1v-3h-1v-2h-3v1h1zm-8 0h2v3h1v1h1v1h-3v-2h-1zm20 0h-1v-2h-3v1h1v1h1v3h2z' opacity='.5'/><path d='m16 11h-1v-1h-1v-1h3v1h-1zm-11 2h-4v1h4zm20 0h4v1h-4zm-20 3h1v1h1v1h-3v-1h1zm10 0h-1v1h-1v1h3v-1h-1zm9-5h1v-1h1v-1h-3v1h1z' opacity='.3'/><path d='m18 10h-1v-1h-1v-1h2v-1h2v1h-1v1h-1zm-15 2h2v1h-2zm2 2h-2v1h2zm22 1v-1h-2v1zm0-2v-1h-2v1zm-27 0h1v1h-1zm29 0h3v1h-3zm-26 4h1v1h1v1h-2v1h-2v-1h1v-1h1zm10 0h-1v1h-1v1h-1v1h2v-1h2v-1h-1zm13-7h1v-1h1v-1h1v-1h-2v1h-2v1h1z' opacity='.1'/></g><path d='m11 13h-1v1h1zm9 0h-1v1h1z' fill='#ffa'/><rect y='13' width='32' height='1' fill='#ffa' opacity='.3'/>");
+        art.eyewears[0] = Item("Thug Life", "<path d='m6 13v1h1v1h1v1h1v1h3v-1h1v-1h1v-1h2v1h1v1h1v1h3v-1h1v-1h1v-1h1v-1h-18z' class='c'/><path d='m7 13v1h1v-1h-1zm1 1v1h1v-1h-1zm1 0h1v-1h-1v1zm1 0v1h1v-1h-1zm1 1v1h1v-1h-1zm-1 0h-1v1h1v-1zm6-2v1h1v-1h-1zm1 1v1h1v-1h-1zm1 0h1v-1h-1v1zm1 0v1h1v-1h-1zm1 1v1h1v-1h-1zm-1 0h-1v1h1v-1z' fill='#fff'/>");
+        art.eyewears[1] = Item("Groucho", "<path d='m8 8v3h6v-3zm8 0v3h6v-3zm-7 9v4h2v-1h8v1h2v-4z' fill='333'/><path d='m14 11v5h-1v1h1v1h2v-1h1v-1h-1v-5z' fill='#fda'/><path class='c' d='m9 11v1h4v-1zm4 1v4h1v-3h2v3h1v-4zm4 0h4v-1h-4zm4 0v4h1v-4zm0 4h-4v1h4zm-8 0h-4v1h4zm-4 0v-4h-1v4z'/><path d='m9 12v4h4v-4zm8 0v4h4v-4z' fill='#fff' opacity='.2'/>");
+        art.eyewears[2] = Item("John Lennon", "<path d='m9 11v1h3v-1zm3 1v1h1v-1zm1 1v2h1v-1h2v1h1v-2zm4 0h1v-1h-1zm1-1h3v-1h-3zm3 0v1h1v-1zm1 1v2h1v-2zm0 2h-1v1h1zm-1 1h-3v1h3zm-3 0v-1h-1v1zm-5-1h-1v1h1zm-1 1h-3v1h3zm-3 0v-1h-1v1zm-1-1v-2h-1v2zm0-2h1v-1h-1z' fill='#fc3'/><path class='c' d='m12 12h-3v1h-1v2h1v1h3v-1h1v-2h-1zm9 1h1v2h-1v1h-3v-1h-1v-2h1v-1h3z' opacity='.5'/>");
+        art.eyewears[3] = Item("Laser eyes", "<g class='b'><path d='m13 11h-5v1h-1v3h1v1h5v-1h1v-3h-1zm9 0h-5v1h-1v3h1v1h5v-1h1v-3h-1z' opacity='.7'/><path d='m13 12h1v3h1v2h3v-1h-1v-1h-1v-3h-1v-2h-3v1h1zm-8 0h2v3h1v1h1v1h-3v-2h-1zm20 0h-1v-2h-3v1h1v1h1v3h2z' opacity='.5'/><path d='m16 11h-1v-1h-1v-1h3v1h-1zm-11 2h-4v1h4zm20 0h4v1h-4zm-20 3h1v1h1v1h-3v-1h1zm10 0h-1v1h-1v1h3v-1h-1zm9-5h1v-1h1v-1h-3v1h1z' opacity='.3'/><path d='m18 10h-1v-1h-1v-1h2v-1h2v1h-1v1h-1zm-15 2h2v1h-2zm2 2h-2v1h2zm22 1v-1h-2v1zm0-2v-1h-2v1zm-27 0h1v1h-1zm29 0h3v1h-3zm-26 4h1v1h1v1h-2v1h-2v-1h1v-1h1zm10 0h-1v1h-1v1h-1v1h2v-1h2v-1h-1zm13-7h1v-1h1v-1h1v-1h-2v1h-2v1h1z' opacity='.1'/></g><path d='m11 13h-1v1h1zm9 0h-1v1h1z' fill='#ffa'/><rect y='13' width='32' height='1' fill='#ffa' opacity='.3'/>");
         // ...
         
         art.hats[0] = Item("Headphones", "<path d='m7 11h-4v8h4zm17 0h4v8h-4z' fill='#555'/><path class='d' d='m9 2v1h-2v1h-1v1h-1v1h-1v2h-1v2h2v-1h1v-2h1v-1h1v-1h2v-1h11v1h2v1h1v1h1v2h1v1h2v-2h-1v-2h-1v-1h-1v-1h-1v-1h-2v-1zm19 11h2v4h-2zm-25 0h-2v4h2z'/><path d='m2 10v3h1v-2h2v-1h-3zm24 0v1h2v2h1v-3h-3zm-24 7v6h1v-6h-1zm1 6v4h1v-4h-1zm1 4v2h1v-2h-1zm1 2v1h1v-1h-1zm1 1v1h1v-1h-1zm1 1v1h1v-1h-1zm21-14v5h1v-5h-1zm0 5h-1v2h1v-2zm-1 2h-1v2h1v-2zm-1 2h-1v2h1v-2zm-1 2h-1v1h1v-1zm-1 1h-1v1h1v-1zm-1 1h-2v1h2v-1zm-2 1h-2v1h2v-1z' fill='#ccc'/>");
@@ -73,8 +73,8 @@ contract WitmonLiscon21
         art.hats[2] = Item("Tiara", "<path class='d' d='m17 1h-2v1h-2v1h-2v1h-1v1h-1v1h-1v2h-2v4h2v-2h1v-1h2v-1h3v1h3v-1h4v1h2v1h2v1h2v1h1v-3h-1v-2h-2v-2h-2v-1h-2v-1h-1v-1h-3z'/><path class='b' d='m17 3h-3v1h-1v3h1v1h3v-1h1v-3h-1z'/><path d='m14 3v1h1v-1zm1 1v1h1v-1zm1 0h1v-1h-1zm-1 1h-1v1h1zm-1 1h-1v1h1zm0-1v-1h-1v1z' fill='#fff' opacity='.3'/><path d='m14 2v1h3v-1zm3 1v3h-1v1h-3v1h1v1h3v-1h1v-1h1v-3h-1v-1zm-4 4v-3h-1v3zm0-3h1v-1h-1z' opacity='.1'/>");
         // ...
 
-        art.neckwares[0] = Item("", "");
-        // art.neckwares[1] = Item("Bitcoin", "...");
+        art.neckwears[0] = Item("", "");
+        // art.neckwears[1] = Item("Bitcoin", "...");
         // ...
     }
 
@@ -91,16 +91,16 @@ contract WitmonLiscon21
         Item[5] memory _items = [
             art.species[_traits.species],
             art.backgrounds[_traits.background],
-            art.eyewares[_traits.eyeware],
+            art.eyewears[_traits.eyewear],
             art.hats[_traits.hat],
-            art.neckwares[_traits.neckware]
+            art.neckwears[_traits.neckwear]
         ];
         string[5] memory _traitTypes = [
             "Species",
             "Background",
-            "Eyeware",
+            "Eyewear",
             "Hat",
-            "Neckware"
+            "Neckwear"
         ];
         string memory _attributes;
         for (uint8 _i = 0; _i < _items.length; _i ++) {
@@ -154,7 +154,7 @@ contract WitmonLiscon21
         return string(abi.encodePacked(
             "<style>#witmon", _tokenId.toString(), " .a { fill: #", art.colors[_traits.baseColor],
             "; } #witmon", _tokenId.toString(), " .b { fill: #", art.colors[_traits.eyesColor],
-            "; } #witmon", _tokenId.toString(), " .c { fill: #", art.colors[_traits.eyewareColor],
+            "; } #witmon", _tokenId.toString(), " .c { fill: #", art.colors[_traits.eyewearColor],
             "; } #witmon", _tokenId.toString(), " .d { fill: #", art.colors[_traits.hatColor],
             "; }</style>"
         ));
@@ -176,12 +176,12 @@ contract WitmonLiscon21
             );
         _traits.baseColor = uint8(_eggColorIndex % _numColors);
         _traits.eyesColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
-        _traits.eyeware = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
-        _traits.eyewareColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
+        _traits.eyewear = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
+        _traits.eyewearColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
         _traits.hat = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
         _traits.hatColor = randomUniform(_eggPhenotype, _seed ++, _numColors);       
-        _traits.neckware = (_eggCategory > Witmons.CreatureCategory.Common
-                ? 1 + randomUniform(_eggPhenotype, _seed ++, 11) // TODO: set total number of neckwares
+        _traits.neckwear = (_eggCategory > Witmons.CreatureCategory.Common
+                ? 1 + randomUniform(_eggPhenotype, _seed ++, 11) // TODO: set total number of neckwears
                 : 0
             );
         _traits.species = randomUniform(_eggPhenotype, _seed ++, 13); // TODO: set total number of species
