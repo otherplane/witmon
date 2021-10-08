@@ -1,27 +1,13 @@
 <template>
   <SectionHeader>SCAN YOUR QR CODE</SectionHeader>
   <div class="container">
-    <QrStream @decode="onDecode"></QrStream>
-    <img
-      src="@/assets/witty-creatures-logo.svg"
-      alt="Witty creatures logo"
-      class="logo"
-    />
-    <input
-      v-model="eggKey"
-      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      id="username"
-      type="text"
-      placeholder="Egg ID"
-    />
-    <Button color="black" @click="submitAndRedirect">
-      Submit
-    </Button>
-    <p v-if="egg.errors.claim" class="error">{{ egg.errors.claim }}</p>
+    <QrStream class="pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
 
+    <p v-if="egg.errors.claim" class="error mb-4">{{ egg.errors.claim }}</p>
+    <p class="mb-4">Or import your profile</p>
     <label
       v-if="!fileInfo"
-      class="w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150"
+      class="mb-8 w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150"
     >
       <i class="fas fa-cloud-upload-alt fa-3x"></i>
       <span class="mt-2 text-base leading-normal">Select a file</span>

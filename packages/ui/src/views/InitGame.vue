@@ -7,7 +7,6 @@
     />
     <div>
       <p class="subtitle">THE DECENTRALIZED ORACLE PRESENTS</p>
-      <p class="subtitle">PRESENTS</p>
     </div>
     <img
       src="@/assets/witty-creatures-logo.svg"
@@ -19,7 +18,7 @@
       <p class="subtitle">aka "O JOGO DOS OVOS"</p>
     </div>
     <p class="small-title">
-      Join us in the funiest and most gamified NFT minting ceremony even,
+      Join us in the funniest and most gamified NFT minting ceremony even,
       featuring the cutest creatures in crypto
     </p>
     <router-link to="/disclaimer" class="link">
@@ -35,13 +34,13 @@
   margin: 0 auto;
   padding: 32px;
   max-width: 600px;
-  height: 100vh;
-  row-gap: 18px;
-  display: grid;
-  grid-template-rows: repeat(8, max-content);
-  justify-items: center;
-  align-content: center;
+  row-gap: 16px;
+  align-items: center;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   .witnet-logo {
     width: 150px;
   }
