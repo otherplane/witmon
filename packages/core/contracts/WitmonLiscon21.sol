@@ -21,7 +21,7 @@ contract WitmonLiscon21
         uint8 neckwear;
         uint8 species;
     }
-   struct Art {
+    struct Art {
         string[] colors;
         mapping(uint256 => Item) species;
         mapping(uint256 => Item) backgrounds;
@@ -107,21 +107,21 @@ contract WitmonLiscon21
             if (_items[_i].name != bytes12(0)) {
                 _attributes = string(abi.encodePacked(
                     _attributes,
-                    bytes(_attributes).length == 0 ? '{' : ', {',
-                        '"trait_type": "', _traitTypes[_i], '",',
-                        '"value": "', _items[_i].name, '"',
-                    '}'
+                    bytes(_attributes).length == 0 ? "{" : ", {",
+                        "\"trait_type\": \"", _traitTypes[_i], "\",",
+                        "\"value\": \"", _items[_i].name, "\"",
+                    "}"
                 ));
             }
         }
         return string(abi.encodePacked(
-            '{',
-                '"name": "Witty Creature #', _creature.tokenId.toString(), '",',
-                '"description": "Witty Creatures 2.0 at Liscon 2021. Powered by Witnet!",',
-                '"image_data": "', getCreatureImage(_creature), '",',
-                '"external_url": "', baseURI, _creature.eggIndex.toString(), '",',
-                '"attributes": [', _attributes, ']',
-            '}'
+            "{",
+                "\"name\": \"Witty Creature #", _creature.tokenId.toString(), "\",",
+                "\"description\": \"Witty Creatures 2.0 at Liscon 2021. Powered by Witnet!\",",
+                "\"image_data\": \"", getCreatureImage(_creature), "\",",
+                "\"external_url\": \"", baseURI, _creature.eggIndex.toString(), "\",",
+                "\"attributes\": [", _attributes, "]",
+            "}"
         ));
     }
 

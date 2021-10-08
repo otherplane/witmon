@@ -16,14 +16,14 @@ import "./interfaces/IWitmonView.sol";
 
 contract WitmonERC721
     is
-        ERC721
-        , Ownable
-        , ReentrancyGuard
-        , UsingWitnet
-        , IWitmonAdmin
-        , IWitmonEvents
-        , IWitmonSurrogates
-        , IWitmonView
+        ERC721,
+        Ownable,
+        ReentrancyGuard,
+        UsingWitnet,
+        IWitmonAdmin,
+        IWitmonEvents,
+        IWitmonSurrogates,
+        IWitmonView
 {
     using Counters for Counters.Counter;
     using Strings for bytes32;
