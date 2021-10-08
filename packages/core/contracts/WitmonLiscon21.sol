@@ -169,8 +169,8 @@ contract WitmonLiscon21
         virtual
         returns (TraitIndexes memory _traits)
     {
-        uint256 _seed; uint8 _numColors = uint8(art.colors.length);        
-        _traits.background = (_eggCategory > Witmons.CreatureCategory.Rare
+        uint256 _seed; uint8 _numColors = uint8(art.colors.length);
+        _traits.background = (_eggCategory == Witmons.CreatureCategory.Legendary
                 ? 1 + randomUniform(_eggPhenotype, _seed ++, 13) // TODO: set total number of backgrounds
                 : 0
             );
@@ -180,7 +180,7 @@ contract WitmonLiscon21
         _traits.eyewearColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
         _traits.hat = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
         _traits.hatColor = randomUniform(_eggPhenotype, _seed ++, _numColors);       
-        _traits.neckwear = (_eggCategory > Witmons.CreatureCategory.Common
+        _traits.neckwear = (_eggCategory != Witmons.CreatureCategory.Common
                 ? 1 + randomUniform(_eggPhenotype, _seed ++, 11) // TODO: set total number of neckwears
                 : 0
             );
