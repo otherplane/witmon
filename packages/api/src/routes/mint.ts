@@ -5,6 +5,7 @@ import Web3 from 'web3'
 
 import { EGG_BIRTH_DATE, MINT_PRIVATE_KEY } from '../constants'
 import { EggRepository } from '../repositories/egg'
+import { MintRepository } from '../repositories/mint'
 import {
   AuthorizationHeader,
   JwtVerifyPayload,
@@ -16,6 +17,7 @@ import { fromHexToUint8Array, isTimeToMint } from '../utils'
 const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
   const eggRepository = new EggRepository(fastify.mongo.db)
+  const mintRepository = new MintRepository(fastify.mongo.db)
 
   fastify.post<{ Body: MintParams; Reply: MintOutput | Error }>('/mint', {
     schema: {
@@ -28,7 +30,9 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     handler: async (request: FastifyRequest<{ Body: MintParams }>, reply) => {
       // Check 0: incubation period
       if (EGG_BIRTH_DATE && isTimeToMint())
-        return reply.status(403).send(new Error(`Forbidden: mint is not enabled yet`))
+        return reply
+          .status(403)
+          .send(new Error(`Forbidden: mint is not enabled yet`))
 
       // Check 1: token is valid
       let fromId: string
@@ -56,6 +60,12 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           .send(
             new Error(`Player egg should be claimed before incubating others`)
           )
+      }
+
+      // If previously minted, reply with same mint output
+      const prevMint = await mintRepository.get(fromId)
+      if (prevMint) {
+        return reply.status(200).send(prevMint)
       }
 
       const web3 = new Web3()
@@ -113,6 +123,9 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           total,
         },
       }
+
+      // Save mint output for future requests
+      mintRepository.create(response)
 
       return reply.status(200).send(response)
     },
