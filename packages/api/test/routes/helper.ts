@@ -55,11 +55,18 @@ teardown(async () => {
 })
 
 beforeEach(async (t) => {
-  // Drop mongodb `eggs` collection
+  // Drop mongodb collections
   try {
-    await client.db(process.env.MONGO_INITDB_DATABASE).collection('eggs').drop()
+    await client
+      .db(process.env.MONGO_INITDB_DATABASE)
+      .listCollections()
+      .forEach((collection) => {
+        client
+          .db(process.env.MONGO_INITDB_DATABASE)
+          .dropCollection(collection.name)
+      })
   } catch (err) {
-    console.error('Error dropping mongo')
+    console.error('Error dropping mongo', err)
   }
 
   server = Fastify().register(app)

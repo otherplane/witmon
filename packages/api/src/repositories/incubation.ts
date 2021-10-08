@@ -6,7 +6,7 @@ export class IncubationRepository {
   private collection: Collection
 
   constructor(db: Db) {
-    this.collection = db.collection('eggs')
+    this.collection = db.collection('incubations')
   }
 
   public async create(incubation: Incubation): Promise<Incubation> {
