@@ -25,6 +25,19 @@ export const useEggStore = defineStore('egg', {
       }
     }
   },
+  getters: {
+    mintCreatureParams () {
+      return [
+        this.mintInformation.data.address,
+        this.mintInformation.data.index,
+        this.mintInformation.data.color,
+        this.mintInformation.data.score,
+        this.mintInformation.data.rank,
+        this.mintInformation.data.total,
+        '0x' + this.mintInformation.envelopedSignature.signature
+      ]
+    }
+  },
   actions: {
     notify (payload) {
       useEggStore().app.config.globalProperties.$notify(payload)
@@ -94,7 +107,6 @@ export const useEggStore = defineStore('egg', {
       if (request.error) {
         this.setError('info', request.error)
       } else {
-        console.log('request', request)
         this.clearError('info')
         const { username, score, key, index, rarityIndex, color } = request.egg
         const { incubatedBy, incubating } = request
@@ -108,8 +120,15 @@ export const useEggStore = defineStore('egg', {
         this.incubator = incubating ? incubating.to : null
         this.incubatedTimeLeft = incubatedBy ? incubatedBy.ends : null
         this.incubatingTimeLeft = incubating ? incubating.ends : null
-        console.log('getEggIngo', request)
       }
+    },
+    async mint (address) {
+      const tokenInfo = this.getToken()
+      const request = await this.api.mint({ address, token: tokenInfo.token })
+
+      this.mintInformation = request
+
+      return this.mintCreatureParams
     }
   }
 })

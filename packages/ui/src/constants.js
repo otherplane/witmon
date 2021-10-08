@@ -1,0 +1,2 @@
+export const CONTRACT_ADDRESS = import.meta.env.CONTRACT_ADDRESS || '0x8521cCefc088Ab649Eb47eDc13217AFdb085257C'
+

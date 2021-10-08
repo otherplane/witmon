@@ -7,8 +7,8 @@
       </div>
       <EggSvg
         class="egg-image"
-        :mainColor="egg.color && colors[egg.color].mainColor"
-        :baseColor="egg.color && colors[egg.color].baseColor"
+        :mainColor="eggColor.mainColor"
+        :baseColor="eggColor.baseColor"
       />
       <EggInfo
         :score="egg.score"
@@ -53,11 +53,24 @@
       <Button @click="modal.showModal" color="grey" class="center-item">
         Export
       </Button>
-      <ModalDialog :show="modal.visible.value" v-on:close="modal.hideModal">
-        <ModalExport />
-      </ModalDialog>
+
+      <Button
+        v-if="!isProviderConnected"
+        @click="enableProvider"
+        color="grey"
+        class="center-item"
+      >
+        Connect metamask
+      </Button>
+      <Button v-else @click="mint" color="grey" class="center-item">
+        Mint
+      </Button>
     </div>
   </div>
+
+  <ModalDialog :show="modal.visible.value" v-on:close="modal.hideModal">
+    <ModalExport />
+  </ModalDialog>
 </template>
 
 <script>
@@ -66,6 +79,7 @@ import { computed, onBeforeMount } from 'vue'
 
 import imageUrl from '@/assets/egg-example.png'
 import { useModal } from '@/composables/useModal'
+import { useWeb3Witmon } from '../composables/useWeb3Witmon'
 
 export default {
   setup () {
@@ -79,16 +93,34 @@ export default {
     ]
     const modal = useModal()
     const egg = useEggStore()
+    const web3Witmon = useWeb3Witmon()
+
     onBeforeMount(() => {
       egg.getEggInfo()
     })
     const type = computed(() => (egg.incubator ? 'disable' : 'default'))
+    const eggColor = computed(() =>
+      Number.isFinite(egg.color)
+        ? colors[egg.color]
+        : { mainColor: null, baseColor: null }
+    )
     function incubateMyEgg () {
       if (type.value !== 'disable') {
         egg.incubateEgg({ key: egg.id })
       }
     }
-    return { egg, type, incubateMyEgg, imageUrl, colors, modal }
+
+    return {
+      egg,
+      type,
+      incubateMyEgg,
+      imageUrl,
+      eggColor,
+      modal,
+      enableProvider: web3Witmon.enableProvider,
+      isProviderConnected: web3Witmon.isProviderConnected,
+      mint: web3Witmon.mint
+    }
   }
 }
 </script>

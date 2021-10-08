@@ -66,7 +66,6 @@ export default {
     }
 
     function submitAndRedirect () {
-      console.log('eggkey', eggKey.value)
       if (previousRoute.value.includes('/my-egg')) {
         egg.incubateEgg({ key: eggKey.value })
       } else {
@@ -75,7 +74,6 @@ export default {
     }
 
     function onDecode (decodedString) {
-      console.log('---', decodedString)
       const chunks = decodedString.split('/')
       const key = chunks[chunks.length - 1]
       if (key) {

@@ -17,7 +17,8 @@
     "sass": "^1.42.1",
     "vue": "^3.2.6",
     "vue-router": "4",
-    "vue3-qr-reader": "^1.0.0"
+    "vue3-qr-reader": "^1.0.0",
+    "web3": "^1.6.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.6.1",

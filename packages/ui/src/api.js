@@ -58,4 +58,14 @@ export class WittyCreaturesApi {
       params: { headers: { authorization: params.token } }
     })
   }
+
+  mint ({ address, token }) {
+    console.log('address', address)
+    console.log('token', token)
+    return this._post({
+      url: `${this.baseUrl}/mint`,
+      data: { address },
+      params: { headers: { authorization: token } }
+    })
+  }
 }
