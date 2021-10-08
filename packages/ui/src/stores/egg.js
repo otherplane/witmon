@@ -17,6 +17,7 @@ export const useEggStore = defineStore('egg', {
       incubatingTimeLeft: null,
       incubated: null,
       list: [],
+      color: null,
       errors: {
         claim: null,
         info: null,
