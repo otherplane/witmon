@@ -64,8 +64,10 @@ test('should mint a claimed egg', async (t) => {
         t.ok(response.json().envelopedSignature.signature)
         t.same(response.json().data, {
           address: VALID_ETH_ADDRESS,
+          color: 0,
           index: 0,
           rank: 1,
+          score: 20,
           total: 2,
         })
 
