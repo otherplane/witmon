@@ -27,9 +27,8 @@ export default {
 <style scoped lang="scss">
 .info-container {
   display: grid;
-  grid-template-columns: repeat(3, max-content);
+  grid-template-columns: 1fr 1fr max-content;
   grid-template-rows: repeat(2, max-content);
   justify-content: space-between;
-  column-gap: 38px;
 }
 </style>
