@@ -1,9 +1,23 @@
 {
   "name": "witmon-solidity-contracts",
   "version": "1.0.0",
-  "private": true,
   "description": "Witmon Solidity Contracts",
-  "workspaces": [],
+  "author": "Witnet Devs <devs@witnet.io>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "compile": "truffle compile",
+    "console": "truffle console",
+    "fmt": "solhint --max-warnings 0 \"contracts/**/*.sol\" && eslint ./test && solhint \"test/**/*.sol\"",
+    "fmt!": "solhint --max-warnings 0 \"contracts/**/*.sol\" --fix && eslint ./test --fix && solhint \"test/**/*.sol\" --fix",
+    "migrate": "truffle migrate",
+    "test": "truffle test"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "witnet-solidity-bridge": "~0.5.0"
+  },
   "devDependencies": {
     "chai": "4.3.4",
     "eslint": "7.24.0",
@@ -13,16 +27,7 @@
     "eslint-plugin-promise": "5.1.0",
     "eslint-plugin-standard": "5.0.0",
     "solhint": "3.3.4",
+    "truffle": "^5.4.14",
     "truffle-assertions": "0.9.2"
-  },
-  "scripts": {
-    "fmt": "solhint --max-warnings 0 \"contracts/**/*.sol\" && eslint ./test && eslint ./scripts/*.js && solhint \"test/**/*.sol\"",
-    "fmt!": "solhint --max-warnings 0 \"contracts/**/*.sol\" --fix && eslint ./test --fix && eslint ./scripts/*.js --fix && solhint \"test/**/*.sol\" --fix"
-  },
-  "keywords": [],
-  "license": "MIT",
-  "dependencies": {
-    "@openzeppelin/contracts": "^4.3.2",
-    "witnet-solidity-bridge": "~0.5.0"
   }
 }
