@@ -6,7 +6,7 @@ const WitmonLiscon21 = artifacts.require("WitmonLiscon21");
 const WitnetRequestBoard = artifacts.require("WitnetRequestBoard")
 module.exports = async function (deployer, network, accounts) {  
   network = network.split("-")[0]
-  if (network !== "test") {
+  if (network !== "test" && test !== "develop") {
     if (!witmonAddresses[network]) {
       witmonAddresses[network] = {}
     }
@@ -21,14 +21,14 @@ module.exports = async function (deployer, network, accounts) {
     }
     WitnetRequestBoard.address = WitnetRequestBoardMock.address; 
   }
-  if (network === "test" || witmonAddresses[network].WitmonERC721 === "") {
+  if (network === "test" || network === "develop" || witmonAddresses[network].WitmonERC721 === "") {
     await deployer.deploy(
       WitmonERC721,
-      WitnetRequestBoard.address,
-      "Witty Creatures 2.0",            // name
-      "WITMON",                         // symbol
+      WitnetRequestBoard.address,       // Witnet Bridge entry-point
+      WitmonLiscon21.address,           // IWitmonDecorator implementation
+      "Witty Creatures 2.0",            // ERC721 Token Name
+      "WITMON",                         // ERC721 Token Symbol
       accounts[0],                      // signator
-      WitmonLiscon21.address,           // decorator    
       [10, 30, 60],                     // percentile marks
       80640                             // expirationDays (~ 14 days)
     )
