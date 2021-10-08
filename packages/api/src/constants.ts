@@ -44,3 +44,9 @@ export const MINT_PRIVATE_KEY =
 export const EGG_COLORS_COUNT = process.env.EGG_COLORS_COUNT
   ? parseInt(process.env.EGG_COLORS_COUNT)
   : 7
+
+// Egg birth/hatch date in millis
+// If `EGG_BIRTH_DATE=0`, checks are ignored (for testing purposes)
+export const EGG_BIRTH_DATE = process.env.EGG_BIRTH_DATE
+  ? parseInt(process.env.EGG_BIRTH_DATE)
+  : 1635116400 // Sunday, October 24, 2021 11:00:00 PM (GMT)

@@ -1,4 +1,5 @@
 import {
+  EGG_BIRTH_DATE,
   EGG_COLORS_COUNT,
   INCUBATION_COOLDOWN,
   INCUBATION_DURATION,
@@ -41,4 +42,8 @@ export function getColorFromIndex(index: number) {
 
 export function fromHexToUint8Array(hex: string) {
   return Uint8Array.from(Buffer.from(hex.substring(2).padStart(64, '0'), 'hex'))
+}
+
+export function isTimeToMint() {
+  return Date.now() >= EGG_BIRTH_DATE
 }

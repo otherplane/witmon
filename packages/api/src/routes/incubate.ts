@@ -1,6 +1,7 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 
 import {
+  EGG_BIRTH_DATE,
   INCUBATION_COOLDOWN,
   INCUBATION_DURATION,
   INCUBATION_POINTS_OTHERS,
@@ -14,7 +15,7 @@ import {
   Incubation,
   JwtVerifyPayload,
 } from '../types'
-import { calculateRemainingCooldown } from '../utils'
+import { calculateRemainingCooldown, isTimeToMint } from '../utils'
 
 const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
@@ -35,6 +36,10 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         request: FastifyRequest<{ Body: IncubateParams }>,
         reply
       ) => {
+        // Check 0: incubation period
+        if (EGG_BIRTH_DATE && !isTimeToMint())
+          return reply.status(403).send(new Error(`Forbidden: incubation period is over`))
+
         // Check 1: token is valid
         let fromId: string
         try {

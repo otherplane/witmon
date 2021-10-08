@@ -3,7 +3,7 @@ import keccak from 'keccak'
 import secp256k1 from 'secp256k1'
 import Web3 from 'web3'
 
-import { MINT_PRIVATE_KEY } from '../constants'
+import { EGG_BIRTH_DATE, MINT_PRIVATE_KEY } from '../constants'
 import { EggRepository } from '../repositories/egg'
 import {
   AuthorizationHeader,
@@ -11,7 +11,7 @@ import {
   MintOutput,
   MintParams,
 } from '../types'
-import { fromHexToUint8Array } from '../utils'
+import { fromHexToUint8Array, isTimeToMint } from '../utils'
 
 const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
@@ -26,6 +26,10 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       },
     },
     handler: async (request: FastifyRequest<{ Body: MintParams }>, reply) => {
+      // Check 0: incubation period
+      if (EGG_BIRTH_DATE && isTimeToMint())
+        return reply.status(403).send(new Error(`Forbidden: mint is not enabled yet`))
+
       // Check 1: token is valid
       let fromId: string
       try {
@@ -89,7 +93,7 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       )
       // `V` signature component (V = 27 + recid)
       const signV = (27 + signatureObj.recid).toString(16)
-      // Signature = RS | V 
+      // Signature = RS | V
       const signature = Buffer.from(signatureObj.signature)
         .toString('hex')
         .concat(signV)

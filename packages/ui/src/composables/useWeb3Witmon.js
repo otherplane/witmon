@@ -3,7 +3,7 @@ import Web3 from 'web3/dist/web3.min.js'
 
 import { useEggStore } from '@/stores/egg'
 import jsonInterface from '../../../core/build/contracts/WitmonMock.json'
-import { CONTRACT_ADDRESS  } from '../constants'
+import { CONTRACT_ADDRESS } from '../constants'
 
 async function requestAccounts (web3) {
   return await web3.givenProvider.request({ method: 'eth_requestAccounts' })
