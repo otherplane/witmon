@@ -3,11 +3,13 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "witnet-solidity-bridge/contracts/interfaces/IWitnetRequest.sol";
+import "../interfaces/IWitmonDecorator.sol";
 
 library Witmons {
 
     struct State {
         Parameters params;
+        IWitmonDecorator decorator;
         IWitnetRequest witnetRNG;
         uint256 witnetQueryId;
         bytes32 witnetRandomness;
@@ -19,7 +21,6 @@ library Witmons {
 
     struct Parameters {
         address signator;
-        address decorator;
         uint8[] percentileMarks;      
         uint256 expirationBlocks;
     }

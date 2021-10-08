@@ -50,19 +50,19 @@ contract WitmonERC721
 
     constructor(
             WitnetRequestBoard _witnet,
+            IWitmonDecorator _decorator,
             string memory _name,
             string memory _symbol,
             address _signator,
-            IWitmonDecorator _decorator,
             uint8[] memory _percentileMarks,
             uint256 _expirationBlocks
         )
         UsingWitnet(_witnet)
         ERC721(_name, _symbol)
     {
+        setDecorator(_decorator);
         setParameters(
             _signator,
-            _decorator,
             _percentileMarks,
             _expirationBlocks
         );
@@ -81,7 +81,7 @@ contract WitmonERC721
         uint256 _eggIndex = _state.eggIndex_[_tokenId];
         Witmons.Creature memory _creature = _state.creatures[_eggIndex];
         assert(_tokenId == _creature.tokenId);
-        return IWitmonDecorator(_state.params.decorator).getCreatureMetadata(_creature);
+        return IWitmonDecorator(_state.decorator).getCreatureMetadata(_creature);
     }
 
     function tokenURI(uint256 _tokenId)
@@ -92,7 +92,7 @@ contract WitmonERC721
     {
         uint256 _eggIndex = _state.eggIndex_[_tokenId];
         return string(abi.encodePacked(
-            IWitmonDecorator(_state.params.decorator).baseURI,
+            IWitmonDecorator(_state.decorator).baseURI,
             _eggIndex.toString()
         ));
     }
@@ -100,15 +100,26 @@ contract WitmonERC721
     // ========================================================================
     // --- Implementation of 'IWitmonAdmin' -----------------------------------
 
+    /// Change token/creature decorator.
+    /// @param _decorator Decorating logic contract producing a creature's metadata, and picture.
+    function setDecorator(IWitmonDecorator _decorator)
+        public
+        virtual override
+        onlyOwner
+        // inState(Witmons.Status.Batching)
+    {
+        require(address(_decorator) != address(0), "WitmonERC721: no decorator");
+        _state.decorator = _decorator;
+        emit DecoratorSet(_decorator);
+    }
+
     /// Change batch parameters. Only possible while in 'Batching' status.
     /// @param _signator Externally-owned account authorize to sign egg's info before minting.
-    /// @param _decorator Decorating logic contract producing a creature's metadata, and picture.
     /// @param _percentileMarks Creature-category ordered percentile marks (common first).
     /// @param _expirationBlocks Number of blocks after Witnet randomness is generated, 
     /// during which creatures may be minted.
     function setParameters(
             address _signator,
-            IWitmonDecorator _decorator,
             uint8[] memory _percentileMarks,
             uint256 _expirationBlocks
         )
@@ -117,7 +128,6 @@ contract WitmonERC721
         onlyOwner
         inStatus(Witmons.Status.Batching)
     {
-        require(address(_decorator) != address(0), "WitmonERC721: no decorator");
         require(_signator != address(0), "WitmonERC721: no signator");
         require(_percentileMarks.length == uint8(Witmons.CreatureCategory.Common) + 1, "WitmonERC721: bad percentile marks");
         _state.params.percentileMarks = new uint8[](_percentileMarks.length);
@@ -130,12 +140,10 @@ contract WitmonERC721
         require(_checkSum == 100, "WitmonERC721: bad percentile checksum");
         
         _state.params.signator = _signator;
-        _state.params.decorator = address(_decorator);
         _state.params.expirationBlocks = _expirationBlocks;
         
         emit BatchParameters(
             _signator,
-            _decorator,
             _percentileMarks,
             _expirationBlocks
         );
@@ -284,7 +292,7 @@ contract WitmonERC721
             "WitmonERC721: not alive yet"
         );
         Witmons.Creature memory _creature = _state.creatures[_eggIndex];
-        return IWitmonDecorator(_state.params.decorator).getCreatureImage(_creature);
+        return IWitmonDecorator(_state.decorator).getCreatureImage(_creature);
     }
 
     function getCreatureStatus(uint256 _eggIndex)
@@ -305,6 +313,14 @@ contract WitmonERC721
                 return Witmons.CreatureStatus.Incubating;
             }
         }
+    }
+
+    function getDecorator()
+        external view
+        override
+        returns (IWitmonDecorator)
+    {
+        return _state.decorator;
     }
 
     function getParameters()
