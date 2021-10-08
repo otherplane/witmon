@@ -38,7 +38,7 @@
   </div>
   <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
     <button
-      @click="triggerDownload"
+      @click="exportInfo"
       type="button"
       class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
     >
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, getCurrentInstance } from 'vue'
 import { useExportInformation } from '@/composables/useExportInformation'
 
 export default defineComponent({
@@ -69,10 +69,15 @@ export default defineComponent({
     // this.$refs.download.click()
     const exportInformation = useExportInformation()
 
+    const instance = getCurrentInstance()
+
     return {
       download: exportInformation.download,
       downloadLink: exportInformation.downloadLink,
-      triggerDownload: exportInformation.triggerDownload
+      exportInfo () {
+        exportInformation.triggerDownload()
+        instance.parent.emit('close')
+      }
     }
   }
 })
