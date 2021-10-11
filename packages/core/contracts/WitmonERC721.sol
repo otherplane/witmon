@@ -155,6 +155,7 @@ contract WitmonERC721
     function stopBatching()
         external payable
         virtual override
+        nonReentrant
         onlyOwner
         inStatus(Witmons.Status.Batching)
     {   
