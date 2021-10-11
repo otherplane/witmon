@@ -16,10 +16,11 @@
         :timeToBirth="egg.timeToBirth"
       />
       <IncubationInfo
-        :incubatedTimeLeft="egg.incubatedTimeLeft"
-        :incubator="egg.incubator"
+        :incubatedByTimeLeft="egg.incubatedByTimeLeft"
+        :incubatedBy="egg.incubatedBy"
         :incubatingTimeLeft="egg.incubatingTimeLeft"
-        :incubated="egg.incubated"
+        :incubating="egg.incubating"
+        :selfIncubation="egg.selfIncubation"
       />
     </div>
     <div class="buttons">

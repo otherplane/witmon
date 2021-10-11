@@ -84,7 +84,6 @@ const app: FastifyPluginAsync<AppOptions> = async (
     root: join(__dirname, '../public'),
     // prefix: '/public/', // optional: default '/'
   })
-
 }
 
 export default app

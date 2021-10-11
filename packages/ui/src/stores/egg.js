@@ -12,10 +12,10 @@ export const useEggStore = defineStore('egg', {
       score: null,
       rarityIndex: null,
       timeToBirth: 1635080212000,
-      incubatedTimeLeft: null,
-      incubator: null,
-      incubatingTimeLeft: null,
+      incubatedByTimeLeft: null,
       incubated: null,
+      incubatingTimeLeft: null,
+      incubating: null,
       list: [],
       color: null,
       errors: {
@@ -37,6 +37,13 @@ export const useEggStore = defineStore('egg', {
         this.mintInformation.data.total,
         '0x' + this.mintInformation.envelopedSignature.signature
       ]
+    },
+    selfIncubation () {
+      return (
+        this.egg &&
+        this.egg.incubating &&
+        this.egg.incubating === this.egg.username
+      )
     }
   },
   actions: {
@@ -110,17 +117,20 @@ export const useEggStore = defineStore('egg', {
       } else {
         this.clearError('info')
         const { username, score, key, index, rarityIndex, color } = request.egg
-        const { incubatedBy, incubating } = request
+        const {
+          incubatedBy: reqIncubatedBy,
+          incubating: reqIncubating
+        } = request
         this.rarityIndex = rarityIndex
         this.username = username
         this.score = score
         this.color = color
         this.id = key
         this.index = index
-        this.incubated = incubatedBy ? incubatedBy.from : null
-        this.incubator = incubating ? incubating.to : null
-        this.incubatedTimeLeft = incubatedBy ? incubatedBy.ends : null
-        this.incubatingTimeLeft = incubating ? incubating.ends : null
+        this.incubatedBy = reqIncubatedBy ? reqIncubatedBy.from : null
+        this.incubating = reqIncubating ? reqIncubating.to : null
+        this.incubatedByTimeLeft = reqIncubatedBy ? reqIncubatedBy.ends : null
+        this.incubatingTimeLeft = reqIncubating ? reqIncubating.ends : null
       }
     },
     async mint (address) {

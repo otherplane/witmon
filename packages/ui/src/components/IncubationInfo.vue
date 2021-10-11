@@ -1,24 +1,24 @@
 <template>
   <div class="incubations">
     <div class="incubation" v-if="selfIncubation">
-      <p class="label">CURRENTLY INCUBATING</p>
+      <p class="label">CURRENTLY SELF INCUBATING</p>
       <TimeLeft
         class="time"
-        :timestamp="incubatedTimeLeft"
+        :timestamp="incubatedByTimeLeft"
         :seconds="true"
         @clear-incubation="clear"
       />
-      <p class="small-title">{{ incubated }}</p>
+      <p class="small-title">{{ incubatedBy }}</p>
     </div>
-    <div class="incubation" v-if="!selfIncubation && incubatedTimeLeft">
+    <div class="incubation" v-if="!selfIncubation && incubatedByTimeLeft">
       <p class="label">CURRENTLY INCUBATED BY</p>
       <TimeLeft
         class="time"
-        :timestamp="incubatedTimeLeft"
+        :timestamp="incubatedByTimeLeft"
         :seconds="true"
         @clear-incubation="clear"
       />
-      <p class="small-title">{{ incubated }}</p>
+      <p class="small-title">{{ incubatedBy }}</p>
     </div>
     <div class="incubation" v-if="!selfIncubation && incubatingTimeLeft">
       <p class="label">CURRENTLY INCUBATING</p>
@@ -28,9 +28,9 @@
         :seconds="true"
         @clear-incubation="clear"
       />
-      <p class="small-title">{{ incubator }}</p>
+      <p class="small-title">{{ incubating }}</p>
     </div>
-    <div class="empty-state" v-if="!incubatingTimeLeft && !incubatedTimeLeft">
+    <div class="empty-state" v-if="!incubatingTimeLeft && !incubatedByTimeLeft">
       No current incubations
     </div>
   </div>
@@ -41,18 +41,16 @@ import { useEggStore } from '@/stores/egg'
 import { computed } from 'vue'
 export default {
   props: {
-    incubatedTimeLeft: Number,
-    incubator: String,
+    incubatedByTimeLeft: Number,
+    incubatedBy: String,
     incubatingTimeLeft: Number,
-    incubated: String
+    incubating: String,
+    selfIncubation: Boolean
   },
   setup (props) {
     const egg = useEggStore()
     const clear = () => egg.getEggInfo()
-    const selfIncubation = computed(() => {
-      return props.incubator && props.incubator === props.incubated
-    })
-    return { clear, selfIncubation }
+    return { clear }
   }
 }
 </script>
