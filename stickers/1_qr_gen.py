@@ -56,7 +56,7 @@ if __name__ == '__main__':
     parser.add_argument('--eggs', help='how many eggs to generate', default=10)
     parser.add_argument('--salt', help='a string to use as salt for deterministic egg key derivation', default='')
     parser.add_argument('--key_len', help='the byte length of egg keys', default=8)
-    parser.add_argument('--base_url', help='base URL for QR codes', default='https://wittycreatures.com/egg/')
+    parser.add_argument('--base_url', help='base URL for QR codes', default='https://wittycreatures.com/#/egg/')
     parser.add_argument('--output_dir', help='path for QR image output', default='./qr_codes/')
     args = parser.parse_args()
     main(args)
