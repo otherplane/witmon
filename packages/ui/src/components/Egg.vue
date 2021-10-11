@@ -8,6 +8,7 @@ import EggSvg from './EggSvg.vue'
 const colors = [
   { baseColor: '#fff', mainColor: '#080' },
   { baseColor: '#fff', mainColor: '#333' },
+  { baseColor: '#fff', mainColor: '#f00' },
   { baseColor: '#fff', mainColor: '#627' },
   { baseColor: '#000', mainColor: '#fff' },
   { baseColor: '#fff', mainColor: '#fd2' },
