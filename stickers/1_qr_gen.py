@@ -8,6 +8,7 @@ import qrcode
 from typing import List
 from qrcode.image.pure import PymagingImage
 
+colors = ['green', 'black', 'red', 'purple', 'negative', 'yellow', 'blue']
 
 class Egg:
     def __init__(self, index, key):
@@ -27,11 +28,15 @@ def generate_eggs(eggs_count: int, salt: str, key_len: int):
     return [generate_egg(index, salt, key_len) for index in range(eggs_count)]
 
 
+def colorize(index: int) -> str:
+    return colors[index % len(colors)]
+
+
 def generate_qr_code(egg: Egg, base_url: str, output_dir: str):
     url = f'{base_url}{egg.key}'
-    output_path = f'{output_dir}/{egg.index}-{egg.key}.png'
+    output_path = f'{output_dir}/{egg.index}-{egg.key}-{colorize(egg.index)}.png'
 
-    img = qrcode.make(url, image_factory=PymagingImage, error_correction=qrcode.ERROR_CORRECT_L, border=0)
+    img = qrcode.make(url, image_factory=PymagingImage, error_correction=qrcode.ERROR_CORRECT_M, border=0)
 
     with open(output_path, 'wb') as file:
         img.save(file, 'PNG')
@@ -47,7 +52,7 @@ def generate_qr_codes(eggs: List[Egg], base_url: str, output_dir: str):
 
 def main(config):
     eggs = generate_eggs(int(config.eggs), config.salt, int(config.key_len))
-    [print(f'{egg.index} → {egg.key}') for egg in eggs]
+    [print(f'{egg.index} → {egg.key} ({colorize(egg.index)})') for egg in eggs]
     generate_qr_codes(eggs, config.base_url, config.output_dir)
 
 

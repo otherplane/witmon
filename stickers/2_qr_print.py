@@ -13,14 +13,14 @@ from typing import List, Tuple
 
 def load_image(path: str, resolution: Tuple[int, int]):
     with Image.open(path) as image:
-        extended = Image.new('1', (round(resolution[0] * 1.4), round(resolution[1] * 1.4)), 1)
+        extended = Image.new('1', (round(resolution[0] * 1.55), round(resolution[1] * 1.55)), 1)
         extended.paste(image, (round(resolution[0] * 0.2), 0))
 
         return extended.resize(resolution)
 
 
 def load_images(input_dir: str, resolution: Tuple[int, int]):
-    files = glob.glob(f'{input_dir}/*.png')
+    files = glob.glob(f'{input_dir}/*-*-*.png')
 
     return [load_image(file, resolution) for file in files]
 
