@@ -92,7 +92,7 @@ contract WitmonERC721
     {
         uint256 _eggIndex = _state.eggIndex_[_tokenId];
         return string(abi.encodePacked(
-            IWitmonDecorator(_state.decorator).baseURI,
+            IWitmonDecorator(_state.decorator).baseURI(),
             _eggIndex.toString()
         ));
     }
