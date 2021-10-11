@@ -1,7 +1,7 @@
 <template>
   <div class="info-container">
-    <p class="label">EggScore ™</p>
-    <p class="label">RARITY IDX</p>
+    <p class="label">EggScore™</p>
+    <p class="label">RARITY INDEX</p>
     <p class="label">TIME TO BIRTH</p>
     <p class="info">{{ score }}</p>
     <p class="info">{{ rarityIndex }}</p>

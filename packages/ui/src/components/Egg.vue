@@ -1,65 +1,33 @@
 <template>
-  <div class="egg-container" :class="{ dark: dark }">
-    <p class="subtitle item">{{ index }}</p>
-    <div class="small-title item user">
-      <img
-        class="small-title egg-image"
-        src="@/assets/egg-example.png"
-        alt="Witty Creature egg"
-      />
-      <p>{{ username }}</p>
-    </div>
-    <p class="small-title item score">{{ score }}</p>
-  </div>
+  <EggSvg :base-color="baseColor" :main-color="mainColor" />
 </template>
 
 <script>
+import EggSvg from './EggSvg.vue'
+
+const colors = [
+  { baseColor: '#fff', mainColor: '#080' },
+  { baseColor: '#fff', mainColor: '#333' },
+  { baseColor: '#fff', mainColor: '#627' },
+  { baseColor: '#000', mainColor: '#fff' },
+  { baseColor: '#fff', mainColor: '#fd2' },
+  { baseColor: '#fff', mainColor: '#00d' }
+]
+
 export default {
+  components: { EggSvg },
+  computed: {
+    baseColor () {
+      return colors[this.index % colors.length].baseColor
+    },
+    mainColor () {
+      return colors[this.index % colors.length].mainColor
+    }
+  },
   props: {
-    index: Number,
-    username: String,
-    score: Number,
-    rarityIndex: Number,
-    dark: Number
+    index: Number
   }
 }
 </script>
 
-<style scoped lang="scss">
-.dark {
-  background: rgb(237, 240, 247);
-}
-.egg-container {
-  display: grid;
-  grid-template-columns: 50px 1fr 80px;
-  justify-items: center;
-  grid-template-rows: max-content;
-  justify-content: center;
-  align-items: center;
-  .item {
-    padding: 8px;
-    text-align: center;
-  }
-  .score {
-    width: 60px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .user {
-    display: grid;
-    grid-template-columns: 50px 1fr;
-    column-gap: 16px;
-    align-items: center;
-    justify-self: flex-start;
-    .egg-image {
-      width: 50px;
-    }
-  }
-}
-@media (min-width: 1200px) {
-  .egg-container {
-    grid-template-columns: 10% 30% 10% 10%;
-  }
-}
-</style>
+<style scoped></style>

@@ -5,11 +5,7 @@
         <p class="subtitle">EGG ID: {{ egg.username }}</p>
         <p class="title">My Witty Creature</p>
       </div>
-      <EggSvg
-        class="egg-image"
-        :mainColor="eggColor.mainColor"
-        :baseColor="eggColor.baseColor"
-      />
+      <Egg class="egg-image" :index="egg.index" />
       <EggInfo
         :score="egg.score"
         :rarityIndex="egg.rarityIndex"
@@ -84,14 +80,6 @@ import { useWeb3Witmon } from '../composables/useWeb3Witmon'
 
 export default {
   setup () {
-    const colors = [
-      { baseColor: '#fff', mainColor: '#080' },
-      { baseColor: '#fff', mainColor: '#333' },
-      { baseColor: '#fff', mainColor: '#627' },
-      { baseColor: '#000', mainColor: '#fff' },
-      { baseColor: '#fff', mainColor: '#fd2' },
-      { baseColor: '#fff', mainColor: '#00d' }
-    ]
     const modal = useModal()
     const egg = useEggStore()
     const web3Witmon = useWeb3Witmon()
@@ -99,12 +87,9 @@ export default {
     onBeforeMount(() => {
       egg.getEggInfo()
     })
+
     const type = computed(() => (egg.incubator ? 'disable' : 'default'))
-    const eggColor = computed(() =>
-      Number.isFinite(egg.color)
-        ? colors[egg.color]
-        : { mainColor: null, baseColor: null }
-    )
+
     function incubateMyEgg () {
       if (type.value !== 'disable') {
         egg.incubateEgg({ key: egg.id })
@@ -116,7 +101,6 @@ export default {
       type,
       incubateMyEgg,
       imageUrl,
-      eggColor,
       modal,
       enableProvider: web3Witmon.enableProvider,
       isProviderConnected: web3Witmon.isProviderConnected,

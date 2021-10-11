@@ -6,7 +6,7 @@
       <div class="label" @click="orderBy('username')">USER</div>
       <div class="label" @click="orderBy('score')">EggScore ™</div>
     </div>
-    <Egg
+    <EggEntry
       v-for="(egg, index) in egg.list"
       :key="egg.index"
       :index="egg.index"
