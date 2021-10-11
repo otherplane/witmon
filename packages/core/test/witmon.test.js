@@ -9,7 +9,8 @@ contract("WitmonERC721", accounts => {
     let owner = accounts[0]
     let stranger = accounts[1]
     let signator = accounts[2]
-    let eggOwner = accounts[3]
+    let eggOwner = "0x184cc5908e1a3d29b4d31df67d99622c4baa7b71"
+    let eggSignator = "0x12890D2cce102216644c59daE5baed380d84830c"
     before(async () => {
         witmon = await WitmonERC721.new(      
             WitnetRequestBoardMock.address,
@@ -44,10 +45,26 @@ contract("WitmonERC721", accounts => {
                         )
                     })
                 })
+                describe("previewCreature(..)", async() => {
+                    it("creature images cannot be previewed", async () => {
+                        await truffleAssert.reverts(
+                            witmon.previewCreatureImage(
+                                eggOwner,
+                                0,
+                                0,
+                                0,
+                                0,
+                                512,
+                                "0x0"
+                            ),
+                            "not in Hatching"
+                        )
+                    })
+                })
             })
             describe("IWitmonView", async () => {
-                describe("getCreatureStatus(0)", async () => {
-                    it("creature 0 is in 'Incubating' status", async() => {
+                describe("getCreatureStatus(..)", async () => {
+                    it("creature #0 is in 'Incubating' status", async() => {
                         let cStatus = await witmon.getCreatureStatus.call(0)
                         assert.equal(cStatus.toString(), "1")
                     })
@@ -56,22 +73,31 @@ contract("WitmonERC721", accounts => {
             describe("IWitmonAdmin", async() => {
                 describe("setDecorator(..)", async () => {
                     it("signator cannot change decorator", async () => {
-                        // TODO
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(stranger, { from: signator }),
+                            "Ownable"
+                        )
                     })
                     it("stranger cannot change decorator", async() => {
-                        // TODO
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(stranger, { from: stranger }),
+                            "Ownable"
+                        )
+                    })
+                    it("decorator cannot be set to zero", async () => {
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(
+                                "0x0000000000000000000000000000000000000000",
+                                { from: owner }
+                            ),
+                            "no decorator"
+                        )
+                    })
+                    it("owner can change decorator", async() => {
+                        await witmon.setDecorator(WitmonLiscon21.address, { from: owner })
                     })
                 })
                 describe("setParameters(..)", async () => {
-                    it("owner can change valid parameters", async () => {
-                        await witmon.setParameters(
-                            signator,
-                            [10, 30, 60],
-                            80640,
-                            { from: owner }
-                        )
-                        console.log(await witmon.getParameters.call())
-                    })
                     it("stranger cannot change parameters", async() => {
                         await truffleAssert.reverts(
                             witmon.setParameters(
@@ -103,17 +129,6 @@ contract("WitmonERC721", accounts => {
                             )
                         )
                     })
-                    // it("decorator cannot be set to zero", async () => {
-                    //     await truffleAssert.reverts(
-                    //         witmon.setParameters(
-                    //             signator,
-                    //             "0x0000000000000000000000000000000000000000",
-                    //             [10, 30, 60],
-                    //             80640,
-                    //             { from: owner }
-                    //         )
-                    //     )
-                    // })
                     it("fails if bad number of percentiles is passed", async () => {
                         await truffleAssert.reverts(
                             witmon.setParameters(
@@ -132,6 +147,14 @@ contract("WitmonERC721", accounts => {
                                 80640,
                                 { from: owner }
                             )
+                        )
+                    })
+                    it("owner can change valid parameters", async () => {
+                        await witmon.setParameters(
+                            eggSignator,
+                            [10, 30, 60],
+                            80640,
+                            { from: owner }
                         )
                     })
                 })
@@ -167,8 +190,523 @@ contract("WitmonERC721", accounts => {
                             from: owner,
                             value: 10 ** 10 // 10 gwei
                         })
+                        // check status changed to 'Randomizing'
+                        let status = await witmon.getStatus.call()
+                        assert.equal(status.toString(), "1")
                     })
                 })
+            })
+        })
+
+        describe("In status: 'Randomizing'", async () => {
+            beforeEach(async () => {
+                let status = await witmon.getStatus.call()
+                assert.equal(status.toString(), "1")
+            })
+            describe("IWitmonSurrogates", async() => {
+                describe("mintCreature(..)", async () => {
+                    it("creatures cannot be minted", async () => {
+                        await truffleAssert.reverts(
+                            witmon.mintCreature(
+                                eggOwner,
+                                0,
+                                0,
+                                0,
+                                0,
+                                512,
+                                "0x0"
+                            ),
+                            "not in Hatching"
+                        )
+                    })
+                })
+                describe("previewCreature(..)", async() => {
+                    it("creature images cannot be previewed", async () => {
+                        await truffleAssert.reverts(
+                            witmon.previewCreatureImage(
+                                eggOwner,
+                                0,
+                                0,
+                                0,
+                                0,
+                                512,
+                                "0x0"
+                            ),
+                            "not in Hatching"
+                        )
+                    })
+                })
+            })
+            describe("IWitmonView", async () => {
+                describe("getCreatureStatus(..)", async () => {
+                    it("creature #0 is in 'Incubating' status", async() => {
+                        let cStatus = await witmon.getCreatureStatus.call(0)
+                        assert.equal(cStatus.toString(), "1")
+                    })
+                })
+            })
+            describe("IWitmonAdmin", async() => {
+                describe("setDecorator(..)", async () => {
+                    it("signator cannot change decorator", async () => {
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(stranger, { from: signator }),
+                            "Ownable"
+                        )
+                    })
+                    it("stranger cannot change decorator", async() => {
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(stranger, { from: stranger }),
+                            "Ownable"
+                        )
+                    })
+                    it("decorator cannot be set to zero", async () => {
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(
+                                "0x0000000000000000000000000000000000000000",
+                                { from: owner }
+                            ),
+                            "no decorator"
+                        )
+                    })
+                    it("owner can change decorator", async() => {
+                        await witmon.setDecorator(WitmonLiscon21.address, { from: owner })
+                    })
+                })
+                describe("setParameters(..)", async () => {
+                    it("owner cannot change valid parameters", async () => {
+                        await truffleAssert.reverts(
+                            witmon.setParameters(
+                                signator,
+                                [10, 30, 60],
+                                80640,
+                                { from: owner }
+                            ),
+                            "not in Batching"
+                        )
+                    })
+                    it("stranger cannot change parameters", async() => {
+                        await truffleAssert.reverts(
+                            witmon.setParameters(
+                                stranger,
+                                [10, 30, 60],
+                                80640,
+                                { from: stranger }
+                            ),
+                            "Ownable"
+                        )
+                    })
+                    it("signator cannot change parameters", async() => {
+                        await truffleAssert.reverts(
+                            witmon.setParameters(
+                                stranger,
+                                [10, 30, 60],
+                                80640,
+                                { from: signator }
+                            )
+                        )
+                    })
+                })
+                describe("stopBatching()", async () => {
+                    it("signator cannot stop batching", async () => {
+                        await truffleAssert.reverts(
+                            witmon.stopBatching({
+                                from: signator,
+                                value: 10 ** 10 // 10 gwei
+                            }),
+                            "Ownable"
+                        )
+                    })
+                    it("stranger cannot stop batching", async () => {
+                        await truffleAssert.reverts(
+                            witmon.stopBatching({
+                                from: stranger,
+                                value: 10 ** 10 // 10 gwei
+                            }),
+                            "Ownable"
+                        )
+                    })
+                    it("owner cannot stop batching", async() => {
+                        await truffleAssert.reverts(
+                            witmon.stopBatching({ 
+                                from: owner,
+                                value: 10 ** 10 // 10 gwei
+                            }),
+                            "not in Batching"
+                        )
+                    })
+                })
+                describe("startHatching()", async () => {
+                    it("signator cannot start hatching", async() => {
+                        await truffleAssert.reverts(
+                            witmon.startHatching({ from: signator }),
+                            "Ownable"
+                        )
+                    })
+                    it("stranger cannot start hatching", async() => {
+                        await truffleAssert.reverts(
+                            witmon.startHatching({ from: stranger }),
+                            "Ownable"
+                        )
+                    })
+                    it("owner can start hatching", async () => {
+                        await witmon.startHatching({ from: owner })
+                        // check status changed to 'Hatching'
+                        let status = await witmon.getStatus.call()
+                        assert.equal(status.toString(), "2")
+                    })
+                })
+            })
+        })
+
+        describe("In status: 'Hatching'", async () => {
+            beforeEach(async () => {
+                let status = await witmon.getStatus.call()
+                assert.equal(status.toString(), "2")
+            })
+            describe("IWitmonAdmin", async() => {
+                describe("setDecorator(..)", async () => {
+                    it("signator cannot change decorator", async () => {
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(stranger, { from: signator }),
+                            "Ownable"
+                        )
+                    })
+                    it("stranger cannot change decorator", async() => {
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(stranger, { from: stranger }),
+                            "Ownable"
+                        )
+                    })
+                    it("decorator cannot be set to zero", async () => {
+                        await truffleAssert.reverts(
+                            witmon.setDecorator(
+                                "0x0000000000000000000000000000000000000000",
+                                { from: owner }
+                            ),
+                            "no decorator"
+                        )
+                    })
+                    it("owner can change decorator", async() => {
+                        await witmon.setDecorator(WitmonLiscon21.address, { from: owner })
+                    })
+                })
+                describe("setParameters(..)", async () => {
+                    it("owner cannot change valid parameters", async () => {
+                        await truffleAssert.reverts(
+                            witmon.setParameters(
+                                signator,
+                                [10, 30, 60],
+                                80640,
+                                { from: owner }
+                            ),
+                            "not in Batching"
+                        )
+                    })
+                    it("stranger cannot change parameters", async() => {
+                        await truffleAssert.reverts(
+                            witmon.setParameters(
+                                stranger,
+                                [10, 30, 60],
+                                80640,
+                                { from: stranger }
+                            ),
+                            "Ownable"
+                        )
+                    })
+                    it("signator cannot change parameters", async() => {
+                        await truffleAssert.reverts(
+                            witmon.setParameters(
+                                stranger,
+                                [10, 30, 60],
+                                80640,
+                                { from: signator }
+                            )
+                        )
+                    })
+                })
+                describe("stopBatching()", async () => {
+                    it("signator cannot stop batching", async () => {
+                        await truffleAssert.reverts(
+                            witmon.stopBatching({
+                                from: signator,
+                                value: 10 ** 10 // 10 gwei
+                            }),
+                            "Ownable"
+                        )
+                    })
+                    it("stranger cannot stop batching", async () => {
+                        await truffleAssert.reverts(
+                            witmon.stopBatching({
+                                from: stranger,
+                                value: 10 ** 10 // 10 gwei
+                            }),
+                            "Ownable"
+                        )
+                    })
+                    it("owner cannot stop batching", async() => {
+                        await truffleAssert.reverts(
+                            witmon.stopBatching({ 
+                                from: owner,
+                                value: 10 ** 10 // 10 gwei
+                            }),
+                            "not in Batching"
+                        )
+                    })
+                })
+                describe("startHatching()", async () => {
+                    it("signator cannot re-start hatching", async() => {
+                        await truffleAssert.reverts(
+                            witmon.startHatching({ from: signator }),
+                            "Ownable"
+                        )
+                    })
+                    it("stranger cannot re-start hatching", async() => {
+                        await truffleAssert.reverts(
+                            witmon.startHatching({ from: stranger }),
+                            "Ownable"
+                        )
+                    })
+                    it("owner cannot re-start hatching", async() => {
+                        await truffleAssert.reverts(
+                            witmon.startHatching({ from:owner }),
+                            "not in Randomizing"
+                        )
+                    })
+                })
+            })
+            describe("IWitmonSurrogates", async() => {
+                describe("mintCreature(..)", async () => {
+                    it("fails if trying to malleate egg owner when minting a new creature", async () => {
+                        await truffleAssert.reverts(
+                            witmon.mintCreature(
+                                stranger,
+                                0,
+                                0,
+                                0,
+                                1,
+                                2,
+                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                            ),
+                            "bad signature"
+                        )
+                    })
+                    it("fails if trying to malleate egg index when minting a new creature", async () => {
+                        await truffleAssert.reverts(
+                            witmon.mintCreature(
+                                eggOwner,
+                                1,
+                                0,
+                                0,
+                                1,
+                                2,
+                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                            ),
+                            "bad signature"
+                        )
+                    })
+                    // it("fails if trying to malleate egg color index when minting a new creature", async () => {
+                    //     await truffleAssert.reverts(
+                    //         witmon.mintCreature(
+                    //             eggOwner,
+                    //             0,
+                    //             7,
+                    //             0,
+                    //             1,
+                    //             2,
+                    //             "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                    //         ),
+                    //         "bad signature"
+                    //     )
+                    // })
+                    // it("fails if trying to malleate egg score when minting a new creature", async () => {
+                    //     await truffleAssert.reverts(
+                    //         witmon.mintCreature(
+                    //             eggOwner,
+                    //             0,
+                    //             0,
+                    //             110,
+                    //             1,
+                    //             2,
+                    //             "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                    //         ),
+                    //         "bad signature"
+                    //     )
+                    // })
+                    it("fails if trying to malleate egg ranking when minting a new creature", async () => {
+                        await truffleAssert.reverts(
+                            witmon.mintCreature(
+                                eggOwner,
+                                0,
+                                0,
+                                0,
+                                10,
+                                2,
+                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                            ),
+                            "bad signature"
+                        )
+                    })
+                    it("fails if trying to malleate totally claimed eggs when minting a new creature", async () => {
+                        await truffleAssert.reverts(
+                            witmon.mintCreature(
+                                eggOwner,
+                                0,
+                                0,
+                                0,
+                                1,
+                                25,
+                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                            ),
+                            "bad signature"
+                        )
+                    })
+                    it("new creature can be minted by anyone", async () => {
+                        await witmon.mintCreature(
+                            eggOwner,
+                            0, // eggIndex
+                            0, // eggColorIndex
+                            0, // eggScore
+                            1, // eggRanking
+                            2, // eggTotalClaimedEggs
+                            // eslint-disable-next-line max-len
+                            "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                            { from: stranger }
+                        )
+                        // checks that creature #0 is now in 'Alive' status:
+                        let _status = await witmon.getCreatureStatus.call(0)
+                        assert.equal(_status.toString(), "3")
+                        // checks the new creature was assigned 1 as tokenId:
+                        let _data = await witmon.getCreatureData.call(0)
+                        assert.equal(_data.tokenId.toString(), "1")
+                    })
+                    it("minted creature cannot be minted twice", async () => {
+                        truffleAssert.reverts(
+                            witmon.mintCreature(
+                                eggOwner,
+                                0, // eggIndex
+                                0, // eggColorIndex
+                                0, // eggScore
+                                1, // eggRanking
+                                2, // eggTotalClaimedEggs
+                                // eslint-disable-next-line max-len
+                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                                { from: stranger }
+                            ),
+                            "already minted"
+                        )
+                    })
+                })
+                describe("previewCreature(..)", async() => {
+                    it("minted creature can be previewed by anyone", async () => {
+                        witmon.previewCreatureImage(
+                            eggOwner,
+                            0, // eggIndex
+                            0, // eggColorIndex
+                            0, // eggScore
+                            1, // eggRanking
+                            2, // eggTotalClaimedEggs
+                            // eslint-disable-next-line max-len
+                            "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                            { from: stranger }
+                        )
+                        // checks that creature #0 continues in 'Hatching' status:
+                        let _status = await witmon.getCreatureStatus.call(0)
+                        assert.equal(_status.toString(), "3")
+                        // console.log(
+                            await witmon.previewCreatureImage.call(
+                                eggOwner,
+                                0, // eggIndex
+                                0, // eggColorIndex
+                                0, // eggScore
+                                1, // eggRanking
+                                2, // eggTotalClaimedEggs
+                                // eslint-disable-next-line max-len
+                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                                { from: stranger }
+                            )
+                        // )
+                    })
+                    it("unminted creature can by previewed by anyone", async () => {
+                        // TODO
+                    })
+                })
+            })
+            describe("IWitmonView", async () => {
+                describe("getCreatureData(_eggIndex)", async () => {
+                    it("data of a previously minted creature should be valid", async () => {
+                        let data = await witmon.getCreatureData.call(0)
+                        // console.log(data)
+                        assert.equal(data.tokenId.toString(), "1")
+                        assert.equal(data.eggIndex.toString(), "0")
+                        assert.equal(data.eggColorIndex.toString(), "0")
+                        assert.equal(data.eggScore.toString(), "0")
+                        assert.equal(data.eggRanking.toString(), "1")
+                        assert.equal(data.eggCategory.toString(), "2")
+                    })
+                })
+                describe("getCreatureImage(_eggIndex)", async () => {
+                    it("getting image from minted creature works", async () => {
+                        let image = await witmon.getCreatureImage.call(0)
+                        // console.log(image)
+                    })
+                    it("getting image from unminted creature fails", async () => {
+                        await truffleAssert.reverts(
+                            witmon.getCreatureImage.call(1),
+                            "not alive yet"
+                        )
+                    })
+                })
+                describe("getCreatureStatus(_eggIndex)", async () => {
+                    it("creature #0 is in 'Alive' status", async() => {
+                        let cStatus = await witmon.getCreatureStatus.call(0)
+                        assert.equal(cStatus.toString(), "3")
+                    })
+                    it("creature #1 is in 'Hatching' status", async() => {
+                        let cStatus = await witmon.getCreatureStatus.call(1)
+                        assert.equal(cStatus.toString(), "2")
+                    })
+                })
+                describe("getStats()", async () => {
+                    it("totalSupply should have increased to 1", async() => {
+                        let totalSupply = await witmon.getStats.call()
+                        assert.equal(totalSupply.toString(), "1")
+                    })
+                })
+            })
+            describe("ERC721", async () => {
+                describe("metadata(_tokenId)", async () => {
+                    it("metadata of a previously minted creature should be valid", async () => {
+                        let metadata = await witmon.metadata.call(1)
+                        // console.log(metadata)
+                        // remove non-printable and other non-valid JSON chars
+                        metadata = metadata.replace(/[\u0000-\u0019]+/g,""); 
+                        metadata = JSON.parse(metadata)
+                        assert.equal(metadata.external_url, "https://witmon.com/creatures/0")
+                    })
+                    it("getting metadata from inexistent token fails", async () => {
+                        await truffleAssert.reverts(
+                            witmon.metadata.call(2),
+                            "inexistent token"
+                        )
+                    })
+                })
+                describe("tokenURI(_tokenId)", async () => {
+                    it("tokenURI of a previously minted creature should be valid", async () => {
+                        let tokenURI = await witmon.tokenURI.call(1)
+                        assert.equal(tokenURI, "https://witmon.com/creatures/0")
+                    })
+                    it("getting tokenURI from inexistent token fails", async () => {
+                        await truffleAssert.reverts(
+                            witmon.tokenURI.call(2),
+                            "inexistent token"
+                        )
+                    })
+                })
+                // describe("transfer(..)", async () => {
+                //     it("", async () => {
+                //     })
+                //     // TODO
+                // })
             })
         })
     })

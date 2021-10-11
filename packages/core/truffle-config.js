@@ -56,7 +56,16 @@ module.exports = {
 
   // Set default mocha options here, use special reporters etc.
   mocha: {
-    // timeout: 100000
+    // reporter: "eth-gas-reporter",
+    // reporterOptions: {
+    //   coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    //   currency: "USD",
+    //   gasPrice: 100,
+    //   excludeContracts: ["Migrations"],
+    //   src: "contracts",
+    // },
+    timeout: 100000,
+    useColors: true,
   },
 
   // Configure your compilers
