@@ -2,7 +2,21 @@
   <SectionHeader>SCAN YOUR QR CODE</SectionHeader>
   <div class="container">
     <QrStream class="pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
-
+    <img
+      src="@/assets/witty-creatures-logo.svg"
+      alt="Witty creatures logo"
+      class="logo"
+    />
+    <input
+      v-model="eggKey"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      id="username"
+      type="text"
+      placeholder="Egg ID"
+    />
+    <Button color="black" @click="submitAndRedirect">
+      Submit
+    </Button>
     <p v-if="egg.errors.claim" class="error mb-4">{{ egg.errors.claim }}</p>
     <p class="mb-4">Or import your profile</p>
     <label
