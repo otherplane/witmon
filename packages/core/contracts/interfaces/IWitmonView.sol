@@ -11,5 +11,4 @@ interface IWitmonView {
     function getParameters() external view returns (Witmons.Parameters memory);
     function getStats() external view returns (uint256 _totalSupply);
     function getStatus() external view returns (Witmons.Status);
-    // function previewCreatureImage(/*...*/) external view returns (string memory);
 }
