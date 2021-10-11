@@ -15,6 +15,9 @@ export const EGG_KEY_LENGTH_BYTES = eggKeyLengthBytes
 // Base string to use for salting the deterministic egg key derivation.
 export const EGG_KEY_SALT: string = process.env.EGG_KEY_SALT || ''
 
+// JWT secret to derive tokens
+export const JWT_SECRET: string = process.env.JWT_SECRET || 'secret'
+
 // Egg incubation duration in millis
 export const INCUBATION_DURATION = process.env.INCUBATION_DURATION
   ? parseInt(process.env.INCUBATION_DURATION)

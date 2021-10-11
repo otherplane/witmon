@@ -5,6 +5,7 @@ import { FastifyPluginAsync } from 'fastify'
 import { fastifyMongodb } from 'fastify-mongodb'
 import { join } from 'path'
 
+import { JWT_SECRET } from './constants'
 import { EggRepository } from './repositories/egg'
 
 require('dotenv').config()
@@ -70,7 +71,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
 
   // JWT
   fastify.register(fastifyJwt, {
-    secret: process.env.JWT_SECRET as string,
+    secret: JWT_SECRET as string,
   })
 
   // Plugins defined in routes
