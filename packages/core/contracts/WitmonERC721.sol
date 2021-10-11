@@ -170,7 +170,7 @@ contract WitmonERC721
     }
 
     /// Starts hatching, which means that minting of creatures will start to be possible,
-    /// until the hatching period expires (see `_hatchingExpirationBlocks`).
+    /// until the hatching period expires (see `_state.expirationBlocks`).
     /// @dev During the hatching period the tender will remain in 'Hatching status'. Once the
     /// @dev hatching period expires, tender status will automatically change to 'Freezed'.
     function startHatching()
@@ -185,7 +185,8 @@ contract WitmonERC721
             "WitmonERC721: randomness not yet solved"
         );
         Witnet.Result memory _result = witnet.readResponseResult(_queryId);
-        if (witnet.isOk(_result)) {
+        if (_result.success) {
+            _result.value.buffer.data[1] = 0x1f; // 31-byte randomness
             bytes32 _randomness = _bytesToBytes32(witnet.asBytes(_result));
             _state.hatchingBlock = block.number;
             _state.witnetRandomness = _randomness;
