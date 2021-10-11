@@ -26,6 +26,7 @@
     "fastify-mongodb": "^4.1.0",
     "fastify-plugin": "^3.0.0",
     "fastify-sensible": "^3.1.0",
+    "fastify-static": "^4.4.0",
     "keccak": "^3.0.2",
     "mongodb": "^4.1.2",
     "nodemon": "^2.0.13",

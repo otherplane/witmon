@@ -78,6 +78,12 @@ const app: FastifyPluginAsync<AppOptions> = async (
     dir: join(__dirname, 'routes'),
     options: opts,
   })
+
+  fastify.register(require('fastify-static'), {
+    root: join(__dirname, '../public'),
+    // prefix: '/public/', // optional: default '/'
+  })
+
 }
 
 export default app
