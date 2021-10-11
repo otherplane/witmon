@@ -19,6 +19,6 @@ module.exports = async function (deployer, network) {
       console.info("   > Skipped: presumably deployed at", WitmonLiscon21.address)
     }
   } else {
-    await deployer.deploy(WitmonLiscon21, "https://witcom.com/creatures/");
+    await deployer.deploy(WitmonLiscon21, "https://witmon.com/creatures/");
   }
 };

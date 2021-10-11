@@ -7,8 +7,6 @@ import "../contracts/interfaces/IWitmonSurrogates.sol";
 import "../contracts/libs/Witmons.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
-
 
 contract WitmonMock is IWitmonSurrogates, IWitmonEvents {
     using Counters for Counters.Counter;
@@ -83,5 +81,19 @@ contract WitmonMock is IWitmonSurrogates, IWitmonEvents {
         // _safeMint(_eggOwner, _tokenId);
         emit NewCreature(_eggIndex, _tokenId);
     }
+
+    function previewCreatureImage(
+            address _eggOwner,
+            uint256 _eggIndex,
+            uint256, //_eggColorIndex,
+            uint256, // _eggScore,
+            uint256 _eggRanking,
+            uint256 _totalClaimedEggs,
+            bytes calldata _signature
+        )
+        external view
+        override
+        returns (string memory)
+    {}
 
 }

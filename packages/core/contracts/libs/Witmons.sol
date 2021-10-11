@@ -50,11 +50,11 @@ library Witmons {
     }
 
     enum CreatureStatus {
-        Inexistent,
-        Incubating,
-        Hatching,
-        Alive,
-        Freezed
+        Inexistent, // 0
+        Incubating, // 1
+        Hatching,   // 2
+        Alive,      // 3
+        Freezed     // 4
     }
 
     /// Recovers address from hash and signature.
