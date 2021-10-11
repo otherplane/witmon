@@ -66,7 +66,7 @@ export default {
     }
 
     function submitAndRedirect () {
-      if (previousRoute.value.includes('/my-egg')) {
+      if (egg.username) {
         egg.incubateEgg({ key: eggKey.value })
       } else {
         egg.claim({ key: eggKey.value })
