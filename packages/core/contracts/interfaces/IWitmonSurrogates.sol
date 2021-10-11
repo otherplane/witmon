@@ -11,4 +11,13 @@ interface IWitmonSurrogates {
         uint256 _totalClaimedEggs,
         bytes calldata _signature
     ) external;
+    function previewCreatureImage(
+        address _eggOwner,
+        uint256 _eggIndex,
+        uint256 _eggColor,
+        uint256 _eggScore,
+        uint256 _eggRanking,
+        uint256 _totalClaimedEggs,
+        bytes calldata _signature
+    ) external view returns (string memory);
 }

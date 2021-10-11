@@ -222,17 +222,14 @@ contract WitmonERC721
         nonReentrant
         inStatus(Witmons.Status.Hatching)
     {
-        // Verify signator:
-        bytes32 _eggHash = keccak256(abi.encodePacked(
+        _verifySignatorSignature(
             _eggOwner,
             _eggIndex,
-            // ..
-            _eggRanking,            
-            _totalClaimedEggs
-        ));
-        require(
-            Witmons.recoverAddr(_eggHash, _signature) == _state.params.signator,
-            "WitmonERC721: bad signature"
+            _eggColorIndex,
+            _eggScore,
+            _eggRanking,
+            _totalClaimedEggs,
+            _signature
         );
 
         // Verify not already minted:
@@ -246,29 +243,63 @@ contract WitmonERC721
         uint256 _tokenId = _state.totalSupply.current();
 
         // Fulfill creature data:
-        uint8 _percentile100 = _eggRanking > _totalClaimedEggs
-            ? 100 
-            : uint8((_eggRanking * 100) / _totalClaimedEggs)
-        ;
-        Witmons.Creature memory _creature = Witmons.Creature({
-            tokenId: _tokenId,
-            eggBirth: block.number,
-            eggCategory: _state.creatureCategory(_percentile100),
-            eggColorIndex: _eggColorIndex,
-            eggIndex: _eggIndex,
-            eggScore: _eggScore,
-            eggRanking: _eggRanking,
-            eggPhenotype: keccak256(abi.encodePacked(
-                _signature,
-                _state.witnetRandomness
-            ))
-        });
+        Witmons.Creature memory _creature = _mintCreature(
+            _tokenId,
+            block.number,
+            _eggIndex,
+            _eggColorIndex,
+            _eggScore,
+            _eggRanking,
+            _totalClaimedEggs,
+            _signature
+        );
+
+        // Write to storage:
         _state.creatures[_eggIndex] = _creature;		
         _state.eggIndex_[_tokenId] = _eggIndex;
 
         // Mint the token:
         _safeMint(_eggOwner, _tokenId);
         emit NewCreature(_eggIndex, _tokenId);
+    }
+
+    function previewCreatureImage(
+            address _eggOwner,
+            uint256 _eggIndex,
+            uint256 _eggColorIndex,
+            uint256 _eggScore,
+            uint256 _eggRanking,
+            uint256 _totalClaimedEggs,
+            bytes calldata _signature
+        )
+        external view
+        virtual override
+        inStatus(Witmons.Status.Hatching)
+        returns (string memory)
+    {
+        _verifySignatorSignature(
+            _eggOwner,
+            _eggIndex,
+            _eggColorIndex,
+            _eggScore,
+            _eggRanking,
+            _totalClaimedEggs,
+            _signature
+        );
+
+        // Preview creature image:
+        return _state.decorator.getCreatureImage(
+            _mintCreature(
+                0,
+                0,
+                _eggIndex,
+                _eggColorIndex,
+                _eggScore,
+                _eggRanking,
+                _totalClaimedEggs,
+                _signature
+            )
+        );
     }
 
     // ========================================================================
@@ -351,6 +382,70 @@ contract WitmonERC721
         return _state.status();
     }
 
+    // ------------------------------------------------------------------------
+    // --- INTERNAL VIRTUAL METHODS -------------------------------------------
+    // ------------------------------------------------------------------------
+
+    function _mintCreature(
+            uint256 _tokenId,
+            uint256 _tokenInception,
+            uint256 _eggIndex,
+            uint256 _eggColorIndex,
+            uint256 _eggScore,
+            uint256 _eggRanking,
+            uint256 _totalClaimedEggs,
+            bytes memory _signature
+        )
+        internal view
+        virtual
+        returns (Witmons.Creature memory)
+    {
+        uint8 _percentile100 = _eggRanking > _totalClaimedEggs
+            ? 100 
+            : uint8((_eggRanking * 100) / _totalClaimedEggs)
+        ;
+        return Witmons.Creature({
+            tokenId: _tokenId,
+            eggBirth: _tokenInception,
+            eggCategory: _state.creatureCategory(_percentile100),
+            eggColorIndex: _eggColorIndex,
+            eggIndex: _eggIndex,
+            eggScore: _eggScore,
+            eggRanking: _eggRanking,
+            eggPhenotype: keccak256(abi.encodePacked(
+                _signature,
+                _state.witnetRandomness
+            ))
+        });
+    }
+
+    function _verifySignatorSignature(
+            address _eggOwner,
+            uint256 _eggIndex,
+            uint256, // TODO: _eggColorIndex,
+            uint256, // TODO: _eggScore,
+            uint256 _eggRanking,
+            uint256 _totalClaimedEggs,
+            bytes memory _signature
+        )
+        internal view
+        virtual
+    {
+        // Verify signator:
+        bytes32 _eggHash = keccak256(abi.encodePacked(
+            _eggOwner,
+            _eggIndex,
+            // TODO: _eggColorIndex,
+            // TODO: _eggScore,
+            _eggRanking,            
+            _totalClaimedEggs
+        ));
+        require(
+            Witmons.recoverAddr(_eggHash, _signature) == _state.params.signator,
+            "WitmonERC721: bad signature"
+        );
+    }
+    
     // ------------------------------------------------------------------------
     // --- PRIVATE METHODS ----------------------------------------------------
     // ------------------------------------------------------------------------
