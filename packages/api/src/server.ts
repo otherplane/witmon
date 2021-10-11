@@ -22,5 +22,10 @@ server
     )
     console.log('[Server] ECDSA public Key: ', account.address)
 
-    server.listen(3000)
+    server.listen(3000, '0.0.0.0', function (err, address) {
+      if (err) {
+        server.log.error(err)
+        process.exit(1)
+      }
+    })
   })
