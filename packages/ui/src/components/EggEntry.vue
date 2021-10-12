@@ -55,9 +55,4 @@ export default {
     }
   }
 }
-@media (min-width: 1200px) {
-  .egg-container {
-    grid-template-columns: 10% 30% 10% 10%;
-  }
-}
 </style>

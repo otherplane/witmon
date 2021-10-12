@@ -55,11 +55,4 @@ export default {
     }
   }
 }
-@media (min-width: 1200px) {
-  .scores-container {
-    .header {
-      grid-template-columns: 10% 30% 10% 10%;
-    }
-  }
-}
 </style>
