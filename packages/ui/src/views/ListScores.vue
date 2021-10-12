@@ -2,13 +2,13 @@
   <SectionHeader>LEADER BOARD</SectionHeader>
   <div class="scores-container">
     <div class="table-header">
-      <div class="label" @click="orderBy('index')">INDEX</div>
-      <div class="label" @click="orderBy('username')">USER</div>
-      <div class="label" @click="orderBy('score')">EggScore ™</div>
+      <div class="label" @click="orderBy('index')">Rarity index</div>
+      <div class="label" @click="orderBy('username')">Username</div>
+      <div class="label" @click="orderBy('score')">EggScore™</div>
     </div>
     <EggEntry
       v-for="(egg, index) in egg.list"
-      :key="egg.index"
+      :key="egg.username"
       :index="egg.index"
       :dark="index % 2"
       :username="egg.username"
@@ -42,7 +42,7 @@ export default {
   .table-header {
     display: grid;
     background-color: rgb(237, 240, 247);
-    grid-template-columns: 50px 1fr 80px;
+    grid-template-columns: 55px 1fr 80px;
     grid-template-rows: max-content;
     justify-content: center;
     align-items: center;
