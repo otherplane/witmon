@@ -38,7 +38,7 @@
       </router-link>
       <router-link to="/scores" class="center-item">
         <Button color="orange">
-          LeaderBoard
+          Leaderboard
         </Button>
       </router-link>
       <router-link to="/help" class="center-item">
@@ -48,7 +48,7 @@
       </router-link>
 
       <Button @click="modal.showModal" color="grey" class="center-item">
-        Export
+        Eggport &trade;
       </Button>
 
       <Button
@@ -60,7 +60,7 @@
         Connect metamask
       </Button>
       <Button v-else @click="mint" color="grey" class="center-item">
-        Mint
+        Open my egg
       </Button>
     </div>
   </div>
