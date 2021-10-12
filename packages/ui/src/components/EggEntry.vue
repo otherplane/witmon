@@ -2,7 +2,7 @@
   <div class="egg-container" :class="{ dark: dark }">
     <p class="subtitle item">{{ index }}</p>
     <div class="small-title item user">
-      <Egg class="egg-image" :index="index" />
+      <Egg class="egg-image" :index="rarityIndex" />
       <p>{{ username }}</p>
     </div>
     <p class="small-title item score">{{ score }}</p>
@@ -29,7 +29,7 @@ export default {
 }
 .egg-container {
   display: grid;
-  grid-template-columns: 50px 1fr 80px;
+  grid-template-columns: 55px 1fr 80px;
   justify-items: center;
   grid-template-rows: max-content;
   justify-content: center;
@@ -49,9 +49,11 @@ export default {
     grid-template-columns: 50px 1fr;
     column-gap: 16px;
     align-items: center;
-    justify-self: flex-start;
+    justify-self: center;
+    // justify-self: flex-start;
     .egg-image {
       width: 50px;
+      height: min-content;
     }
   }
 }
