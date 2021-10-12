@@ -9,7 +9,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: grid;
-  grid-template: 1fr / 1fr;
+  grid-template: min-content / 1fr;
   height: 100vh;
 }
 </style>
