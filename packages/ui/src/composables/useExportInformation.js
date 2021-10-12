@@ -6,8 +6,9 @@ export function useExportInformation () {
   // wil store the reference found in the template
   const download = ref(null)
 
+  downloadLink.value = createDownloadLink()
+
   function triggerDownload () {
-    downloadLink.value = createDownloadLink()
     download.value.click()
   }
 

@@ -66,7 +66,6 @@ import { useExportInformation } from '@/composables/useExportInformation'
 
 export default defineComponent({
   setup (props, ctx) {
-    // this.$refs.download.click()
     const exportInformation = useExportInformation()
 
     const instance = getCurrentInstance()
