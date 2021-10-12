@@ -60,7 +60,7 @@ export const useEggStore = defineStore('egg', {
       this.errors[error] = null
     },
     setError (name, error) {
-      router.push('/')
+      // router.push('/')
       this.errors[name] = error.response.data.message
       this.notify({ message: this.errors[name] })
     },
@@ -73,12 +73,13 @@ export const useEggStore = defineStore('egg', {
     },
     async claim ({ key }) {
       const request = await this.api.claim({ key })
-      if (request.token) {
+      console.log('request', request)
+      if (request.error) {
+        this.setError('claim', request.error)
+      } else if (request.token) {
         await this.saveClaimInfo(request)
         this.clearError('claim')
         router.push('/')
-      } else if (request.error) {
-        this.setError('claim', request.error)
       }
     },
     async incubateEgg ({ key }) {
