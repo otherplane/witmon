@@ -21,6 +21,7 @@
     </div>
     <div class="buttons">
       <Button
+        v-if="!egg.hasBorn"
         color="green"
         :type="type"
         @click="incubateMyEgg"
@@ -29,6 +30,7 @@
         Incubate my egg
       </Button>
       <router-link
+        v-if="!egg.hasBorn"
         :to="type === 'disable' ? '' : '/scan-egg'"
         class="center-item"
       >
@@ -52,14 +54,19 @@
       </Button>
 
       <Button
-        v-if="!isProviderConnected"
+        v-if="egg.hasBorn && !isProviderConnected"
         @click="enableProvider"
         color="grey"
         class="center-item"
       >
         Connect metamask
       </Button>
-      <Button v-else @click="mint" color="grey" class="center-item">
+      <Button
+        v-else-if="egg.hasBorn"
+        @click="mint"
+        color="grey"
+        class="center-item"
+      >
         Open my egg
       </Button>
     </div>
@@ -72,7 +79,7 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
-import { computed, onBeforeMount } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount } from 'vue'
 
 import imageUrl from '@/assets/egg-example.png'
 import { useModal } from '@/composables/useModal'
@@ -83,9 +90,18 @@ export default {
     const modal = useModal()
     const egg = useEggStore()
     const web3Witmon = useWeb3Witmon()
-
+    let timeout
     onBeforeMount(() => {
       egg.getEggInfo()
+      if (!egg.hasBorn) {
+        timeout = setTimeout(() => {
+          egg.timeToBirth -= 1
+        }, egg.timeToBirth - Date.now())
+      }
+    })
+
+    onBeforeUnmount(() => {
+      clearTimeout(timeout)
     })
 
     const type = computed(() => (egg.incubator ? 'disable' : 'default'))

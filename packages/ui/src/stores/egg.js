@@ -44,6 +44,9 @@ export const useEggStore = defineStore('egg', {
         this.egg.incubating &&
         this.egg.incubating === this.egg.username
       )
+    },
+    hasBorn () {
+      return this.timeToBirth < Date.now()
     }
   },
   actions: {
