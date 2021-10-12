@@ -1,5 +1,5 @@
 <template>
-  <div class="container-egg">
+  <div v-if="egg.username" class="container-egg">
     <div class="egg-content">
       <div>
         <p class="subtitle">EGG ID: {{ egg.username }}</p>
@@ -144,8 +144,8 @@ export default {
   text-align: left;
   row-gap: 16px;
   .egg-image {
-    width: 40%;
-    max-height: 150px;
+    width: 100px;
+    height: min-content;
     justify-self: center;
   }
 }
