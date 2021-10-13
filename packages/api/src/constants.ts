@@ -18,13 +18,13 @@ export const EGG_KEY_SALT: string = process.env.EGG_KEY_SALT || ''
 // JWT secret to derive tokens
 export const JWT_SECRET: string = process.env.JWT_SECRET || 'secret'
 
-// Egg incubation duration in milliss
+// Egg incubation duration in millis
 export const INCUBATION_DURATION_MILLIS = process.env
   .INCUBATION_DURATION_SECONDS
   ? parseInt(process.env.INCUBATION_DURATION_SECONDS) * 1000
   : 5 * 60 * 1000
 
-// Egg incubation cooldown in seconds
+// Egg incubation cooldown in millis
 export const INCUBATION_COOLDOWN_MILLIS = process.env
   .INCUBATION_COOLDOWN_SECONDS
   ? Math.max(
@@ -38,12 +38,12 @@ export const INCUBATION_POINTS = process.env.INCUBATION_POINTS
   ? parseInt(process.env.INCUBATION_POINTS)
   : 800
 
-// Minimum amount of points that can be incubated
+// Minimum amount of points that can be rewarded after an incubation
 export const INCUBATION_POINTS_MIN = process.env.INCUBATION_POINTS_MIN
   ? parseInt(process.env.INCUBATION_POINTS_MIN)
   : 50
 
-// Incubation factor to be
+// Incubation point divisor to be applied every time the same incubation happens
 export const INCUBATION_POINTS_DIVISOR = process.env.INCUBATION_POINTS_DIVISOR
   ? parseInt(process.env.INCUBATION_POINTS_DIVISOR)
   : 2

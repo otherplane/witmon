@@ -49,3 +49,12 @@ export function fromHexToUint8Array(hex: string) {
 export function isTimeToMint() {
   return Date.now() >= EGG_MINT_TIMESSTAMP
 }
+
+export function printRemainingMillis(millis: number) {
+  const seconds = Math.ceil(millis / 1000)
+  if (seconds < 60) {
+    return `${seconds} sec`
+  } else {
+    return `${Math.ceil(seconds / 60)} min`
+  }
+}

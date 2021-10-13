@@ -15,7 +15,11 @@ import {
   Incubation,
   JwtVerifyPayload,
 } from '../types'
-import { calculateRemainingCooldown, isTimeToMint } from '../utils'
+import {
+  calculateRemainingCooldown,
+  isTimeToMint,
+  printRemainingMillis,
+} from '../utils'
 
 const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
@@ -120,7 +124,9 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
             .status(409)
             .send(
               new Error(
-                `Target egg needs ${remainingCooldown} min to cooldown before being incubated again`
+                `Target egg needs ${printRemainingMillis(
+                  remainingCooldown
+                )} to cooldown before being incubated again`
               )
             )
         }
