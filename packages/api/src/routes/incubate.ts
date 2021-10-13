@@ -2,7 +2,6 @@ import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 
 import {
   EGG_MINT_TIMESSTAMP,
-  INCUBATION_COOLDOWN_MILLIS,
   INCUBATION_DURATION_MILLIS,
   INCUBATION_POINTS,
 } from '../constants'
@@ -111,15 +110,10 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           from: fromEgg.username,
           to: toEgg.username,
         })
-
-        if (
-          lastIncubation &&
-          currentTimestamp < lastIncubation.ends + INCUBATION_COOLDOWN_MILLIS
-        ) {
-          const remainingCooldown = calculateRemainingCooldown(
-            lastIncubation.ends
-          )
-
+        const remainingCooldown: number = lastIncubation
+          ? calculateRemainingCooldown(lastIncubation.ends)
+          : 0
+        if (remainingCooldown) {
           return reply
             .status(409)
             .send(

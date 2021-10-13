@@ -77,7 +77,7 @@ test('should return incubation object after incubate itself', async (t) => {
   })
 })
 
-test('should sum points to incubator and incubated', async (t) => {
+test('should sum points to incubated egg', async (t) => {
   // Before test: Claim an egg
   const token0 = await claimEgg(t)(0)
   await claimEgg(t)(1)

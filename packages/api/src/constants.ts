@@ -27,13 +27,26 @@ export const INCUBATION_DURATION_MILLIS = process.env
 // Egg incubation cooldown in seconds
 export const INCUBATION_COOLDOWN_MILLIS = process.env
   .INCUBATION_COOLDOWN_SECONDS
-  ? parseInt(process.env.INCUBATION_COOLDOWN_SECONDS) * 1000
-  : 2 * 60 * 60 * 1000
+  ? Math.max(
+      parseInt(process.env.INCUBATION_COOLDOWN_SECONDS) * 1000,
+      INCUBATION_DURATION_MILLIS
+    )
+  : Math.max(2 * 60 * 60 * 1000, INCUBATION_DURATION_MILLIS)
 
-// Incubation points if target egg is not your own
-export const INCUBATION_POINTS = process.env.INCUBATION_POINTS_OTHERS
-  ? parseInt(process.env.INCUBATION_POINTS_OTHERS)
+// Incubation points
+export const INCUBATION_POINTS = process.env.INCUBATION_POINTS
+  ? parseInt(process.env.INCUBATION_POINTS)
   : 800
+
+// Minimum amount of points that can be incubated
+export const INCUBATION_POINTS_MIN = process.env.INCUBATION_POINTS_MIN
+  ? parseInt(process.env.INCUBATION_POINTS_MIN)
+  : 50
+
+// Incubation factor to be
+export const INCUBATION_POINTS_DIVISOR = process.env.INCUBATION_POINTS_DIVISOR
+  ? parseInt(process.env.INCUBATION_POINTS_DIVISOR)
+  : 2
 
 // Secp256k1 private key used for signing in the `mint` endpoint
 export const MINT_PRIVATE_KEY =

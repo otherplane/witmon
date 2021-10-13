@@ -9,9 +9,11 @@ import { Incubation } from './types'
 export function calculateRemainingCooldown(
   incubationEnds: number,
   currentTimestamp = Date.now(),
+  incubationDuration: number = INCUBATION_DURATION_MILLIS,
   incubationCooldown: number = INCUBATION_COOLDOWN_MILLIS
 ) {
-  const remainingMillis = incubationEnds + incubationCooldown - currentTimestamp
+  const remainingMillis =
+    incubationEnds - incubationDuration + incubationCooldown - currentTimestamp
 
   return remainingMillis > 0 ? remainingMillis : 0
 }
