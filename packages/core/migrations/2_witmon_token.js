@@ -6,7 +6,7 @@ const WitmonLiscon21 = artifacts.require("WitmonLiscon21");
 const WitnetRequestBoard = artifacts.require("WitnetRequestBoard")
 module.exports = async function (deployer, network, accounts) {  
   network = network.split("-")[0]
-  if (network !== "test" && test !== "develop") {
+  if (network !== "test" && network !== "develop") {
     if (!witmonAddresses[network]) {
       witmonAddresses[network] = {}
     }
@@ -14,12 +14,14 @@ module.exports = async function (deployer, network, accounts) {
       witmonAddresses[network].WitmonERC721 = ""
     }
     WitnetRequestBoard.address = witnetAddresses.default[network].WitnetRequestBoard
+    console.info("   > Using WitnetRequestBoard at", WitnetRequestBoard.address)
   } else {
     const WitnetRequestBoardMock = artifacts.require("WitnetRequestBoardMock")
     if (!WitnetRequestBoardMock.isDeployed()) {
       await deployer.deploy(WitnetRequestBoardMock)
     }
-    WitnetRequestBoard.address = WitnetRequestBoardMock.address; 
+    WitnetRequestBoard.address = WitnetRequestBoardMock.address;
+    console.info("   > Using WitnetRequestBoardMock at", WitnetRequestBoard.address)
   }
   if (network === "test" || network === "develop" || witmonAddresses[network].WitmonERC721 === "") {
     await deployer.deploy(
@@ -32,7 +34,7 @@ module.exports = async function (deployer, network, accounts) {
       [10, 30, 60],                     // percentile marks
       80640                             // expirationDays (~ 14 days)
     )
-    if (network !== "test") {
+    if (network !== "test" && network !== "develop") {
       witmonAddresses[network].WitmonERC721 = WitmonERC721.address
       fs.writeFileSync("./migrations/witmon.addresses.json", JSON.stringify(witmonAddresses, null, 4), { flag: 'w+' })
     }
