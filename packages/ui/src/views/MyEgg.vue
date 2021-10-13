@@ -128,7 +128,7 @@ export default {
 
 <style scoped lang="scss">
 .container-egg {
-  min-height: 100vh;
+  grid-row: 2;
   width: 100vw;
   display: grid;
   justify-items: center;

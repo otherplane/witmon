@@ -2350,33 +2350,15 @@
   "ast": {
     "absolutePath": "project:/contracts/WitmonMock.sol",
     "exportedSymbols": {
-      "Counters": [
-        1513
-      ],
-      "IWitmonDecorator": [
-        3648
-      ],
-      "IWitmonEvents": [
-        3678
-      ],
-      "IWitmonSurrogates": [
-        3698
-      ],
-      "IWitnetRequest": [
-        4264
-      ],
-      "Strings": [
-        1716
-      ],
-      "WitmonDecoratorBase": [
-        1947
-      ],
-      "WitmonMock": [
-        3597
-      ],
-      "Witmons": [
-        4024
-      ]
+      "Counters": [1513],
+      "IWitmonDecorator": [3648],
+      "IWitmonEvents": [3678],
+      "IWitmonSurrogates": [3698],
+      "IWitnetRequest": [4264],
+      "Strings": [1716],
+      "WitmonDecoratorBase": [1947],
+      "WitmonMock": [3597],
+      "Witmons": [4024]
     },
     "id": 3598,
     "license": "MIT",
@@ -2384,12 +2366,7 @@
     "nodes": [
       {
         "id": 3498,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "32:23:15"
       },
@@ -2497,11 +2474,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 3597,
-        "linearizedBaseContracts": [
-          3597,
-          3678,
-          3698
-        ],
+        "linearizedBaseContracts": [3597, 3678, 3698],
         "name": "WitmonMock",
         "nameLocation": "368:10:15",
         "nodeType": "ContractDefinition",
@@ -2734,18 +2707,14 @@
             "visibility": "public"
           },
           {
-            "baseFunctions": [
-              3697
-            ],
+            "baseFunctions": [3697],
             "body": {
               "id": 3595,
               "nodeType": "Block",
               "src": "999:1655:15",
               "statements": [
                 {
-                  "assignments": [
-                    3552
-                  ],
+                  "assignments": [3552],
                   "declarations": [
                     {
                       "constant": false,
@@ -3098,10 +3067,7 @@
                       "id": 3563,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "1235:7:15",
                       "typeDescriptions": {
@@ -3194,9 +3160,7 @@
                   "src": "1601:30:15"
                 },
                 {
-                  "assignments": [
-                    3584
-                  ],
+                  "assignments": [3584],
                   "declarations": [
                     {
                       "constant": false,
@@ -3595,33 +3559,15 @@
   "legacyAST": {
     "absolutePath": "project:/contracts/WitmonMock.sol",
     "exportedSymbols": {
-      "Counters": [
-        1513
-      ],
-      "IWitmonDecorator": [
-        3648
-      ],
-      "IWitmonEvents": [
-        3678
-      ],
-      "IWitmonSurrogates": [
-        3698
-      ],
-      "IWitnetRequest": [
-        4264
-      ],
-      "Strings": [
-        1716
-      ],
-      "WitmonDecoratorBase": [
-        1947
-      ],
-      "WitmonMock": [
-        3597
-      ],
-      "Witmons": [
-        4024
-      ]
+      "Counters": [1513],
+      "IWitmonDecorator": [3648],
+      "IWitmonEvents": [3678],
+      "IWitmonSurrogates": [3698],
+      "IWitnetRequest": [4264],
+      "Strings": [1716],
+      "WitmonDecoratorBase": [1947],
+      "WitmonMock": [3597],
+      "Witmons": [4024]
     },
     "id": 3598,
     "license": "MIT",
@@ -3629,12 +3575,7 @@
     "nodes": [
       {
         "id": 3498,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "32:23:15"
       },
@@ -3742,11 +3683,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 3597,
-        "linearizedBaseContracts": [
-          3597,
-          3678,
-          3698
-        ],
+        "linearizedBaseContracts": [3597, 3678, 3698],
         "name": "WitmonMock",
         "nameLocation": "368:10:15",
         "nodeType": "ContractDefinition",
@@ -3979,18 +3916,14 @@
             "visibility": "public"
           },
           {
-            "baseFunctions": [
-              3697
-            ],
+            "baseFunctions": [3697],
             "body": {
               "id": 3595,
               "nodeType": "Block",
               "src": "999:1655:15",
               "statements": [
                 {
-                  "assignments": [
-                    3552
-                  ],
+                  "assignments": [3552],
                   "declarations": [
                     {
                       "constant": false,
@@ -4343,10 +4276,7 @@
                       "id": 3563,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "1235:7:15",
                       "typeDescriptions": {
@@ -4439,9 +4369,7 @@
                   "src": "1601:30:15"
                 },
                 {
-                  "assignments": [
-                    3584
-                  ],
+                  "assignments": [3584],
                   "declarations": [
                     {
                       "constant": false,

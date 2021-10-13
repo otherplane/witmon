@@ -1,8 +1,7 @@
 <template>
   <div class="egg-container" :class="{ dark: dark }">
-    <p class="subtitle item">{{ index }}</p>
+    <Egg class="egg-image item" :index="index" />
     <div class="small-title item user">
-      <Egg class="egg-image" :index="rarityIndex" />
       <p>{{ username }}</p>
     </div>
     <p class="small-title item score">{{ score }}</p>
@@ -28,8 +27,9 @@ export default {
   background: rgb(237, 240, 247);
 }
 .egg-container {
+  padding: 8px 24px;
   display: grid;
-  grid-template-columns: 55px 1fr 80px;
+  grid-template-columns: 80px 1fr 80px;
   justify-items: center;
   grid-template-rows: max-content;
   justify-content: center;
@@ -44,17 +44,9 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .user {
-    display: grid;
-    grid-template-columns: 50px 1fr;
-    column-gap: 16px;
-    align-items: center;
-    justify-self: center;
-    // justify-self: flex-start;
-    .egg-image {
-      width: 50px;
-      height: min-content;
-    }
+  .egg-image {
+    width: 50px;
+    height: min-content;
   }
 }
 </style>

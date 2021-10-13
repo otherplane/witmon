@@ -2,7 +2,7 @@
   <SectionHeader>LEADER BOARD</SectionHeader>
   <div class="scores-container">
     <div class="table-header">
-      <div class="label" @click="orderBy('index')">Rarity index</div>
+      <div class="label"></div>
       <div class="label" @click="orderBy('username')">Username</div>
       <div class="label" @click="orderBy('score')">EggScore™</div>
     </div>
@@ -42,11 +42,11 @@ export default {
   .table-header {
     display: grid;
     background-color: rgb(237, 240, 247);
-    grid-template-columns: 55px 1fr 80px;
+    grid-template-columns: 80px 1fr 80px;
     grid-template-rows: max-content;
     justify-content: center;
     align-items: center;
-    padding: 16px 4px;
+    padding: 24px;
     .label {
       cursor: pointer;
       color: black;

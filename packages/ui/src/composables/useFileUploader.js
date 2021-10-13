@@ -6,7 +6,7 @@ export function useFileUploader () {
 
   function onFileSelected () {
     const file = myFile.value.files[0]
-    if (!file || file.type !== 'application/json') {
+    if (!file) {
       console.error('invalid format')
     }
 

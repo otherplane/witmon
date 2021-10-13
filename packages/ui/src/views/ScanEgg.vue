@@ -2,11 +2,6 @@
   <SectionHeader>SCAN YOUR QR CODE</SectionHeader>
   <div class="container">
     <QrStream class="pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
-    <img
-      src="@/assets/witty-creatures-logo.svg"
-      alt="Witty creatures logo"
-      class="logo"
-    />
     <input
       v-model="eggKey"
       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -61,14 +56,20 @@ export default {
     const previousRoute = ref('')
 
     function saveInfo () {
-      localStorage.setItem('tokenInfo', JSON.stringify(fileUploader.fileInfo))
-      router.push('/my-egg')
+      console.log(fileUploader.fileInfo.value)
+      localStorage.setItem(
+        'tokenInfo',
+        JSON.stringify(fileUploader.fileInfo.value)
+      )
+      router.push(`/egg/${fileUploader.fileInfo.value.key}`)
     }
 
     function submitAndRedirect () {
+      console.log(egg.username)
       if (egg.username) {
         egg.incubateEgg({ key: eggKey.value })
       } else {
+        console.log(eggKey.value)
         egg.claim({ key: eggKey.value })
       }
     }

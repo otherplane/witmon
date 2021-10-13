@@ -31,6 +31,7 @@
 
 <style scoped lang="scss">
 .container {
+  grid-row: 2;
   margin: 0 auto;
   padding: 32px;
   max-width: 600px;

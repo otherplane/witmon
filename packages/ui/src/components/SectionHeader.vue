@@ -1,37 +1,41 @@
 <template>
   <div class="header">
-    <router-link to="/">
-      <img src="@/assets/back-btn.svg" alt="Back button" class="back-btn" />
-    </router-link>
-    <div class="logo">
-      <img src="@/assets/witty-creatures-logo.svg" alt="Witty creatures logo" />
-      <p class="information"><slot></slot></p>
+    <div class="back-container">
+      <router-link to="/">
+        <img src="@/assets/back-btn.svg" alt="Back button" class="back-btn" />
+      </router-link>
+      <img
+        class="logo"
+        src="@/assets/witty-creatures-logo.svg"
+        alt="Witty creatures logo"
+      />
     </div>
+    <p class="information"><slot></slot></p>
   </div>
 </template>
 
 <style scoped lang="scss">
 .header {
-  display: flex;
+  display: grid;
   padding: 16px 24px;
-  justify-content: space-between;
+  grid-template-columns: max-content 1fr;
   align-items: center;
+  column-gap: 24px;
   width: 100%;
   color: black;
-  .back-btn {
-    width: 20px;
-  }
-  .logo {
-    width: 150px;
-    display: grid;
-    grid-template-rows: 1fr;
-    width: max-content;
-    justify-items: center;
-    .information {
-      margin-top: 4px;
-      font-size: 12px;
-      font-weight: lighter;
+  .back-container {
+    display: flex;
+    align-items: center;
+    .back-btn {
+      width: 20px;
+      margin-right: 24px;
     }
+  }
+  .information {
+    text-align: right;
+    font-size: 18px;
+    font-weight: lighter;
+    justify-self: flex-end;
   }
 }
 </style>
