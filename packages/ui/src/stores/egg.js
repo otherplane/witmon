@@ -39,10 +39,7 @@ export const useEggStore = defineStore('egg', {
       ]
     },
     selfIncubation () {
-      return (
-        this.incubating &&
-        this.incubating === this.username
-      )
+      return this.incubating && this.incubating === this.username
     },
     hasBorn () {
       return this.timeToBirth < Date.now()
@@ -65,7 +62,6 @@ export const useEggStore = defineStore('egg', {
       this.errors[error] = null
     },
     setError (name, error) {
-      // router.push('/')
       this.errors[name] = error.response.data.message
       this.notify({ message: this.errors[name] })
     },
@@ -83,7 +79,6 @@ export const useEggStore = defineStore('egg', {
       } else if (request.token) {
         await this.saveClaimInfo(request)
         this.clearError('claim')
-        router.push('/')
       }
     },
     async incubateEgg ({ key }) {
@@ -98,7 +93,6 @@ export const useEggStore = defineStore('egg', {
       } else {
         this.clearError('incubate')
         this.getEggInfo()
-        router.push('/')
       }
     },
     async getEggList () {
@@ -116,10 +110,11 @@ export const useEggStore = defineStore('egg', {
       const tokenInfo = this.getToken()
       const currentScore = this.score || tokenInfo.score
       const request = await this.api.getEggInfo({
-        token: tokenInfo.token,
-        id: tokenInfo.key
+        token: (tokenInfo && tokenInfo.token) || null,
+        id: (tokenInfo && tokenInfo.key) || null
       })
       if (request.error) {
+        router.push({ name: 'init-game' })
         this.setError('info', request.error)
       } else {
         this.clearError('info')

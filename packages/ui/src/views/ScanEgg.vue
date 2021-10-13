@@ -56,7 +56,6 @@ export default {
     const previousRoute = ref('')
 
     function saveInfo () {
-      console.log(fileUploader.fileInfo.value)
       localStorage.setItem(
         'tokenInfo',
         JSON.stringify(fileUploader.fileInfo.value)
@@ -65,13 +64,7 @@ export default {
     }
 
     function submitAndRedirect () {
-      console.log(egg.username)
-      if (egg.username) {
-        egg.incubateEgg({ key: eggKey.value })
-      } else {
-        console.log(eggKey.value)
-        egg.claim({ key: eggKey.value })
-      }
+      router.push(`/egg/${eggKey.value}`)
     }
 
     function onDecode (decodedString) {

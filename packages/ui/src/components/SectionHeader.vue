@@ -27,7 +27,7 @@
     display: flex;
     align-items: center;
     .back-btn {
-      width: 20px;
+      width: 12px;
       margin-right: 24px;
     }
   }

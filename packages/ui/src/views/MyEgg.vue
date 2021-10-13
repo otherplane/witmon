@@ -11,6 +11,7 @@
         :rarityIndex="egg.rarityIndex"
         :timeToBirth="egg.timeToBirth"
       />
+      {{ egg.selfIncubation }}
       <IncubationInfo
         :incubatedByTimeLeft="egg.incubatedByTimeLeft"
         :incubatedBy="egg.incubatedBy"
@@ -79,7 +80,13 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
-import { computed, onBeforeMount, onBeforeUnmount } from 'vue'
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  ref,
+  onBeforeUpdate
+} from 'vue'
 
 import imageUrl from '@/assets/egg-example.png'
 import { useModal } from '@/composables/useModal'
@@ -90,13 +97,24 @@ export default {
     const modal = useModal()
     const egg = useEggStore()
     const web3Witmon = useWeb3Witmon()
+    const routeId = ref('')
     let timeout
+
     onBeforeMount(() => {
       egg.getEggInfo()
       if (!egg.hasBorn) {
         timeout = setTimeout(() => {
           egg.timeToBirth -= 1
         }, egg.timeToBirth - Date.now())
+      }
+    })
+
+    onBeforeUpdate(() => {
+      if (!egg.id) {
+        egg.claim({ key: routeId.value })
+      }
+      if (egg.id !== routeId.value) {
+        egg.incubateEgg({ key: routeId.value })
       }
     })
 
@@ -113,6 +131,7 @@ export default {
     }
 
     return {
+      routeId,
       egg,
       type,
       incubateMyEgg,
@@ -122,6 +141,11 @@ export default {
       isProviderConnected: web3Witmon.isProviderConnected,
       mint: web3Witmon.mint
     }
+  },
+  beforeRouteEnter (to, _from, next) {
+    next(vm => {
+      vm.routeId = to.params.id
+    })
   }
 }
 </script>

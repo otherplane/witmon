@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import MyEgg from '../views/MyEgg.vue'
 import InitGame from '../views/InitGame.vue'
@@ -33,21 +33,6 @@ const routes = [
     }
   },
   {
-    name: 'egg',
-    path: '/egg/:id',
-    component: MyEgg,
-    beforeEnter: async (to, from, next) => {
-      const store = useEggStore()
-      const eggLoginInfo = store.getToken()
-
-      if (eggLoginInfo && eggLoginInfo.token) {
-        next()
-      } else {
-        next('init-game')
-      }
-    }
-  },
-  {
     name: 'help',
     path: '/help',
     component: Info,
@@ -70,17 +55,7 @@ const routes = [
   {
     name: 'egg',
     path: '/egg/:id',
-    component: MyEgg,
-    beforeEnter: async (to, from, next) => {
-      const store = useEggStore()
-      const eggLoginInfo = store.getToken()
-
-      if (eggLoginInfo) {
-        next()
-      } else {
-        next('init-game')
-      }
-    }
+    component: MyEgg
   },
   {
     path: '/scan-egg',
@@ -100,13 +75,14 @@ const routes = [
     }
   },
   {
+    name: 'init-game',
     path: '/init-game',
     component: InitGame
   }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
