@@ -137,7 +137,7 @@ contract WitmonLiscon21
         );
         return string(abi.encodePacked(
             "<svg width='32' height='32' version='1.1' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>",
-                _styles(_creature.tokenId, _traits),
+                _styles(_creature.eggIndex, _traits),
                 "<rect width='32' height='32' class='a'/>",
                 art.backgrounds[_traits.background].svg,
                 art.species[_traits.species].svg,
@@ -147,15 +147,15 @@ contract WitmonLiscon21
         ));
     }
 
-    function _styles(uint256 _tokenId, TraitIndexes memory _traits)
+    function _styles(uint256 _creatureId, TraitIndexes memory _traits)
         internal view
         returns (string memory)
     {
         return string(abi.encodePacked(
-            "<style>#witmon", _tokenId.toString(), " .a { fill: #", art.colors[_traits.baseColor],
-            "; } #witmon", _tokenId.toString(), " .b { fill: #", art.colors[_traits.eyesColor],
-            "; } #witmon", _tokenId.toString(), " .c { fill: #", art.colors[_traits.eyewearColor],
-            "; } #witmon", _tokenId.toString(), " .d { fill: #", art.colors[_traits.hatColor],
+            "<style>#witmon", _creatureId.toString(), " .a { fill: #", art.colors[_traits.baseColor],
+            "; } #witmon", _creatureId.toString(), " .b { fill: #", art.colors[_traits.eyesColor],
+            "; } #witmon", _creatureId.toString(), " .c { fill: #", art.colors[_traits.eyewearColor],
+            "; } #witmon", _creatureId.toString(), " .d { fill: #", art.colors[_traits.hatColor],
             "; }</style>"
         ));
     }
