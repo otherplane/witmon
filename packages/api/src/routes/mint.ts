@@ -3,7 +3,7 @@ import keccak from 'keccak'
 import secp256k1 from 'secp256k1'
 import Web3 from 'web3'
 
-import { EGG_BIRTH_DATE, MINT_PRIVATE_KEY } from '../constants'
+import { EGG_MINT_TIMESSTAMP, MINT_PRIVATE_KEY } from '../constants'
 import { EggRepository } from '../repositories/egg'
 import { MintRepository } from '../repositories/mint'
 import {
@@ -29,7 +29,7 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     },
     handler: async (request: FastifyRequest<{ Body: MintParams }>, reply) => {
       // Check 0: incubation period
-      if (EGG_BIRTH_DATE && isTimeToMint())
+      if (EGG_MINT_TIMESSTAMP && isTimeToMint())
         return reply
           .status(403)
           .send(new Error(`Forbidden: mint is not enabled yet`))

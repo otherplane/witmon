@@ -1,5 +1,8 @@
 import { test } from 'tap'
-import { INCUBATION_COOLDOWN, INCUBATION_DURATION } from '../../src/constants'
+import {
+  INCUBATION_COOLDOWN_MILLIS,
+  INCUBATION_DURATION_MILLIS,
+} from '../../src/constants'
 
 import {
   claimEgg,
@@ -273,14 +276,16 @@ test('should get EGG #1 - get after incubation', async (t) => {
         t.same(response.json().incubatedBy.to, initialEggs[0].username)
         t.ok(response.json().incubatedBy.remainingDuration > 0)
         t.ok(
-          response.json().incubatedBy.remainingDuration <= INCUBATION_DURATION
+          response.json().incubatedBy.remainingDuration <=
+            INCUBATION_DURATION_MILLIS
         )
         t.ok(
-          response.json().incubatedBy.remainingCooldown > INCUBATION_DURATION
+          response.json().incubatedBy.remainingCooldown >
+            INCUBATION_DURATION_MILLIS
         )
         t.ok(
           response.json().incubatedBy.remainingCooldown <=
-            INCUBATION_DURATION + INCUBATION_COOLDOWN
+            INCUBATION_DURATION_MILLIS + INCUBATION_COOLDOWN_MILLIS
         )
 
         // Check incubating (self-incubation)
@@ -288,12 +293,16 @@ test('should get EGG #1 - get after incubation', async (t) => {
         t.same(response.json().incubating.to, initialEggs[0].username)
         t.ok(response.json().incubating.remainingDuration > 0)
         t.ok(
-          response.json().incubating.remainingDuration <= INCUBATION_DURATION
+          response.json().incubating.remainingDuration <=
+            INCUBATION_DURATION_MILLIS
         )
-        t.ok(response.json().incubating.remainingCooldown > INCUBATION_DURATION)
+        t.ok(
+          response.json().incubating.remainingCooldown >
+            INCUBATION_DURATION_MILLIS
+        )
         t.ok(
           response.json().incubating.remainingCooldown <=
-            INCUBATION_DURATION + INCUBATION_COOLDOWN
+            INCUBATION_DURATION_MILLIS + INCUBATION_COOLDOWN_MILLIS
         )
 
         t.end()
@@ -334,7 +343,7 @@ test('should return correct rarity index after incubate', async (t) => {
     )
   })
 
-  await sleep(INCUBATION_DURATION + INCUBATION_COOLDOWN)
+  await sleep(INCUBATION_DURATION_MILLIS + INCUBATION_COOLDOWN_MILLIS)
   await new Promise((resolve) => {
     server.inject(
       {

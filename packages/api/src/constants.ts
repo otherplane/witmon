@@ -18,25 +18,22 @@ export const EGG_KEY_SALT: string = process.env.EGG_KEY_SALT || ''
 // JWT secret to derive tokens
 export const JWT_SECRET: string = process.env.JWT_SECRET || 'secret'
 
-// Egg incubation duration in millis
-export const INCUBATION_DURATION = process.env.INCUBATION_DURATION
-  ? parseInt(process.env.INCUBATION_DURATION)
+// Egg incubation duration in milliss
+export const INCUBATION_DURATION_MILLIS = process.env
+  .INCUBATION_DURATION_SECONDS
+  ? parseInt(process.env.INCUBATION_DURATION_SECONDS) * 1000
   : 5 * 60 * 1000
 
-// Egg incubation cooldown in millis
-export const INCUBATION_COOLDOWN = process.env.INCUBATION_COOLDOWN
-  ? parseInt(process.env.INCUBATION_COOLDOWN)
+// Egg incubation cooldown in seconds
+export const INCUBATION_COOLDOWN_MILLIS = process.env
+  .INCUBATION_COOLDOWN_SECONDS
+  ? parseInt(process.env.INCUBATION_COOLDOWN_SECONDS) * 1000
   : 2 * 60 * 60 * 1000
 
-// Incubation points if target egg is your own
-export const INCUBATION_POINTS_SELF = process.env.INCUBATION_POINTS_SELF
-  ? parseInt(process.env.INCUBATION_POINTS_SELF)
-  : 20
-
 // Incubation points if target egg is not your own
-export const INCUBATION_POINTS_OTHERS = process.env.INCUBATION_POINTS_OTHERS
+export const INCUBATION_POINTS = process.env.INCUBATION_POINTS_OTHERS
   ? parseInt(process.env.INCUBATION_POINTS_OTHERS)
-  : 100
+  : 800
 
 // Secp256k1 private key used for signing in the `mint` endpoint
 export const MINT_PRIVATE_KEY =
@@ -50,6 +47,6 @@ export const EGG_COLORS_COUNT = process.env.EGG_COLORS_COUNT
 
 // Egg birth/hatch date in millis
 // If `EGG_BIRTH_DATE=0`, checks are ignored (for testing purposes)
-export const EGG_BIRTH_DATE = process.env.EGG_BIRTH_DATE
+export const EGG_MINT_TIMESSTAMP = process.env.EGG_BIRTH_DATE
   ? parseInt(process.env.EGG_BIRTH_DATE)
   : 1635116400 // Sunday, October 24, 2021 11:00:00 PM (GMT)

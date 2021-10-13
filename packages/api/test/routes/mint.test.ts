@@ -1,4 +1,5 @@
 import { test } from 'tap'
+import { INCUBATION_POINTS } from '../../src/constants'
 
 import { claimEgg, initialEggs, server } from './helper'
 
@@ -67,7 +68,7 @@ test('should mint a claimed egg', async (t) => {
           color: 0,
           index: 0,
           rank: 1,
-          score: 20,
+          score: INCUBATION_POINTS,
           total: 2,
         })
 

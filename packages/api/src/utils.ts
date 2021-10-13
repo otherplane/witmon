@@ -1,15 +1,15 @@
 import {
-  EGG_BIRTH_DATE,
+  EGG_MINT_TIMESSTAMP,
   EGG_COLORS_COUNT,
-  INCUBATION_COOLDOWN,
-  INCUBATION_DURATION,
+  INCUBATION_COOLDOWN_MILLIS,
+  INCUBATION_DURATION_MILLIS,
 } from './constants'
 import { Incubation } from './types'
 
 export function calculateRemainingCooldown(
   incubationEnds: number,
   currentTimestamp = Date.now(),
-  incubationCooldown: number = INCUBATION_COOLDOWN
+  incubationCooldown: number = INCUBATION_COOLDOWN_MILLIS
 ) {
   const remainingMillis = incubationEnds + incubationCooldown - currentTimestamp
 
@@ -19,7 +19,7 @@ export function calculateRemainingCooldown(
 export function calculateRemainingDuration(
   incubationEnds: number,
   currentTimestamp = Date.now(),
-  incubationDuration: number = INCUBATION_DURATION
+  incubationDuration: number = INCUBATION_DURATION_MILLIS
 ) {
   const remainingMillis = incubationEnds - currentTimestamp
 
@@ -45,5 +45,5 @@ export function fromHexToUint8Array(hex: string) {
 }
 
 export function isTimeToMint() {
-  return Date.now() >= EGG_BIRTH_DATE
+  return Date.now() >= EGG_MINT_TIMESSTAMP
 }

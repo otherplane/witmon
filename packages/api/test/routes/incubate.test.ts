@@ -1,9 +1,8 @@
 import { test } from 'tap'
 import {
-  INCUBATION_COOLDOWN,
-  INCUBATION_DURATION,
-  INCUBATION_POINTS_OTHERS,
-  INCUBATION_POINTS_SELF,
+  INCUBATION_COOLDOWN_MILLIS,
+  INCUBATION_DURATION_MILLIS,
+  INCUBATION_POINTS,
 } from '../../src/constants'
 
 import {
@@ -43,9 +42,9 @@ test('should return incubation object after incubate itself', async (t) => {
         t.ok(response.json().timestamp)
         t.same(
           response.json().ends,
-          response.json().timestamp + INCUBATION_DURATION
+          response.json().timestamp + INCUBATION_DURATION_MILLIS
         )
-        t.same(response.json().points, INCUBATION_POINTS_SELF)
+        t.same(response.json().points, INCUBATION_POINTS)
 
         resolve(true)
       }
@@ -68,7 +67,7 @@ test('should return incubation object after incubate itself', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.same(response.json()[0].score, INCUBATION_POINTS_SELF)
+        t.same(response.json()[0].score, INCUBATION_POINTS)
 
         t.end()
 
@@ -102,7 +101,7 @@ test('should sum points to incubator and incubated', async (t) => {
           response.headers['content-type'],
           'application/json; charset=utf-8'
         )
-        t.same(response.json().points, INCUBATION_POINTS_OTHERS)
+        t.same(response.json().points, INCUBATION_POINTS)
 
         resolve(true)
       }
@@ -126,7 +125,7 @@ test('should sum points to incubator and incubated', async (t) => {
           'application/json; charset=utf-8'
         )
         t.same(response.json()[0].score, 0)
-        t.same(response.json()[1].score, INCUBATION_POINTS_OTHERS)
+        t.same(response.json()[1].score, INCUBATION_POINTS)
 
         t.end()
 
@@ -407,7 +406,7 @@ test('should NOT incubate EGGs if cooldown has not elapsed (check 8)', async (t)
     )
   })
 
-  await sleep(INCUBATION_DURATION)
+  await sleep(INCUBATION_DURATION_MILLIS)
 
   await new Promise((resolve) => {
     server.inject(
@@ -434,7 +433,7 @@ test('should NOT incubate EGGs if cooldown has not elapsed (check 8)', async (t)
     )
   })
 
-  await sleep(INCUBATION_COOLDOWN)
+  await sleep(INCUBATION_COOLDOWN_MILLIS)
 
   await new Promise((resolve) => {
     server.inject(

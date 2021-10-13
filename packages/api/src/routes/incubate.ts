@@ -1,11 +1,10 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 
 import {
-  EGG_BIRTH_DATE,
-  INCUBATION_COOLDOWN,
-  INCUBATION_DURATION,
-  INCUBATION_POINTS_OTHERS,
-  INCUBATION_POINTS_SELF,
+  EGG_MINT_TIMESSTAMP,
+  INCUBATION_COOLDOWN_MILLIS,
+  INCUBATION_DURATION_MILLIS,
+  INCUBATION_POINTS,
 } from '../constants'
 import { EggRepository } from '../repositories/egg'
 import { IncubationRepository } from '../repositories/incubation'
@@ -37,7 +36,7 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         reply
       ) => {
         // Check 0: incubation period
-        if (EGG_BIRTH_DATE && !isTimeToMint())
+        if (EGG_MINT_TIMESSTAMP && !isTimeToMint())
           return reply
             .status(403)
             .send(new Error(`Forbidden: incubation period is over`))
@@ -108,17 +107,17 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         }
 
         // Check 8: cooldown period from incubator to target has elapsed
-        const incubationLast = await incubationRepository.getLast({
+        const lastIncubation = await incubationRepository.getLast({
           from: fromEgg.username,
           to: toEgg.username,
         })
 
         if (
-          incubationLast &&
-          currentTimestamp < incubationLast.ends + INCUBATION_COOLDOWN
+          lastIncubation &&
+          currentTimestamp < lastIncubation.ends + INCUBATION_COOLDOWN_MILLIS
         ) {
           const remainingCooldown = calculateRemainingCooldown(
-            incubationLast.ends
+            lastIncubation.ends
           )
 
           return reply
@@ -131,19 +130,14 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         }
 
         // Compute points:
-        let points
-        if (fromEgg.username === toEgg.username) {
-          points = INCUBATION_POINTS_SELF
-        } else {
-          // TODO: Add factor to decrease points if previous incubations exist
-          points = INCUBATION_POINTS_OTHERS
-        }
+        // TODO: Add factor to decrease points if previous incubations exist
+        const points = INCUBATION_POINTS
 
         await eggRepository.addPoints(toEgg.key, points)
 
         // Create and return `incubation` object
         const incubation = await incubationRepository.create({
-          ends: currentTimestamp + INCUBATION_DURATION,
+          ends: currentTimestamp + INCUBATION_DURATION_MILLIS,
           from: fromEgg.username,
           points,
           timestamp: currentTimestamp,
