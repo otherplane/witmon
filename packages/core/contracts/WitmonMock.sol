@@ -27,8 +27,8 @@ contract WitmonMock is IWitmonSurrogates, IWitmonEvents {
             address _eggOwner,
             uint256 _eggIndex,
             uint256, //_eggColorIndex,
-            uint256, // _eggScore,
             uint256 _eggRanking,
+            uint256 _eggScore,
             uint256 _totalClaimedEggs,
             bytes calldata _signature
         )
@@ -39,8 +39,8 @@ contract WitmonMock is IWitmonSurrogates, IWitmonEvents {
         bytes32 _eggHash = keccak256(abi.encodePacked(
             _eggOwner,
             _eggIndex,
-            // ..
             _eggRanking,            
+            _eggScore,
             _totalClaimedEggs
         ));
         require(

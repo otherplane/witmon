@@ -92,7 +92,6 @@ export const MintOutput = Type.Object({
   }),
   data: Type.Object({
     address: Type.String(),
-    color: Type.Number(),
     index: Type.Number(),
     rank: Type.Number(),
     score: Type.Number(),

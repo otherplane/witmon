@@ -7,7 +7,7 @@ const VALID_ETH_ADDRESS = '0x184cc5908e1a3d29b4d31df67d99622c4baa7b71'
 // Keccak256 digest for mint with VALID_ETH_ADDRESS and
 // index 0, rank 1 and total eggs 2.
 const MESSAGE_DIGEST =
-  '0b3f11ac7636f7f1c7617b10729f9b4607ba5f155ed69d4b838de323886e0150'
+  '4040cf85fcfd59bb0d329dda58b38cf537e48dee7b7b0a7af080ceef03a7858b'
 
 const INVALID_ETH_ADDRESS_1 = '0x00'
 const INVALID_ETH_ADDRESS_2 = 'foo'
@@ -65,12 +65,13 @@ test('should mint a claimed egg', async (t) => {
         t.ok(response.json().envelopedSignature.signature)
         t.same(response.json().data, {
           address: VALID_ETH_ADDRESS,
-          color: 0,
           index: 0,
           rank: 1,
           score: INCUBATION_POINTS,
           total: 2,
         })
+        console.log("--->", response.json())
+
 
         t.end()
 

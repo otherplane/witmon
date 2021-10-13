@@ -84,6 +84,7 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         request.body.address,
         egg.index,
         rank,
+        egg.score,
         total
       )
 
@@ -116,7 +117,6 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         },
         data: {
           address: request.body.address,
-          color: egg.color,
           index: egg.index,
           rank,
           score: egg.score,

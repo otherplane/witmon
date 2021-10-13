@@ -15,11 +15,11 @@ contract("WitmonMock", accounts => {
         "0x184cc5908e1a3d29b4d31df67d99622c4baa7b71", // address _eggOwner,
         0, // uint256 _eggIndex,
         0, // uint256 _eggColorIndex,
-        0, // uint256 _eggScore,
         1, // uint256 _eggRanking,
+        800, // uint256 _eggScore,
         2, // uint256 _totalEggs
         // eslint-disable-next-line max-len
-        "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+        "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
       )
       // assert.equal(hash, test.hash)
       assert.equal(lol.logs[0].event, "NewCreature")
