@@ -9,7 +9,9 @@ contract("WitmonERC721", accounts => {
     let owner = accounts[0]
     let stranger = accounts[1]
     let signator = accounts[2]
-    let eggOwner = "0x184cc5908e1a3d29b4d31df67d99622c4baa7b71"
+    let eggOwner0 = "0x184cc5908e1a3d29b4d31df67d99622c4baa7b71"
+    let eggOwner1 = accounts[2]
+    let eggOwner2 = accounts[3]
     let eggSignator = "0x12890D2cce102216644c59daE5baed380d84830c"
     before(async () => {
         witmon = await WitmonERC721.new(      
@@ -33,13 +35,12 @@ contract("WitmonERC721", accounts => {
                     it("creatures cannot be minted", async () => {
                         await truffleAssert.reverts(
                             witmon.mintCreature(
-                                eggOwner,
+                                eggOwner0,
                                 0,
-                                0,
-                                0,
-                                0,
-                                512,
-                                "0x0"
+                                1,
+                                800,
+                                2,
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "not in Hatching"
                         )
@@ -49,13 +50,12 @@ contract("WitmonERC721", accounts => {
                     it("creature images cannot be previewed", async () => {
                         await truffleAssert.reverts(
                             witmon.previewCreatureImage(
-                                eggOwner,
+                                eggOwner0,
                                 0,
-                                0,
-                                0,
-                                0,
-                                512,
-                                "0x0"
+                                1,
+                                800,
+                                2,
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "not in Hatching"
                         )
@@ -208,13 +208,12 @@ contract("WitmonERC721", accounts => {
                     it("creatures cannot be minted", async () => {
                         await truffleAssert.reverts(
                             witmon.mintCreature(
-                                eggOwner,
+                                eggOwner0,
                                 0,
-                                0,
-                                0,
-                                0,
-                                512,
-                                "0x0"
+                                1,
+                                800,
+                                2,
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "not in Hatching"
                         )
@@ -224,13 +223,12 @@ contract("WitmonERC721", accounts => {
                     it("creature images cannot be previewed", async () => {
                         await truffleAssert.reverts(
                             witmon.previewCreatureImage(
-                                eggOwner,
+                                eggOwner0,
                                 0,
-                                0,
-                                0,
-                                0,
-                                512,
-                                "0x0"
+                                1,
+                                800,
+                                2,
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "not in Hatching"
                         )
@@ -479,13 +477,12 @@ contract("WitmonERC721", accounts => {
                     it("fails if trying to malleate egg owner when minting a new creature", async () => {
                         await truffleAssert.reverts(
                             witmon.mintCreature(
-                                stranger,
-                                0,
-                                0,
-                                0,
-                                1,
-                                2,
-                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                                stranger,   // _eggOwner
+                                0,          // _eggIndex
+                                1,          // _eggRanking
+                                800,        // _eggScore
+                                2,          // _totalEggs
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "bad signature"
                         )
@@ -493,55 +490,38 @@ contract("WitmonERC721", accounts => {
                     it("fails if trying to malleate egg index when minting a new creature", async () => {
                         await truffleAssert.reverts(
                             witmon.mintCreature(
-                                eggOwner,
+                                eggOwner0,
                                 1,
-                                0,
-                                0,
                                 1,
+                                800,
                                 2,
-                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "bad signature"
                         )
                     })
-                    // it("fails if trying to malleate egg color index when minting a new creature", async () => {
-                    //     await truffleAssert.reverts(
-                    //         witmon.mintCreature(
-                    //             eggOwner,
-                    //             0,
-                    //             7,
-                    //             0,
-                    //             1,
-                    //             2,
-                    //             "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
-                    //         ),
-                    //         "bad signature"
-                    //     )
-                    // })
-                    // it("fails if trying to malleate egg score when minting a new creature", async () => {
-                    //     await truffleAssert.reverts(
-                    //         witmon.mintCreature(
-                    //             eggOwner,
-                    //             0,
-                    //             0,
-                    //             110,
-                    //             1,
-                    //             2,
-                    //             "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
-                    //         ),
-                    //         "bad signature"
-                    //     )
-                    // })
+                    it("fails if trying to malleate egg score when minting a new creature", async () => {
+                        await truffleAssert.reverts(
+                            witmon.mintCreature(
+                                eggOwner0,
+                                0,
+                                1,
+                                1800,
+                                2,
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
+                            ),
+                            "bad signature"
+                        )
+                    })
                     it("fails if trying to malleate egg ranking when minting a new creature", async () => {
                         await truffleAssert.reverts(
                             witmon.mintCreature(
-                                eggOwner,
+                                eggOwner0,
                                 0,
-                                0,
-                                0,
-                                10,
                                 2,
-                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                                800,
+                                2,
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "bad signature"
                         )
@@ -549,27 +529,25 @@ contract("WitmonERC721", accounts => {
                     it("fails if trying to malleate totally claimed eggs when minting a new creature", async () => {
                         await truffleAssert.reverts(
                             witmon.mintCreature(
-                                eggOwner,
-                                0,
-                                0,
+                                eggOwner0,
                                 0,
                                 1,
+                                800,
                                 25,
-                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b"
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b"
                             ),
                             "bad signature"
                         )
                     })
                     it("new creature can be minted by anyone", async () => {
                         await witmon.mintCreature(
-                            eggOwner,
-                            0, // eggIndex
-                            0, // eggColorIndex
-                            0, // eggScore
-                            1, // eggRanking
-                            2, // eggTotalClaimedEggs
+                            eggOwner0,
+                            0, // _eggIndex
+                            1, // _eggRanking
+                            800, // _eggScore
+                            2, // _eggTotalClaimedEggs
                             // eslint-disable-next-line max-len
-                            "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                            "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b",
                             { from: stranger }
                         )
                         // checks that creature #0 is now in 'Alive' status:
@@ -582,14 +560,13 @@ contract("WitmonERC721", accounts => {
                     it("minted creature cannot be minted twice", async () => {
                         truffleAssert.reverts(
                             witmon.mintCreature(
-                                eggOwner,
-                                0, // eggIndex
-                                0, // eggColorIndex
-                                0, // eggScore
-                                1, // eggRanking
-                                2, // eggTotalClaimedEggs
+                                eggOwner0,
+                                0, // _eggIndex
+                                1, // _eggRanking
+                                800, // _eggScore
+                                2, // _eggTotalClaimedEggs
                                 // eslint-disable-next-line max-len
-                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b",
                                 { from: stranger }
                             ),
                             "already minted"
@@ -599,14 +576,13 @@ contract("WitmonERC721", accounts => {
                 describe("previewCreature(..)", async() => {
                     it("minted creature can be previewed by anyone", async () => {
                         witmon.previewCreatureImage(
-                            eggOwner,
-                            0, // eggIndex
-                            0, // eggColorIndex
-                            0, // eggScore
-                            1, // eggRanking
-                            2, // eggTotalClaimedEggs
+                            eggOwner0,
+                            0, // _eggIndex
+                            1, // _eggRanking
+                            800, // _eggScore                            
+                            2, // _eggTotalClaimedEggs
                             // eslint-disable-next-line max-len
-                            "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                            "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b",
                             { from: stranger }
                         )
                         // checks that creature #0 continues in 'Hatching' status:
@@ -614,14 +590,13 @@ contract("WitmonERC721", accounts => {
                         assert.equal(_status.toString(), "3")
                         // console.log(
                             await witmon.previewCreatureImage.call(
-                                eggOwner,
-                                0, // eggIndex
-                                0, // eggColorIndex
-                                0, // eggScore
-                                1, // eggRanking
-                                2, // eggTotalClaimedEggs
+                                eggOwner0,
+                                0, // _eggIndex
+                                1, // _eggRanking
+                                800, // _eggScore                                
+                                2, // _eggTotalClaimedEggs
                                 // eslint-disable-next-line max-len
-                                "0xc9872184df85bb8d4d1abeb009b6b8967029c4edc0ef75f7d74b1db4d921de6b5faa476f905dc50826010a71614a426a84368fcdc32e570e6fc25e7e73164b471b",
+                                "0xbd8846c16175582d498d6bbf26513cb5dd932f980c5a3033a660be7dd2f5d05072fbd26b22ce700e3b09c8c11f6af2e8977cc21790535847d79166898cd6f5c61b",
                                 { from: stranger }
                             )
                         // )
@@ -635,11 +610,10 @@ contract("WitmonERC721", accounts => {
                 describe("getCreatureData(_eggIndex)", async () => {
                     it("data of a previously minted creature should be valid", async () => {
                         let data = await witmon.getCreatureData.call(0)
-                        // console.log(data)
+                        console.log(data)
                         assert.equal(data.tokenId.toString(), "1")
                         assert.equal(data.eggIndex.toString(), "0")
-                        assert.equal(data.eggColorIndex.toString(), "0")
-                        assert.equal(data.eggScore.toString(), "0")
+                        assert.equal(data.eggScore.toString(), "800")
                         assert.equal(data.eggRanking.toString(), "1")
                         assert.equal(data.eggCategory.toString(), "2")
                     })
@@ -681,7 +655,7 @@ contract("WitmonERC721", accounts => {
                         // remove non-printable and other non-valid JSON chars
                         metadata = metadata.replace(/[\u0000-\u0019]+/g,""); 
                         metadata = JSON.parse(metadata)
-                        assert.equal(metadata.external_url, "https://witmon.com/creatures/0")
+                        assert.equal(metadata.external_url, "https://wittycreatures.com/creatures/0")
                     })
                     it("getting metadata from inexistent token fails", async () => {
                         await truffleAssert.reverts(
@@ -693,7 +667,7 @@ contract("WitmonERC721", accounts => {
                 describe("tokenURI(_tokenId)", async () => {
                     it("tokenURI of a previously minted creature should be valid", async () => {
                         let tokenURI = await witmon.tokenURI.call(1)
-                        assert.equal(tokenURI, "https://witmon.com/creatures/0")
+                        assert.equal(tokenURI, "https://wittycreatures.com/creatures/0")
                     })
                     it("getting tokenURI from inexistent token fails", async () => {
                         await truffleAssert.reverts(

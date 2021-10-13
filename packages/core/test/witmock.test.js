@@ -14,7 +14,6 @@ contract("WitmonMock", accounts => {
       const lol = await witmock.mintCreature(
         "0x184cc5908e1a3d29b4d31df67d99622c4baa7b71", // address _eggOwner,
         0, // uint256 _eggIndex,
-        0, // uint256 _eggColorIndex,
         1, // uint256 _eggRanking,
         800, // uint256 _eggScore,
         2, // uint256 _totalEggs

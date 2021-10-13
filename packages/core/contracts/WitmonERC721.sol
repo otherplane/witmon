@@ -115,7 +115,7 @@ contract WitmonERC721
 
     /// Change batch parameters. Only possible while in 'Batching' status.
     /// @param _signator Externally-owned account authorize to sign egg's info before minting.
-    /// @param _percentileMarks Creature-category ordered percentile marks (common first).
+    /// @param _percentileMarks Creature-category ordered percentile marks (Legendary first).
     /// @param _expirationBlocks Number of blocks after Witnet randomness is generated, 
     /// during which creatures may be minted.
     function setParameters(
@@ -212,10 +212,9 @@ contract WitmonERC721
 
     function mintCreature(
             address _eggOwner,
-            uint256 _eggIndex,
-            uint256 _eggColorIndex,
-            uint256 _eggScore,
+            uint256 _eggIndex,            
             uint256 _eggRanking,
+            uint256 _eggScore,
             uint256 _totalClaimedEggs,
             bytes calldata _signature
         )
@@ -227,9 +226,8 @@ contract WitmonERC721
         _verifySignatorSignature(
             _eggOwner,
             _eggIndex,
-            _eggColorIndex,
-            _eggScore,
             _eggRanking,
+            _eggScore,
             _totalClaimedEggs,
             _signature
         );
@@ -249,9 +247,8 @@ contract WitmonERC721
             _tokenId,
             block.number,
             _eggIndex,
-            _eggColorIndex,
-            _eggScore,
             _eggRanking,
+            _eggScore,
             _totalClaimedEggs,
             _signature
         );
@@ -268,9 +265,8 @@ contract WitmonERC721
     function previewCreatureImage(
             address _eggOwner,
             uint256 _eggIndex,
-            uint256 _eggColorIndex,
-            uint256 _eggScore,
             uint256 _eggRanking,
+            uint256 _eggScore,
             uint256 _totalClaimedEggs,
             bytes calldata _signature
         )
@@ -282,9 +278,8 @@ contract WitmonERC721
         _verifySignatorSignature(
             _eggOwner,
             _eggIndex,
-            _eggColorIndex,
-            _eggScore,
             _eggRanking,
+            _eggScore,
             _totalClaimedEggs,
             _signature
         );
@@ -294,10 +289,9 @@ contract WitmonERC721
             _mintCreature(
                 0,
                 0,
-                _eggIndex,
-                _eggColorIndex,
-                _eggScore,
+                _eggIndex,                
                 _eggRanking,
+                _eggScore,
                 _totalClaimedEggs,
                 _signature
             )
@@ -392,9 +386,8 @@ contract WitmonERC721
             uint256 _tokenId,
             uint256 _tokenInception,
             uint256 _eggIndex,
-            uint256 _eggColorIndex,
-            uint256 _eggScore,
             uint256 _eggRanking,
+            uint256 _eggScore,
             uint256 _totalClaimedEggs,
             bytes memory _signature
         )
@@ -410,7 +403,6 @@ contract WitmonERC721
             tokenId: _tokenId,
             eggBirth: _tokenInception,
             eggCategory: _state.creatureCategory(_percentile100),
-            eggColorIndex: _eggColorIndex,
             eggIndex: _eggIndex,
             eggScore: _eggScore,
             eggRanking: _eggRanking,
@@ -424,9 +416,8 @@ contract WitmonERC721
     function _verifySignatorSignature(
             address _eggOwner,
             uint256 _eggIndex,
-            uint256, // TODO: _eggColorIndex,
-            uint256, // TODO: _eggScore,
             uint256 _eggRanking,
+            uint256 _eggScore,
             uint256 _totalClaimedEggs,
             bytes memory _signature
         )
@@ -437,9 +428,8 @@ contract WitmonERC721
         bytes32 _eggHash = keccak256(abi.encodePacked(
             _eggOwner,
             _eggIndex,
-            // TODO: _eggColorIndex,
-            // TODO: _eggScore,
-            _eggRanking,            
+            _eggRanking,
+            _eggScore,
             _totalClaimedEggs
         ));
         require(

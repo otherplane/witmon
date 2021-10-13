@@ -10,7 +10,7 @@ interface IWitmonAdmin {
 
     /// Change batch parameters. Only possible while in 'Batching' status.
     /// @param _signator Externally-owned account authorize to sign egg's info before minting.
-    /// @param _percentileMarks Creature-category ordered percentile marks (common first).
+    /// @param _percentileMarks Creature-category ordered percentile marks (Legendary first).
     /// @param _expirationBlocks Number of blocks after Witnet randomness is generated, 
     /// during which creatures may be minted.
     function setParameters(

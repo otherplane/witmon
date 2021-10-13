@@ -84,9 +84,9 @@ contract WitmonLiscon21
         returns (string memory _json)
     {
         TraitIndexes memory _traits = _splitPhenotype(
+            _creature.eggIndex,
             _creature.eggPhenotype,
-            _creature.eggCategory,
-            _creature.eggColorIndex
+            _creature.eggCategory
         );
         Item[5] memory _items = [
             art.species[_traits.species],
@@ -131,9 +131,9 @@ contract WitmonLiscon21
         returns (string memory _svg)
     {
         TraitIndexes memory _traits = _splitPhenotype(
+            _creature.eggIndex,
             _creature.eggPhenotype,
-            _creature.eggCategory,
-            _creature.eggColorIndex
+            _creature.eggCategory
         );
         return string(abi.encodePacked(
             "<svg width='32' height='32' version='1.1' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>",
@@ -161,9 +161,9 @@ contract WitmonLiscon21
     }
 
     function _splitPhenotype(
+            uint256 _eggIndex,
             bytes32 _eggPhenotype,
-            Witmons.CreatureCategory _eggCategory,
-            uint256 _eggColorIndex
+            Witmons.CreatureCategory _eggCategory
         )
         internal view
         virtual
@@ -174,7 +174,7 @@ contract WitmonLiscon21
                 ? 1 + randomUniform(_eggPhenotype, _seed ++, 5) // TODO: set total number of backgrounds
                 : 0
             );
-        _traits.baseColor = uint8(_eggColorIndex % _numColors);
+        _traits.baseColor = uint8(_eggIndex % _numColors);
         _traits.eyesColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
         _traits.eyewear = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
         _traits.eyewearColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
