@@ -8,7 +8,7 @@
       your egg data.
     </p>
     <router-link to="/scan-egg" class="link">
-      <Button class="btn" color="black">
+      <Button class="btn" color="red">
         Continue to play
       </Button>
     </router-link>

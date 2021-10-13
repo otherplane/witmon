@@ -26,6 +26,9 @@ defineProps({
   &.black {
     background: black;
   }
+  &.red {
+    background: red;
+  }
   &.green {
     background: rgb(25, 208, 172);
   }
