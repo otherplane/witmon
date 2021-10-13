@@ -36,7 +36,6 @@ library Witmons {
         uint256 tokenId;   
         uint256 eggBirth;
         uint256 eggIndex;
-        uint256 eggColorIndex;
         uint256 eggScore;
         uint256 eggRanking;
         bytes32 eggPhenotype;

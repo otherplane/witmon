@@ -24,7 +24,6 @@ contract WitmonMock is IWitmonSurrogates, IWitmonEvents {
     function mintCreature(
             address _eggOwner,
             uint256 _eggIndex,
-            uint256, //_eggColorIndex,
             uint256 _eggRanking,
             uint256 _eggScore,
             uint256 _totalClaimedEggs,
@@ -85,9 +84,8 @@ contract WitmonMock is IWitmonSurrogates, IWitmonEvents {
     function previewCreatureImage(
             address _eggOwner,
             uint256 _eggIndex,
-            uint256, //_eggColorIndex,
-            uint256, // _eggScore,
             uint256 _eggRanking,
+            uint256 _eggScore,
             uint256 _totalClaimedEggs,
             bytes calldata _signature
         )
