@@ -40,9 +40,8 @@ export const useEggStore = defineStore('egg', {
     },
     selfIncubation () {
       return (
-        this.egg &&
-        this.egg.incubating &&
-        this.egg.incubating === this.egg.username
+        this.incubating &&
+        this.incubating === this.username
       )
     },
     hasBorn () {
