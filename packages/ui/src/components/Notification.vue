@@ -4,22 +4,29 @@
       <p class="message">
         {{ message }}
       </p>
-      <p class="warning">⚠️</p>
+      <p class="warning">{{ icon }} ️</p>
     </div>
   </transition>
 </template>
 
 <script>
 import { getCurrentInstance, onMounted, ref } from 'vue'
-
+const ICONS = {
+  warn: '⚠️️',
+  party: '🎉'
+}
 export default {
   setup () {
     const toggle = ref(false)
     const message = ref('')
+    const icon = ref('⚠️')
     const counter = ref(0)
 
     const show = payload => {
       message.value = payload.message
+      if (payload.icon) {
+        icon.value = ICONS[payload.icon] || ICONS['warn']
+      }
       toggle.value = true
       counter.value += 1
 
@@ -31,7 +38,7 @@ export default {
     onMounted(() => {
       getCurrentInstance().appContext.config.globalProperties.$notify = show
     })
-    return { toggle, message, counter }
+    return { toggle, message, counter, icon }
   }
 }
 </script>

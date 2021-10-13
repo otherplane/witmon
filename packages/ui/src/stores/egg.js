@@ -51,10 +51,13 @@ export const useEggStore = defineStore('egg', {
   },
   actions: {
     notify (payload) {
-      useEggStore().app.config.globalProperties.$notify(payload)
+      this.app.config.globalProperties.$notify(payload)
     },
     saveClaimInfo (info) {
-      localStorage.setItem('tokenInfo', JSON.stringify(info))
+      localStorage.setItem(
+        'tokenInfo',
+        JSON.stringify({ ...this.getToken(), ...info })
+      )
     },
     getToken () {
       return JSON.parse(localStorage.getItem('tokenInfo'))
@@ -76,7 +79,6 @@ export const useEggStore = defineStore('egg', {
     },
     async claim ({ key }) {
       const request = await this.api.claim({ key })
-      console.log('request', request)
       if (request.error) {
         this.setError('claim', request.error)
       } else if (request.token) {
@@ -91,6 +93,7 @@ export const useEggStore = defineStore('egg', {
         token: tokenInfo.token,
         key: key
       })
+
       if (request.error) {
         this.setError('incubate', request.error)
       } else {
@@ -112,6 +115,7 @@ export const useEggStore = defineStore('egg', {
     },
     async getEggInfo () {
       const tokenInfo = this.getToken()
+      const currentScore = this.score || tokenInfo.score
       const request = await this.api.getEggInfo({
         token: tokenInfo.token,
         id: tokenInfo.key
@@ -121,6 +125,13 @@ export const useEggStore = defineStore('egg', {
       } else {
         this.clearError('info')
         const { username, score, key, index, rarityIndex, color } = request.egg
+
+        if (currentScore < score) {
+          this.notify({
+            message: `You have earned ${score - currentScore} points`,
+            icon: 'party'
+          })
+        }
         const {
           incubatedBy: reqIncubatedBy,
           incubating: reqIncubating
@@ -135,6 +146,8 @@ export const useEggStore = defineStore('egg', {
         this.incubating = reqIncubating ? reqIncubating.to : null
         this.incubatedByTimeLeft = reqIncubatedBy ? reqIncubatedBy.ends : null
         this.incubatingTimeLeft = reqIncubating ? reqIncubating.ends : null
+
+        this.saveClaimInfo({ ...this.getToken(), score })
       }
     },
     async mint (address) {
