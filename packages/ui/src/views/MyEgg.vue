@@ -50,7 +50,7 @@
       </router-link>
 
       <Button @click="modal.showModal" color="grey" class="center-item">
-        Eggport &trade;
+        Eggxport &trade;
       </Button>
 
       <Button
