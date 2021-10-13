@@ -3,6 +3,7 @@ import {
   INCUBATION_COOLDOWN_MILLIS,
   INCUBATION_DURATION_MILLIS,
   INCUBATION_POINTS,
+  INCUBATION_POINTS_DIVISOR,
 } from '../../src/constants'
 
 import {
@@ -126,6 +127,98 @@ test('should sum points to incubated egg', async (t) => {
         )
         t.same(response.json()[0].score, 0)
         t.same(response.json()[1].score, INCUBATION_POINTS)
+
+        t.end()
+
+        resolve(true)
+      }
+    )
+  })
+})
+
+test('should sum less points if incubated several times', async (t) => {
+  // Before test: Claim an egg
+  const token0 = await claimEgg(t)(0)
+  await claimEgg(t)(1)
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'POST',
+        url: '/eggs/incubate',
+        payload: {
+          target: initialEggs[1].key,
+        },
+        headers: {
+          Authorization: `${token0}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        t.same(response.json().points, INCUBATION_POINTS)
+
+        resolve(true)
+      }
+    )
+  })
+
+  await sleep(INCUBATION_COOLDOWN_MILLIS)
+
+  const secondIncubationPoints = Math.ceil(
+    INCUBATION_POINTS / INCUBATION_POINTS_DIVISOR
+  )
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'POST',
+        url: '/eggs/incubate',
+        payload: {
+          target: initialEggs[1].key,
+        },
+        headers: {
+          Authorization: `${token0}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        t.same(response.json().points, secondIncubationPoints)
+
+        resolve(true)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    server.inject(
+      {
+        method: 'GET',
+        url: `/eggs`,
+        headers: {
+          Authorization: `${token0}`,
+        },
+      },
+      (err, response) => {
+        t.error(err)
+        t.equal(response.statusCode, 200)
+        t.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8'
+        )
+        t.same(response.json()[0].score, 0)
+        t.same(
+          response.json()[1].score,
+          INCUBATION_POINTS + secondIncubationPoints
+        )
 
         t.end()
 

@@ -4,6 +4,8 @@ import {
   EGG_MINT_TIMESSTAMP,
   INCUBATION_DURATION_MILLIS,
   INCUBATION_POINTS,
+  INCUBATION_POINTS_DIVISOR,
+  INCUBATION_POINTS_MIN,
 } from '../constants'
 import { EggRepository } from '../repositories/egg'
 import { IncubationRepository } from '../repositories/incubation'
@@ -124,8 +126,15 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         }
 
         // Compute points:
-        // TODO: Add factor to decrease points if previous incubations exist
-        const points = INCUBATION_POINTS
+        let points
+        if (!lastIncubation) {
+          points = INCUBATION_POINTS
+        } else {
+          points = Math.max(
+            Math.ceil(lastIncubation.points / INCUBATION_POINTS_DIVISOR),
+            INCUBATION_POINTS_MIN
+          )
+        }
 
         await eggRepository.addPoints(toEgg.key, points)
 
