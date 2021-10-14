@@ -13,6 +13,7 @@ export function useWeb3Witmon () {
   let web3
   const egg = useEggStore()
   const isProviderConnected = ref(false)
+  const mintedCreatureAddress = ref('')
 
   async function enableProvider () {
     const accounts = await requestAccounts(web3)
@@ -21,6 +22,32 @@ export function useWeb3Witmon () {
       isProviderConnected.value = true
     }
   }
+
+  async function openEgg () {
+    const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
+    const from = (await requestAccounts(web3))[0]
+    const previewArgs = await egg.getPreview(from)
+
+    contract.methods
+      .previewCreature(...previewArgs)
+      .send({ from })
+      .on('error', error => {
+        console.error(error)
+      })
+      .on('confirmation', (confirmationNumber, receipt) => {
+        console.log('confirmationNumber', confirmationNumber)
+        console.log('receipt', receipt)
+        // TODO: get address from receipt
+        creaturePreview.value = 'creature'
+      })
+      .then(newContractInstance => {
+        console.log('newContractInstance', newContractInstance)
+
+        // const witmon = newContractInstance.events.NewCreature.returnValues
+        // console.log('witmon minted: ', witmon)
+      })
+  }
+
   onMounted(() => {
     if (window.ethereum) {
       web3 = new Web3(window.ethereum || 'ws://localhost:8545')
@@ -44,6 +71,8 @@ export function useWeb3Witmon () {
       .on('confirmation', (confirmationNumber, receipt) => {
         console.log('confirmationNumber', confirmationNumber)
         console.log('receipt', receipt)
+        // TODO: get address from receipt
+        mintedCreatureAddress.value = 'adress'
       })
       .then(newContractInstance => {
         console.log('newContractInstance', newContractInstance)
@@ -55,7 +84,9 @@ export function useWeb3Witmon () {
 
   return {
     mint,
+    mintedCreatureAddress,
     isProviderConnected,
-    enableProvider
+    enableProvider,
+    openEgg
   }
 }

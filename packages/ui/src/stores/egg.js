@@ -11,7 +11,8 @@ export const useEggStore = defineStore('egg', {
       username: null,
       score: null,
       rarityIndex: null,
-      timeToBirth: 1635080212000,
+      timeToBirth: Date.now() - 1,
+      // timeToBirth: 1635080212000,
       incubatedByTimeLeft: null,
       incubated: null,
       incubatingTimeLeft: null,
@@ -42,6 +43,7 @@ export const useEggStore = defineStore('egg', {
       return this.incubating && this.incubating === this.username
     },
     hasBorn () {
+      //FIXME: make it reactive
       return this.timeToBirth < Date.now()
     }
   },

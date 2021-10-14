@@ -5,14 +5,16 @@
         <p class="subtitle">EGG ID: {{ egg.username }}</p>
         <p class="title">My Witty Creature</p>
       </div>
-      <Egg class="egg-image" :index="egg.index" />
+      <WittyCreature v-if="egg.hasBorn" />
+      <Egg v-else class="egg-image" :index="egg.index" />
       <EggInfo
         :score="egg.score"
         :rarityIndex="egg.rarityIndex"
         :timeToBirth="egg.timeToBirth"
+        :hasBorn="egg.hasBorn"
       />
-      {{ egg.selfIncubation }}
       <IncubationInfo
+        v-if="!egg.hasBorn"
         :incubatedByTimeLeft="egg.incubatedByTimeLeft"
         :incubatedBy="egg.incubatedBy"
         :incubatingTimeLeft="egg.incubatingTimeLeft"
@@ -21,6 +23,22 @@
       />
     </div>
     <div class="buttons">
+      <Button
+        v-if="egg.hasBorn && !isProviderConnected"
+        @click="openEgg"
+        color="black"
+        class="center-item"
+      >
+        Open my egg
+      </Button>
+      <Button
+        v-else-if="egg.hasBorn && isProviderConnected"
+        @click="openModal('mint')"
+        color="black"
+        class="center-item"
+      >
+        Mint egg
+      </Button>
       <Button
         v-if="!egg.hasBorn"
         color="green"
@@ -50,31 +68,16 @@
         </Button>
       </router-link>
 
-      <Button @click="modal.showModal" color="grey" class="center-item">
+      <Button @click="openModal('export')" color="grey" class="center-item">
         Eggport &trade;
       </Button>
-
-      <Button
-        v-if="egg.hasBorn && !isProviderConnected"
-        @click="enableProvider"
-        color="grey"
-        class="center-item"
-      >
-        Connect metamask
-      </Button>
-      <Button
-        v-else-if="egg.hasBorn"
-        @click="mint"
-        color="grey"
-        class="center-item"
-      >
-        Open my egg
-      </Button>
+      <div v-if="mintedCreatureAddress">{{ mintedCreatureAddress }}</div>
     </div>
   </div>
 
-  <ModalDialog :show="modal.visible.value" v-on:close="modal.hideModal">
-    <ModalExport />
+  <ModalDialog :show="modal.visible.value" v-on:close="closeModal">
+    <ModalExport v-if="modals.export" />
+    <ModalMint v-if="modals.mint" />
   </ModalDialog>
 </template>
 
@@ -85,7 +88,8 @@ import {
   onBeforeMount,
   onBeforeUnmount,
   ref,
-  onBeforeUpdate
+  onBeforeUpdate,
+  reactive
 } from 'vue'
 
 import imageUrl from '@/assets/egg-example.png'
@@ -98,6 +102,10 @@ export default {
     const egg = useEggStore()
     const web3Witmon = useWeb3Witmon()
     const routeId = ref('')
+    const modals = reactive({
+      mint: false,
+      export: false
+    })
     let timeout
 
     onBeforeMount(() => {
@@ -130,14 +138,30 @@ export default {
       }
     }
 
+    function openModal (name) {
+      modals[name] = true
+      modal.showModal()
+    }
+
+    function closeModal () {
+      modals.mint = false
+      modals.export = false
+      modal.hideModal()
+    }
+
     return {
       routeId,
       egg,
       type,
       incubateMyEgg,
+      closeModal,
+      openModal,
       imageUrl,
       modal,
+      modals,
       enableProvider: web3Witmon.enableProvider,
+      openEgg: web3Witmon.openEgg,
+      mintedCreatureAddress: web3Witmon.mintedCreatureAddress,
       isProviderConnected: web3Witmon.isProviderConnected,
       mint: web3Witmon.mint
     }
