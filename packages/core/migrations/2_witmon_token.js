@@ -38,6 +38,7 @@ module.exports = async function (deployer, network, accounts) {
       witmonAddresses[network].WitmonERC721 = WitmonERC721.address
       fs.writeFileSync("./migrations/witmon.addresses.json", JSON.stringify(witmonAddresses, null, 4), { flag: 'w+' })
     }
+    console.info("   >> Deployed at", WitmonERC721.address)
   } else {
     WitmonERC721.address = witmonAddresses[network].WitmonERC721
     console.info("   > Skipped: presumably deployed at", WitmonERC721.address)

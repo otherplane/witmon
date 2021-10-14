@@ -21,6 +21,15 @@ contract WitmonLiscon21
         uint8 neckwear;
         uint8 species;
     }
+
+    struct TraitRanges {
+        uint8 species;
+        uint8 backgrounds;
+        uint8 eyewears;
+        uint8 hats;
+        uint8 neckwears;
+    }
+
     struct Art {
         string[] colors;
         mapping(uint256 => Item) species;
@@ -36,6 +45,19 @@ contract WitmonLiscon21
     }
 
     Art internal art;
+    bool public forged;
+    TraitRanges internal ranges;
+    address internal immutable deployer;
+    
+    modifier isForged {
+        require(forged, "WitmonLiscon21: not forged");
+        _;
+    }
+
+    modifier notForged {
+        require(!forged, "WitmonLiscon21: already forged");
+        _;
+    }
 
     constructor(string memory _baseURI)
         WitmonDecoratorBase(_baseURI)
@@ -49,38 +71,76 @@ contract WitmonLiscon21
             "1c49d8",
             "19b554"
         ];
+        deployer = msg.sender;
+    }
 
-        art.species[0] = Item("Witty", "<path d='m7 24v2h-2v2h-2v4h28v-4h-1v-2h-3v-2z' fill='#558'/><path d='m21 0v1h-1v1h-1v1h-2v1h-2v1h-5v1h-1v1h-1v1 1h-1v1 12 1 1 1h1v1h1v1h1v1h10v-1h2v-1h2v-1h1v-1h1v-1h1v-1h1v-3h1v1h1v1h1v1h1v-3h-1v-2h-1v-2h-1v-2h-1v-2h1v1h2v-1-1h-1v-1h-1v-1-1h-1v-1h1v-1h1v-1h1v-1h-9v-1-1-1h-1z' fill='#8c9'/><path d='m10 12v3h2v-3zm9 0v3h2v-3z' class='b'/><path d='m9 15v1h2v1h2v-1h2v1h2v-1h1v-1zm9 1v1h3v-1zm3 1v3h1v1h3v-1h1v-3h-1v-1h-3v1zm-12-1h-1v4h1zm0 4v1h11v-1zm4 4v1h2v-1z' fill='#5a6'/><path d='m11 13v1h1v-1zm9 0v1h1v-1zm4 5v1h2v-1zm-14 3v1h3v-1zm4 0v1h3v-1z' fill='#fff'/><path d='m8 7v2h4v-2zm11 0v2h4v-2z' fill='#558'/>");
-        art.species[1] = Item("AAVE", "<path d='m15 3v1h-3v1h-2v1h-1v1h-2v1h-1v2h-1v20h1v1h2v-1h1v-4h1v3h1v1h2v-1h1v-3h1v4h1v1h2v-1h1v-4h1v2h1v1h2v-1h1v-2h1v4h1v1h2v-1h1v-20h-1v-2h-1v-1h-1v-1h-2v-1h-1v-1h-3v-1h-5z' fill='#fff'/><path d='m9 12v1h-1v3h1v1h2v-1h1v-3h-1v1h-1v-1h1v-1h-2zm10 0v1h-1v3h1v1h2v-1h1v-3h-1v1h-1v-1h1v-1h-2z' class='b'/><path d='m13 19v1h1v1h2v-1h1v-1h-4z' fill='#888'/>");
-        // ...
+    function forge()
+        external virtual
+        notForged
+    {
+        require(msg.sender == deployer, "WitmonLiscon21: only deployer");
+        require(ranges.backgrounds > 0, "WitmonLiscon21: no backgrounds");
+        require(ranges.eyewears > 0, "WitmonLiscon21: no eyewears");
+        require(ranges.hats > 0, "WitmonLiscon21: no hats");
+        require(ranges.neckwears > 0, "WitmonLiscon21: no neckwears");
+        require(ranges.species > 0, "WitmonLiscon21: no species");
+        forged = true;
+    }
 
-        art.backgrounds[0] = Item("", "");
-        art.backgrounds[1] = Item("Lisbon", "...");
-        art.backgrounds[2] = Item("Cloudy", "...");
-        art.backgrounds[3] = Item("Tronic", "...");
-        art.backgrounds[4] = Item("Rainbow", "...");
-        art.backgrounds[5] = Item("Hell", "...");
-        // ...
+    function getArtBackgrounds()
+        external virtual
+        returns (Item[] memory _items)
+    {
+        _items = new Item[](ranges.backgrounds);
+        for (uint _i = 0; _i < ranges.backgrounds; _i ++) {
+            _items[_i] = art.backgrounds[_i];
+        }
+    }
 
-        art.eyewears[0] = Item("Thug Life", "<path d='m6 13v1h1v1h1v1h1v1h3v-1h1v-1h1v-1h2v1h1v1h1v1h3v-1h1v-1h1v-1h1v-1h-18z' class='c'/><path d='m7 13v1h1v-1h-1zm1 1v1h1v-1h-1zm1 0h1v-1h-1v1zm1 0v1h1v-1h-1zm1 1v1h1v-1h-1zm-1 0h-1v1h1v-1zm6-2v1h1v-1h-1zm1 1v1h1v-1h-1zm1 0h1v-1h-1v1zm1 0v1h1v-1h-1zm1 1v1h1v-1h-1zm-1 0h-1v1h1v-1z' fill='#fff'/>");
-        art.eyewears[1] = Item("Groucho", "<path d='m8 8v3h6v-3zm8 0v3h6v-3zm-7 9v4h2v-1h8v1h2v-4z' fill='333'/><path d='m14 11v5h-1v1h1v1h2v-1h1v-1h-1v-5z' fill='#fda'/><path class='c' d='m9 11v1h4v-1zm4 1v4h1v-3h2v3h1v-4zm4 0h4v-1h-4zm4 0v4h1v-4zm0 4h-4v1h4zm-8 0h-4v1h4zm-4 0v-4h-1v4z'/><path d='m9 12v4h4v-4zm8 0v4h4v-4z' fill='#fff' opacity='.2'/>");
-        art.eyewears[2] = Item("John Lennon", "<path d='m9 11v1h3v-1zm3 1v1h1v-1zm1 1v2h1v-1h2v1h1v-2zm4 0h1v-1h-1zm1-1h3v-1h-3zm3 0v1h1v-1zm1 1v2h1v-2zm0 2h-1v1h1zm-1 1h-3v1h3zm-3 0v-1h-1v1zm-5-1h-1v1h1zm-1 1h-3v1h3zm-3 0v-1h-1v1zm-1-1v-2h-1v2zm0-2h1v-1h-1z' fill='#fc3'/><path class='c' d='m12 12h-3v1h-1v2h1v1h3v-1h1v-2h-1zm9 1h1v2h-1v1h-3v-1h-1v-2h1v-1h3z' opacity='.5'/>");
-        art.eyewears[3] = Item("Laser eyes", "<g class='b'><path d='m13 11h-5v1h-1v3h1v1h5v-1h1v-3h-1zm9 0h-5v1h-1v3h1v1h5v-1h1v-3h-1z' opacity='.7'/><path d='m13 12h1v3h1v2h3v-1h-1v-1h-1v-3h-1v-2h-3v1h1zm-8 0h2v3h1v1h1v1h-3v-2h-1zm20 0h-1v-2h-3v1h1v1h1v3h2z' opacity='.5'/><path d='m16 11h-1v-1h-1v-1h3v1h-1zm-11 2h-4v1h4zm20 0h4v1h-4zm-20 3h1v1h1v1h-3v-1h1zm10 0h-1v1h-1v1h3v-1h-1zm9-5h1v-1h1v-1h-3v1h1z' opacity='.3'/><path d='m18 10h-1v-1h-1v-1h2v-1h2v1h-1v1h-1zm-15 2h2v1h-2zm2 2h-2v1h2zm22 1v-1h-2v1zm0-2v-1h-2v1zm-27 0h1v1h-1zm29 0h3v1h-3zm-26 4h1v1h1v1h-2v1h-2v-1h1v-1h1zm10 0h-1v1h-1v1h-1v1h2v-1h2v-1h-1zm13-7h1v-1h1v-1h1v-1h-2v1h-2v1h1z' opacity='.1'/></g><path d='m11 13h-1v1h1zm9 0h-1v1h1z' fill='#ffa'/><rect y='13' width='32' height='1' fill='#ffa' opacity='.3'/>");
-        // ...
-        
-        art.hats[0] = Item("Headphones", "<path d='m7 11h-4v8h4zm17 0h4v8h-4z' fill='#555'/><path class='d' d='m9 2v1h-2v1h-1v1h-1v1h-1v2h-1v2h2v-1h1v-2h1v-1h1v-1h2v-1h11v1h2v1h1v1h1v2h1v1h2v-2h-1v-2h-1v-1h-1v-1h-1v-1h-2v-1zm19 11h2v4h-2zm-25 0h-2v4h2z'/><path d='m2 10v3h1v-2h2v-1h-3zm24 0v1h2v2h1v-3h-3zm-24 7v6h1v-6h-1zm1 6v4h1v-4h-1zm1 4v2h1v-2h-1zm1 2v1h1v-1h-1zm1 1v1h1v-1h-1zm1 1v1h1v-1h-1zm21-14v5h1v-5h-1zm0 5h-1v2h1v-2zm-1 2h-1v2h1v-2zm-1 2h-1v2h1v-2zm-1 2h-1v1h1v-1zm-1 1h-1v1h1v-1zm-1 1h-2v1h2v-1zm-2 1h-2v1h2v-1z' fill='#ccc'/>");
-        art.hats[1] = Item("Cowboy hat", "<path class='d' d='m16 1h-6v2h-2v4h-1v-1h-3v4h1v1h1v1h3v1h2v1h6v-1h4v-1h4v-1h3v-2h1v-3h-2v1h-1v-5h-2v-1h-6v1h-2z'/><path d='m16 2v1h1v-1zm0 1h-2v1h2zm-2 1h-1v1h1zm-7 3v2h1v-2zm1 2v1h1v-1zm1 1v1h1v-1zm1 1v2h1v-2zm1 2v1h6v-1zm6 0h1v-2h-1zm1-2h1v-1h-1zm1-1h5v-1h-5zm5-1h2v-1h-2zm2-1h1v-1h-1z' opacity='.1'/><path d='m9 8h-1v1h1v1h1v1h1v1h6v-1h1v-1h1v-1h-2v1h-5v-1h-2v-1z' opacity='.5'/>");
-        art.hats[2] = Item("Tiara", "<path class='d' d='m17 1h-2v1h-2v1h-2v1h-1v1h-1v1h-1v2h-2v4h2v-2h1v-1h2v-1h3v1h3v-1h4v1h2v1h2v1h2v1h1v-3h-1v-2h-2v-2h-2v-1h-2v-1h-1v-1h-3z'/><path class='b' d='m17 3h-3v1h-1v3h1v1h3v-1h1v-3h-1z'/><path d='m14 3v1h1v-1zm1 1v1h1v-1zm1 0h1v-1h-1zm-1 1h-1v1h1zm-1 1h-1v1h1zm0-1v-1h-1v1z' fill='#fff' opacity='.3'/><path d='m14 2v1h3v-1zm3 1v3h-1v1h-3v1h1v1h3v-1h1v-1h1v-3h-1v-1zm-4 4v-3h-1v3zm0-3h1v-1h-1z' opacity='.1'/>");
-        // ...
+    function getArtEyewears()
+        external virtual
+        returns (Item[] memory _items)
+    {
+        _items = new Item[](ranges.eyewears);
+        for (uint _i = 0; _i < ranges.eyewears; _i ++) {
+            _items[_i] = art.eyewears[_i];
+        }
+    }
 
-        art.neckwears[0] = Item("", "");
-        art.neckwears[1] = Item("Bitcoin", "...");
-        art.neckwears[2] = Item("BDSM", "...");
+    function getArtHats()
+        external virtual
+        returns (Item[] memory _items)
+    {
+        _items = new Item[](ranges.hats);
+        for (uint _i = 0; _i < ranges.hats; _i ++) {
+            _items[_i] = art.hats[_i];
+        }
+    }
+
+    function getArtNeckwears()
+        external virtual
+        returns (Item[] memory _items)
+    {
+        _items = new Item[](ranges.neckwears);
+        for (uint _i = 0; _i < ranges.neckwears; _i ++) {
+            _items[_i] = art.neckwears[_i];
+        }
+    }
+
+    function getArtSpecies()
+        external virtual
+        returns (Item[] memory _species)
+    {
+        _species = new Item[](ranges.species);
+        for (uint _i = 0; _i < ranges.species; _i ++) {
+            _species[_i] = art.species[_i];
+        }
     }
 
     function getCreatureMetadata(Witmons.Creature memory _creature)
         external view
         virtual override
+        isForged
         returns (string memory _json)
     {
         TraitIndexes memory _traits = _splitPhenotype(
@@ -136,6 +196,7 @@ contract WitmonLiscon21
     function getCreatureImage(Witmons.Creature memory _creature)
         public view
         virtual override
+        isForged
         returns (string memory _svg)
     {
         TraitIndexes memory _traits = _splitPhenotype(
@@ -153,6 +214,61 @@ contract WitmonLiscon21
                 art.eyewears[_traits.eyewear].svg,
             "</svg>"
         ));
+    }
+
+    function setArtBackgrounds(Item[] calldata _items)
+        external virtual
+        notForged
+    {
+        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no backgrounds");
+        ranges.backgrounds = uint8(_items.length);
+        for (uint _i = 0; _i < _items.length; _i ++) {
+            art.backgrounds[_i] = _items[_i];
+        }
+    }
+
+    function setArtEyewears(Item[] calldata _items)
+        external virtual
+        notForged
+    {
+        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no eyewears");
+        ranges.eyewears = uint8(_items.length);
+        for (uint _i = 0; _i < _items.length; _i ++) {
+            art.eyewears[_i] = _items[_i];
+        }
+    }
+
+    function setArtHats(Item[] calldata _items)
+        external virtual
+        notForged
+    {
+        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no hats");
+        ranges.hats = uint8(_items.length);
+        for (uint _i = 0; _i < _items.length; _i ++) {
+            art.hats[_i] = _items[_i];
+        }
+    }
+
+    function setArtNeckwears(Item[] calldata _items)
+        external virtual
+        notForged
+    {
+        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no neckwears");
+        ranges.neckwears = uint8(_items.length);
+        for (uint _i = 0; _i < _items.length; _i ++) {
+            art.neckwears[_i] = _items[_i];
+        }
+    }
+   
+    function setArtSpecies(Item[] calldata _items)
+        external virtual
+        notForged
+    {
+        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no species");
+        ranges.species = uint8(_items.length);
+        for (uint _i = 0; _i < _items.length; _i ++) {
+            art.species[_i] = _items[_i];
+        }
     }
 
     function _styles(uint256 _creatureId, TraitIndexes memory _traits)
@@ -179,19 +295,19 @@ contract WitmonLiscon21
     {
         uint256 _seed; uint8 _numColors = uint8(art.colors.length);
         _traits.background = (_eggCategory == Witmons.CreatureCategory.Legendary
-                ? 1 + randomUniform(_eggPhenotype, _seed ++, 5) // TODO: set total number of backgrounds
+                ? 1 + randomUniform(_eggPhenotype, _seed ++, ranges.backgrounds - 1)
                 : 0
             );
         _traits.baseColor = uint8(_eggIndex % _numColors);
         _traits.eyesColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
-        _traits.eyewear = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
+        _traits.eyewear = randomUniformBase2(_eggPhenotype, _seed ++, 6); // TODO: set number of bits
         _traits.eyewearColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
         _traits.hat = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
         _traits.hatColor = randomUniform(_eggPhenotype, _seed ++, _numColors);       
         _traits.neckwear = (_eggCategory != Witmons.CreatureCategory.Common
-                ? 1 + randomUniform(_eggPhenotype, _seed ++, 2) // TODO: set total number of neckwears
+                ? 1 + randomUniform(_eggPhenotype, _seed ++, ranges.neckwears - 1)
                 : 0
             );
-        _traits.species = randomUniform(_eggPhenotype, _seed ++, 2); // TODO: set total number of species
+        _traits.species = randomUniform(_eggPhenotype, _seed ++, ranges.species);
     }
 }
