@@ -70,8 +70,6 @@ test('should mint a claimed egg', async (t) => {
           score: INCUBATION_POINTS,
           total: 2,
         })
-        console.log('--->', response.json())
-
         t.end()
 
         resolve(true)

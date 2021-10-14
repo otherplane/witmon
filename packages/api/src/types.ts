@@ -99,3 +99,18 @@ export const MintOutput = Type.Object({
   }),
 })
 export type MintOutput = Static<typeof MintOutput>
+
+export const EggMetadata = Type.Object({
+  name: Type.String(),
+  description: Type.String(),
+  image_data: Type.String(),
+  external_url: Type.String(),
+  attributes: Type.Array(
+    Type.Object({
+      trait_type: Type.String(),
+      value: Type.String(),
+    })
+  ),
+})
+
+export type EggMetadata = Static<typeof EggMetadata>
