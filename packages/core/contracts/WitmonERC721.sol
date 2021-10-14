@@ -70,8 +70,17 @@ contract WitmonERC721
     }
 
     // ========================================================================
-    // --- 'ERC721' overriden functions ---------------------------------------
+    // --- 'ERC721Metadata' overriden functions -------------------------------
 
+    
+    function baseURI()
+        public view
+        virtual
+        returns (string memory)
+    {
+        return IWitmonDecorator(_state.decorator).baseURI();
+    }
+    
     function metadata(uint256 _tokenId)
         external
         virtual view
