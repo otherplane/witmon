@@ -18,7 +18,6 @@ contract WitmonLiscon21
         uint8 eyewearColor;
         uint8 hat;
         uint8 hatColor;
-        uint8 neckwear;
         uint8 species;
     }
 
@@ -27,7 +26,6 @@ contract WitmonLiscon21
         uint8 backgrounds;
         uint8 eyewears;
         uint8 hats;
-        uint8 neckwears;
     }
 
     struct Art {
@@ -36,7 +34,6 @@ contract WitmonLiscon21
         mapping(uint256 => Item) backgrounds;
         mapping(uint256 => Item) eyewears;
         mapping(uint256 => Item) hats;
-        mapping(uint256 => Item) neckwears;
     }
 
     struct Item {
@@ -82,7 +79,6 @@ contract WitmonLiscon21
         require(ranges.backgrounds > 0, "WitmonLiscon21: no backgrounds");
         require(ranges.eyewears > 0, "WitmonLiscon21: no eyewears");
         require(ranges.hats > 0, "WitmonLiscon21: no hats");
-        require(ranges.neckwears > 0, "WitmonLiscon21: no neckwears");
         require(ranges.species > 0, "WitmonLiscon21: no species");
         forged = true;
     }
@@ -117,16 +113,6 @@ contract WitmonLiscon21
         }
     }
 
-    function getArtNeckwears()
-        external virtual
-        returns (Item[] memory _items)
-    {
-        _items = new Item[](ranges.neckwears);
-        for (uint _i = 0; _i < ranges.neckwears; _i ++) {
-            _items[_i] = art.neckwears[_i];
-        }
-    }
-
     function getArtSpecies()
         external virtual
         returns (Item[] memory _species)
@@ -148,19 +134,17 @@ contract WitmonLiscon21
             _creature.eggPhenotype,
             _creature.eggCategory
         );
-        Item[5] memory _items = [
+        Item[4] memory _items = [
             art.species[_traits.species],
             art.backgrounds[_traits.background],
             art.eyewears[_traits.eyewear],
-            art.hats[_traits.hat],
-            art.neckwears[_traits.neckwear]
+            art.hats[_traits.hat]
         ];
-        string[5] memory _traitTypes = [
+        string[4] memory _traitTypes = [
             "Species",
             "Background",
             "Eyewear",
-            "Hat",
-            "Neckwear"
+            "Hat"
         ];
         string memory _attributes;
         for (uint8 _i = 0; _i < _items.length; _i ++) {
@@ -174,6 +158,7 @@ contract WitmonLiscon21
                 ));
             }
         }
+        // add egg's score and ranking as trait_types in the attributes part
         _attributes = string(abi.encodePacked(
             _attributes,
             ", { \"trait_type\": \"Score\",\"value\": ", 
@@ -248,17 +233,6 @@ contract WitmonLiscon21
             art.hats[_i] = _items[_i];
         }
     }
-
-    function setArtNeckwears(Item[] calldata _items)
-        external virtual
-        notForged
-    {
-        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no neckwears");
-        ranges.neckwears = uint8(_items.length);
-        for (uint _i = 0; _i < _items.length; _i ++) {
-            art.neckwears[_i] = _items[_i];
-        }
-    }
    
     function setArtSpecies(Item[] calldata _items)
         external virtual
@@ -300,14 +274,13 @@ contract WitmonLiscon21
             );
         _traits.baseColor = uint8(_eggIndex % _numColors);
         _traits.eyesColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
-        _traits.eyewear = randomUniformBase2(_eggPhenotype, _seed ++, 6); // TODO: set number of bits
+        _traits.eyewear = (_eggCategory != Witmons.CreatureCategory.Common
+                ? 1 + randomUniform(_eggPhenotype, _seed ++, ranges.eyewears - 1)
+                : 0
+            );
         _traits.eyewearColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
         _traits.hat = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
         _traits.hatColor = randomUniform(_eggPhenotype, _seed ++, _numColors);       
-        _traits.neckwear = (_eggCategory != Witmons.CreatureCategory.Common
-                ? 1 + randomUniform(_eggPhenotype, _seed ++, ranges.neckwears - 1)
-                : 0
-            );
         _traits.species = randomUniform(_eggPhenotype, _seed ++, ranges.species);
     }
 }
