@@ -144,6 +144,7 @@ contract("WitmonLiscon21", _accounts => {
                     assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
                 it("contains no neckware attribute", async () => {
+                    console.log(metadata.attributes)
                     assert(
                         metadata.attributes.filter(val => {
                             if (val.trait_type && val.trait_type === "Neckwear") {
@@ -243,8 +244,5 @@ contract("WitmonLiscon21", _accounts => {
                 })
             })
         })
-        // describe("getCreatureImage(Creature)", async () => {
-        //     // TODO
-        // })
     })
 })
