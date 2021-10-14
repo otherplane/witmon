@@ -99,10 +99,9 @@ contract WitmonERC721
         tokenExists(_tokenId)
         returns (string memory)
     {
-        uint256 _eggIndex = _state.eggIndex_[_tokenId];
         return string(abi.encodePacked(
-            IWitmonDecorator(_state.decorator).baseURI(),
-            _eggIndex.toString()
+            baseURI(),
+            _tokenId.toString()
         ));
     }
 
