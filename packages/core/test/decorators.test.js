@@ -184,10 +184,10 @@ contract("WitmonLiscon21", _accounts => {
                 it("external url contains token index", async () => {
                     assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
-                it("contains neckware attribute", async () => {
+                it("contains eyewear attribute", async () => {
                     assert(
                         metadata.attributes.filter(val => {
-                            if (val.trait_type && val.trait_type === "Neckwear") {
+                            if (val.trait_type && val.trait_type === "Eyewear") {
                                 return val;
                             }
                         }).length == 1
@@ -224,10 +224,10 @@ contract("WitmonLiscon21", _accounts => {
                 it("external url contains token index", async () => {
                     assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
-                it("contains neckware attribute", async () => {
+                it("contains eyewear attribute", async () => {
                     assert(
                         metadata.attributes.filter(val => {
-                            if (val.trait_type && val.trait_type === "Neckwear") {
+                            if (val.trait_type && val.trait_type === "Eyewear") {
                                 return val;
                             }
                         }).length == 1
