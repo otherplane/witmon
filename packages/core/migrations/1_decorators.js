@@ -11,7 +11,7 @@ module.exports = async function (deployer, network) {
       witmonAddresses[network].WitmonLiscon21 = ""
     }
     if (witmonAddresses[network].WitmonLiscon21 === "") {
-      await deployer.deploy(WitmonLiscon21, "https://wittycreatures.com/creatures/")
+      await deployer.deploy(WitmonLiscon21, "https://wittycreatures.com/metadata/")
       witmonAddresses[network].WitmonLiscon21 = WitmonLiscon21.address
       fs.writeFileSync("./migrations/witmon.addresses.json", JSON.stringify(witmonAddresses, null, 4), { flag: 'w+' })
     } else {
@@ -19,6 +19,6 @@ module.exports = async function (deployer, network) {
       console.info("   > Skipped: presumably deployed at", WitmonLiscon21.address)
     }
   } else {
-    await deployer.deploy(WitmonLiscon21, "https://wittycreatures.com/creatures/");
+    await deployer.deploy(WitmonLiscon21, "https://wittycreatures.com/metadata/");
   }
 };
