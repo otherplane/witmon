@@ -60,8 +60,8 @@ export const EGG_COLORS_COUNT = process.env.EGG_COLORS_COUNT
 
 // Egg birth/hatch date in millis
 // If `EGG_BIRTH_DATE=0`, checks are ignored (for testing purposes)
-export const EGG_MINT_TIMESSTAMP = process.env.EGG_BIRTH_DATE
-  ? parseInt(process.env.EGG_BIRTH_DATE)
+export const EGG_MINT_TIMESSTAMP = process.env.EGG_MINT_TIMESSTAMP
+  ? parseInt(process.env.EGG_MINT_TIMESSTAMP)
   : 1635116400 // Sunday, October 24, 2021 11:00:00 PM (GMT)
 
 // Web3 provider URL

@@ -47,7 +47,7 @@ export function fromHexToUint8Array(hex: string) {
 }
 
 export function isTimeToMint() {
-  return Date.now() >= EGG_MINT_TIMESSTAMP
+  return Date.now() >= EGG_MINT_TIMESSTAMP * 1000
 }
 
 export function printRemainingMillis(millis: number) {

@@ -29,7 +29,7 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     },
     handler: async (request: FastifyRequest<{ Body: MintParams }>, reply) => {
       // Check 0: incubation period
-      if (EGG_MINT_TIMESSTAMP && isTimeToMint())
+      if (EGG_MINT_TIMESSTAMP && !isTimeToMint())
         return reply
           .status(403)
           .send(new Error(`Forbidden: mint is not enabled yet`))

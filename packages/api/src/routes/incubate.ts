@@ -41,10 +41,8 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         reply
       ) => {
         // Check 0: incubation period
-        if (EGG_MINT_TIMESSTAMP && !isTimeToMint())
-          return reply
-            .status(403)
-            .send(new Error(`Forbidden: incubation period is over`))
+        if (EGG_MINT_TIMESSTAMP && isTimeToMint())
+          return reply.status(403).send(new Error(`Incubation period is over.`))
 
         // Check 1: token is valid
         let fromId: string
