@@ -12,6 +12,7 @@ export const useEggStore = defineStore('egg', {
       score: null,
       rarityIndex: null,
       timeToBirth: 1635080212000,
+      timeToBirth: Date.now() - 1,
       incubatedByTimeLeft: null,
       incubated: null,
       incubatingTimeLeft: null,

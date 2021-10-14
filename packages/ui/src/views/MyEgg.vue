@@ -13,9 +13,12 @@
         :timeToBirth="egg.timeToBirth"
         :hasBorn="egg.hasBorn"
       />
-      <div class="address" v-if="mintedCreatureAddress">
-        {{ mintedCreatureAddress }}
-      </div>
+      <a
+        v-if="mintedCreatureAddress"
+        :href="`https://etherscan.io/address/${mintedCreatureAddress}`"
+        class="address"
+        >{{ mintedCreatureAddress }}</a
+      >
       <IncubationInfo
         v-if="!egg.hasBorn"
         :incubatedByTimeLeft="egg.incubatedByTimeLeft"
@@ -181,7 +184,7 @@ export default {
   padding: 16px;
   max-width: 600px;
   display: grid;
-  grid-template-rows: repeat(4, max-content);
+  grid-template-rows: max-content 1fr max-content max-content;
   align-content: center;
   text-align: left;
   row-gap: 16px;
@@ -189,6 +192,16 @@ export default {
     width: 100px;
     height: min-content;
     justify-self: center;
+  }
+  .address {
+    font-weight: 600;
+    font-size: 24px;
+    text-decoration: underline;
+    cursor: pointer;
+    background-color: rgb(237, 240, 247);
+    color: rgb(242, 157, 98);
+    padding: 16px;
+    border-radius: 15px;
   }
 }
 .buttons {
