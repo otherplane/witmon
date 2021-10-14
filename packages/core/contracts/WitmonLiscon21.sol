@@ -114,6 +114,14 @@ contract WitmonLiscon21
                 ));
             }
         }
+        _attributes = string(abi.encodePacked(
+            _attributes,
+            ", { \"trait_type\": \"Score\",\"value\": ", 
+                _creature.eggScore.toString(),
+            " }, { \"trait_type\": \"Ranking\",\"value\": \"#",
+                _creature.eggRanking.toString(),
+            "\" }"
+        ));
         return string(abi.encodePacked(
             "{",
                 "\"name\": \"Witty Creature #", _creature.tokenId.toString(), "\",",
