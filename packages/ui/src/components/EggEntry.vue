@@ -39,10 +39,8 @@ export default {
     text-align: center;
   }
   .score {
-    width: 60px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 80px;
+    word-break: break-all;
   }
   .egg-image {
     width: 50px;

@@ -54,11 +54,14 @@ export default {
         'tokenInfo',
         JSON.stringify(fileUploader.fileInfo.value)
       )
-      router.push(`/egg/${fileUploader.fileInfo.value.key}`)
+      router.push({
+        name: 'egg',
+        params: { id: fileUploader.fileInfo.value.key }
+      })
     }
 
     function submitAndRedirect () {
-      router.push(`/egg/${eggKey.value}`)
+      router.push({ name: 'egg', params: { id: eggKey.value } })
     }
 
     function onDecode (decodedString) {

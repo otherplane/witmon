@@ -5,7 +5,7 @@
         <p class="subtitle">EGG ID: {{ egg.username }}</p>
         <p class="title">My Witty Creature</p>
       </div>
-      <WittyCreature v-if="egg.hasBorn" />
+      <WittyCreature v-if="creaturePreview" />
       <Egg v-else class="egg-image" :index="egg.index" />
       <EggInfo
         :score="egg.score"
@@ -13,6 +13,9 @@
         :timeToBirth="egg.timeToBirth"
         :hasBorn="egg.hasBorn"
       />
+      <div class="address" v-if="mintedCreatureAddress">
+        {{ mintedCreatureAddress }}
+      </div>
       <IncubationInfo
         v-if="!egg.hasBorn"
         :incubatedByTimeLeft="egg.incubatedByTimeLeft"
@@ -24,7 +27,7 @@
     </div>
     <div class="buttons">
       <Button
-        v-if="egg.hasBorn && !isProviderConnected"
+        v-if="egg.hasBorn && isProviderConnected && !creaturePreview"
         @click="openEgg"
         color="black"
         class="center-item"
@@ -32,7 +35,7 @@
         Open my egg
       </Button>
       <Button
-        v-else-if="egg.hasBorn && isProviderConnected"
+        v-else-if="egg.hasBorn && isProviderConnected && creaturePreview"
         @click="openModal('mint')"
         color="black"
         class="center-item"
@@ -69,9 +72,8 @@
       </router-link>
 
       <Button @click="openModal('export')" color="grey" class="center-item">
-        Eggport &trade;
+        Eggxport &trade;
       </Button>
-      <div v-if="mintedCreatureAddress">{{ mintedCreatureAddress }}</div>
     </div>
   </div>
 
@@ -108,21 +110,12 @@ export default {
     })
     let timeout
 
-    onBeforeMount(() => {
-      egg.getEggInfo()
+    onBeforeMount(async () => {
+      await egg.getEggInfo()
       if (!egg.hasBorn) {
         timeout = setTimeout(() => {
           egg.timeToBirth -= 1
         }, egg.timeToBirth - Date.now())
-      }
-    })
-
-    onBeforeUpdate(() => {
-      if (!egg.id) {
-        egg.claim({ key: routeId.value })
-      }
-      if (egg.id !== routeId.value) {
-        egg.incubateEgg({ key: routeId.value })
       }
     })
 
@@ -163,6 +156,7 @@ export default {
       openEgg: web3Witmon.openEgg,
       mintedCreatureAddress: web3Witmon.mintedCreatureAddress,
       isProviderConnected: web3Witmon.isProviderConnected,
+      creaturePreview: web3Witmon.creaturePreview,
       mint: web3Witmon.mint
     }
   },

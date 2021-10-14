@@ -11,8 +11,7 @@ export const useEggStore = defineStore('egg', {
       username: null,
       score: null,
       rarityIndex: null,
-      timeToBirth: Date.now() - 1,
-      // timeToBirth: 1635080212000,
+      timeToBirth: 1635080212000,
       incubatedByTimeLeft: null,
       incubated: null,
       incubatingTimeLeft: null,
@@ -77,10 +76,12 @@ export const useEggStore = defineStore('egg', {
     async claim ({ key }) {
       const request = await this.api.claim({ key })
       if (request.error) {
+        router.push({ name: 'init-game' })
         this.setError('claim', request.error)
       } else if (request.token) {
         await this.saveClaimInfo(request)
         this.clearError('claim')
+        this.getEggInfo()
       }
     },
     async incubateEgg ({ key }) {
@@ -110,45 +111,53 @@ export const useEggStore = defineStore('egg', {
     },
     async getEggInfo () {
       const tokenInfo = this.getToken()
-      const currentScore = this.score || tokenInfo.score
-      const request = await this.api.getEggInfo({
-        token: (tokenInfo && tokenInfo.token) || null,
-        id: (tokenInfo && tokenInfo.key) || null
-      })
-      if (request.error) {
-        router.push({ name: 'init-game' })
-        this.setError('info', request.error)
-      } else {
-        this.clearError('info')
-        const { username, score, key, index, rarityIndex, color } = request.egg
+      if (tokenInfo) {
+        const request = await this.api.getEggInfo({
+          token: tokenInfo && tokenInfo.token,
+          id: tokenInfo && tokenInfo.key
+        })
+        if (request.error) {
+          router.push({ name: 'init-game' })
+          this.setError('info', request.error)
+        } else {
+          this.clearError('info')
+          const {
+            username,
+            score,
+            key,
+            index,
+            rarityIndex,
+            color
+          } = request.egg
+          const {
+            incubatedBy: reqIncubatedBy,
+            incubating: reqIncubating
+          } = request
+          this.rarityIndex = rarityIndex
+          this.username = username
+          this.score = score
+          this.color = color
+          this.id = key
+          this.index = index
+          this.incubatedBy = reqIncubatedBy ? reqIncubatedBy.from : null
+          this.incubating = reqIncubating ? reqIncubating.to : null
+          this.incubatedByTimeLeft = reqIncubatedBy ? reqIncubatedBy.ends : null
+          this.incubatingTimeLeft = reqIncubating ? reqIncubating.ends : null
 
-        if (currentScore < score) {
-          this.notify({
-            message: `You have earned ${score - currentScore} points`,
-            icon: 'party'
-          })
+          if (this.id !== router.currentRoute.value.params.id) {
+            this.incubateEgg({ key: routeId.value })
+          }
         }
-        const {
-          incubatedBy: reqIncubatedBy,
-          incubating: reqIncubating
-        } = request
-        this.rarityIndex = rarityIndex
-        this.username = username
-        this.score = score
-        this.color = color
-        this.id = key
-        this.index = index
-        this.incubatedBy = reqIncubatedBy ? reqIncubatedBy.from : null
-        this.incubating = reqIncubating ? reqIncubating.to : null
-        this.incubatedByTimeLeft = reqIncubatedBy ? reqIncubatedBy.ends : null
-        this.incubatingTimeLeft = reqIncubating ? reqIncubating.ends : null
-
-        this.saveClaimInfo({ ...this.getToken(), score })
+      } else {
+        this.claim({ key: router.currentRoute.value.params.id })
       }
     },
-    async mint (address) {
+    async getArgs (address) {
       const tokenInfo = this.getToken()
-      const request = await this.api.mint({ address, token: tokenInfo.token })
+      const request = await this.api.getArgs({
+        address,
+        token: tokenInfo.token
+      })
 
       this.mintInformation = request
 

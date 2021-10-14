@@ -2,7 +2,7 @@ import { onMounted, ref } from 'vue'
 import Web3 from 'web3/dist/web3.min.js'
 
 import { useEggStore } from '@/stores/egg'
-import jsonInterface from '../WitmonMock.json'
+import jsonInterface from '../WitmonERC721.json'
 import { CONTRACT_ADDRESS } from '../constants'
 
 async function requestAccounts (web3) {
@@ -14,10 +14,10 @@ export function useWeb3Witmon () {
   const egg = useEggStore()
   const isProviderConnected = ref(false)
   const mintedCreatureAddress = ref('')
+  const creaturePreview = ref('')
 
   async function enableProvider () {
     const accounts = await requestAccounts(web3)
-
     if (accounts[0]) {
       isProviderConnected.value = true
     }
@@ -26,10 +26,9 @@ export function useWeb3Witmon () {
   async function openEgg () {
     const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
     const from = (await requestAccounts(web3))[0]
-    const previewArgs = await egg.getPreview(from)
-
+    const previewArgs = await egg.getArgs(from)
     contract.methods
-      .previewCreature(...previewArgs)
+      .previewCreatureImage(...previewArgs)
       .send({ from })
       .on('error', error => {
         console.error(error)
@@ -60,7 +59,7 @@ export function useWeb3Witmon () {
   async function mint () {
     const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
     const from = (await requestAccounts(web3))[0]
-    const mintArgs = await egg.mint(from)
+    const mintArgs = await egg.getArgs(from)
 
     contract.methods
       .mintCreature(...mintArgs)
@@ -86,6 +85,7 @@ export function useWeb3Witmon () {
     mint,
     mintedCreatureAddress,
     isProviderConnected,
+    creaturePreview,
     enableProvider,
     openEgg
   }

@@ -61,13 +61,7 @@ export class WittyCreaturesApi {
     })
   }
 
-  getPreview ({ address, token }) {
-    console.log('address', address)
-    console.log('token', token)
-    //TODO: save preview
-  }
-
-  mint ({ address, token }) {
+  getArgs ({ address, token }) {
     console.log('address', address)
     console.log('token', token)
     return this._post({
