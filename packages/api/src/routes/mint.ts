@@ -63,7 +63,7 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       }
 
       // If previously minted, reply with same mint output
-      const prevMint = await mintRepository.get(fromId)
+      const prevMint = await mintRepository.get(egg.index)
       if (prevMint) {
         return reply.status(200).send(prevMint)
       }
@@ -125,7 +125,7 @@ const mint: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       }
 
       // Save mint output for future requests
-      mintRepository.create(response)
+      await mintRepository.create(response)
 
       return reply.status(200).send(response)
     },

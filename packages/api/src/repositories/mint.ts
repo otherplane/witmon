@@ -10,15 +10,15 @@ export class MintRepository {
   }
 
   public async create(mintOutput: MintOutput): Promise<MintOutput> {
-    const success = await this.collection.insertOne(MintOutput)
+    const success = await this.collection.insertOne(mintOutput)
 
     if (!success.acknowledged)
-      throw new Error(`Incubation could not be created`)
+      throw new Error(`Mint object could not be created`)
 
     return mintOutput
   }
 
-  public async get(key: string): Promise<MintOutput | null> {
-    return ((await this.collection.findOne({ key })) as MintOutput) || null
+  public async get(index: number): Promise<MintOutput | null> {
+    return ((await this.collection.findOne({ "data.index": index })) as MintOutput) || null
   }
 }
