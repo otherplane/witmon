@@ -1,6 +1,6 @@
 {
     "ethereum.goerli": {
-        "WitmonERC721": "",
-        "WitmonLiscon21": ""
+        "WitmonERC721": "0x6f151DC1Eb2bE429CB5463Bb15De211d84fA670E",
+        "WitmonLiscon21": "0x2F9d8eEeae525fE40BAcDdb0B07aA7608F3C0405"
     }
 }
