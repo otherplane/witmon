@@ -63,3 +63,12 @@ export const EGG_COLORS_COUNT = process.env.EGG_COLORS_COUNT
 export const EGG_MINT_TIMESSTAMP = process.env.EGG_BIRTH_DATE
   ? parseInt(process.env.EGG_BIRTH_DATE)
   : 1635116400 // Sunday, October 24, 2021 11:00:00 PM (GMT)
+
+// Web3 provider URL
+export const WEB3_PROVIDER =
+  process.env.WEB3_PROVIDER || 'https://mainnet.infura.io/v3/YOUR_PROJECT_ID'
+
+// WitmonERC721 contract address
+export const WITMON_ERC721_ADDRESS =
+  process.env.WITMON_ERC721_ADDRESS ||
+  '0xBD2DF6AD6Bed62ace86E9C165f5BA1682ab54909'
