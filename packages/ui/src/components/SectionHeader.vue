@@ -33,7 +33,7 @@
   }
   .information {
     text-align: right;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: lighter;
     justify-self: flex-end;
   }

@@ -1,27 +1,20 @@
 <template>
-  <SectionHeader>SCAN YOUR QR CODE</SectionHeader>
+  <SectionHeader>IMPORT AN EGG</SectionHeader>
   <div class="container">
-    <QrStream class="pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
-    <input
-      v-model="eggKey"
-      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      id="username"
-      type="text"
-      placeholder="Egg ID"
-    />
-    <Button color="black" @click="submitAndRedirect">
-      Submit
-    </Button>
-    <p v-if="egg.errors.claim" class="error mb-4">{{ egg.errors.claim }}</p>
-    <p class="mb-4">Or import your profile</p>
-    <label
+    <p class="small-title import-label">Scan a QR code</p>
+    <QrStream class="qr-code pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
+    <p class="small-title import-label">Or import your profile</p>
+
+    <Button
+      class="select-file-btn"
+      color="orange"
       v-if="!fileInfo"
-      class="mb-8 w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150"
+      @click="triggerSelectFile"
     >
-      <i class="fas fa-cloud-upload-alt fa-3x"></i>
-      <span class="mt-2 text-base leading-normal">Select a file</span>
-      <input ref="myFile" type="file" class="hidden" @change="onFileSelected" />
-    </label>
+      <label v-if="!fileInfo" class="select-file-btn">
+        <span class="mt-2 text-base leading-normal">Select a file</span>
+      </label>
+    </Button>
 
     <div v-else>
       <p>You are going to import:</p>
@@ -32,6 +25,7 @@
         Import
       </Button>
     </div>
+    <input ref="myFile" type="file" class="hidden" @change="onFileSelected" />
   </div>
 </template>
 
@@ -79,6 +73,7 @@ export default {
     return {
       egg,
       onFileSelected: fileUploader.onFileSelected,
+      triggerSelectFile: fileUploader.triggerSelectFile,
       myFile: fileUploader.myFile,
       fileInfo: fileUploader.fileInfo,
       eggKey,
@@ -100,16 +95,22 @@ export default {
 <style scoped lang="scss">
 .container {
   max-width: 600px;
-  min-height: 100vh;
   display: grid;
   margin: 0 auto;
-  grid-template-rows: 1fr;
+  grid-template-rows: repeat(4, max-content);
+  row-gap: 24px;
   justify-items: center;
   align-content: center;
   text-align: center;
-  .logo {
-    width: 300px;
-    margin-bottom: 8px;
+  .select-file-btn {
+    max-width: 300px;
+  }
+  .qr-code {
+    padding: 8px;
+    border: 2px solid orange;
+    border-style: dashed;
+    width: 350px;
+    height: 350px;
   }
 }
 </style>

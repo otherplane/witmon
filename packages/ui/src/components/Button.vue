@@ -23,6 +23,7 @@ defineProps({
   color: white;
   padding: 14px 24px;
   border-radius: 12px;
+
   &.black {
     background: black;
   }
