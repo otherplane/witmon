@@ -730,9 +730,7 @@ contract("WitmonERC721", accounts => {
                 describe("metadata(_tokenId)", async () => {
                     it("metadata of a previously minted creature should be valid", async () => {
                         let metadata = await witmon.metadata.call(1)
-                        // console.log(metadata)
                         // remove non-printable and other non-valid JSON chars
-                        metadata = metadata.replace(/[\u0000-\u0019]+/g,""); 
                         metadata = JSON.parse(metadata)
                         assert.equal(metadata.external_url, "https://wittycreatures.com/creatures/0")
                     })
