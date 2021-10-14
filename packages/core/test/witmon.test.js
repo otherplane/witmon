@@ -145,7 +145,7 @@ contract("WitmonERC721", accounts => {
                                 signator,
                                 [10, 30, 55],
                                 80640,
-                                { from: owner }
+                                { from: owner, gas: 100000 }
                             )
                         )
                     })
