@@ -31,7 +31,7 @@ contract WitmonLiscon21
     }
 
     struct Item {
-        bytes12 name;
+        string name;
         string svg;
     }
 
@@ -54,7 +54,7 @@ contract WitmonLiscon21
         art.species[1] = Item("AAVE", "<path d='m15 3v1h-3v1h-2v1h-1v1h-2v1h-1v2h-1v20h1v1h2v-1h1v-4h1v3h1v1h2v-1h1v-3h1v4h1v1h2v-1h1v-4h1v2h1v1h2v-1h1v-2h1v4h1v1h2v-1h1v-20h-1v-2h-1v-1h-1v-1h-2v-1h-1v-1h-3v-1h-5z' fill='#fff'/><path d='m9 12v1h-1v3h1v1h2v-1h1v-3h-1v1h-1v-1h1v-1h-2zm10 0v1h-1v3h1v1h2v-1h1v-3h-1v1h-1v-1h1v-1h-2z' class='b'/><path d='m13 19v1h1v1h2v-1h1v-1h-4z' fill='#888'/>");
         // ...
 
-        art.backgrounds[0] = Item(bytes12(0), "");
+        art.backgrounds[0] = Item("", "");
         art.backgrounds[1] = Item("Lisbon", "...");
         art.backgrounds[2] = Item("Cloudy", "...");
         art.backgrounds[3] = Item("Tronic", "...");
@@ -73,7 +73,7 @@ contract WitmonLiscon21
         art.hats[2] = Item("Tiara", "<path class='d' d='m17 1h-2v1h-2v1h-2v1h-1v1h-1v1h-1v2h-2v4h2v-2h1v-1h2v-1h3v1h3v-1h4v1h2v1h2v1h2v1h1v-3h-1v-2h-2v-2h-2v-1h-2v-1h-1v-1h-3z'/><path class='b' d='m17 3h-3v1h-1v3h1v1h3v-1h1v-3h-1z'/><path d='m14 3v1h1v-1zm1 1v1h1v-1zm1 0h1v-1h-1zm-1 1h-1v1h1zm-1 1h-1v1h1zm0-1v-1h-1v1z' fill='#fff' opacity='.3'/><path d='m14 2v1h3v-1zm3 1v3h-1v1h-3v1h1v1h3v-1h1v-1h1v-3h-1v-1zm-4 4v-3h-1v3zm0-3h1v-1h-1z' opacity='.1'/>");
         // ...
 
-        art.neckwears[0] = Item(bytes12(0), "");
+        art.neckwears[0] = Item("", "");
         art.neckwears[1] = Item("Bitcoin", "...");
         art.neckwears[2] = Item("BDSM", "...");
     }
@@ -104,7 +104,7 @@ contract WitmonLiscon21
         ];
         string memory _attributes;
         for (uint8 _i = 0; _i < _items.length; _i ++) {
-            if (_items[_i].name != bytes12(0)) {
+            if (bytes(_items[_i].name).length > 0) {
                 _attributes = string(abi.encodePacked(
                     _attributes,
                     bytes(_attributes).length == 0 ? "{" : ", {",
@@ -119,7 +119,7 @@ contract WitmonLiscon21
                 "\"name\": \"Witty Creature #", _creature.tokenId.toString(), "\",",
                 "\"description\": \"Witty Creatures 2.0 at Liscon 2021. Powered by Witnet!\",",
                 "\"image_data\": \"", getCreatureImage(_creature), "\",",
-                "\"external_url\": \"", baseURI, _creature.eggIndex.toString(), "\",",
+                "\"external_url\": \"", baseURI, _creature.tokenId.toString(), "\",",
                 "\"attributes\": [", _attributes, "]",
             "}"
         ));

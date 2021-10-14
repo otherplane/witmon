@@ -135,14 +135,13 @@ contract("WitmonLiscon21", _accounts => {
                 it("generates valid JSON", async() => {
                     metadata = await decorator.getCreatureMetadata.call(creature)
                     // remove non-printable and other non-valid JSON chars
-                    metadata = metadata.replace(/[\u0000-\u0019]+/g,""); 
                     metadata = JSON.parse(metadata)
                 })
                 it("name contains token id", async () => {
                     assert(metadata.name.indexOf(creature[0].toString()) >= 0);
                 })
-                it("external url contains egg index", async () => {
-                    assert(metadata.external_url.indexOf(creature[2].toString()) >= 0);
+                it("external url contains token id", async () => {
+                    assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
                 it("contains no neckware attribute", async () => {
                     assert(
@@ -176,14 +175,13 @@ contract("WitmonLiscon21", _accounts => {
                 it("generates valid JSON", async() => {
                     metadata = await decorator.getCreatureMetadata.call(creature)
                     // remove non-printable and other non-valid JSON chars
-                    metadata = metadata.replace(/[\u0000-\u0019]+/g,""); 
                     metadata = JSON.parse(metadata)
                 })
                 it("name contains token id", async () => {
                     assert(metadata.name.indexOf(creature[0].toString()) >= 0);
                 })
-                it("external url contains egg index", async () => {
-                    assert(metadata.external_url.indexOf(creature[2].toString()) >= 0);
+                it("external url contains token index", async () => {
+                    assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
                 it("contains neckware attribute", async () => {
                     assert(
@@ -217,14 +215,13 @@ contract("WitmonLiscon21", _accounts => {
                 it("generates valid JSON", async() => {
                     metadata = await decorator.getCreatureMetadata.call(creature)
                     // remove non-printable and other non-valid JSON chars
-                    metadata = metadata.replace(/[\u0000-\u0019]+/g,""); 
                     metadata = JSON.parse(metadata)
                 })
                 it("name contains token id", async () => {
                     assert(metadata.name.indexOf(creature[0].toString()) >= 0);
                 })
-                it("external url contains egg index", async () => {
-                    assert(metadata.external_url.indexOf(creature[2].toString()) >= 0);
+                it("external url contains token index", async () => {
+                    assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
                 it("contains neckware attribute", async () => {
                     assert(
