@@ -145,7 +145,8 @@ export const useEggStore = defineStore('egg', {
           this.incubatingTimeLeft = reqIncubating ? reqIncubating.ends : null
 
           if (this.id !== router.currentRoute.value.params.id) {
-            this.incubateEgg({ key: routeId.value })
+            this.incubateEgg({ key: router.currentRoute.value.params.id })
+            router.push('/')
           }
         }
       } else {
