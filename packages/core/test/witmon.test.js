@@ -709,9 +709,9 @@ contract("WitmonERC721", accounts => {
                         assert.equal(cStatus.toString(), "2")
                     })
                 })
-                describe("getStats()", async () => {
+                describe("totalSupply()", async () => {
                     it("totalSupply should have increased to 3", async() => {
-                        let totalSupply = await witmon.getStats.call()
+                        let totalSupply = await witmon.totalSupply.call()
                         assert.equal(totalSupply.toString(), "3")
                     })
                 })

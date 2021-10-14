@@ -366,7 +366,7 @@ contract WitmonERC721
         return _state.params;
     }
 
-    function getStats()
+    function totalSupply()
         public view
         override
         returns (
