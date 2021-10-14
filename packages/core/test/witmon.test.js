@@ -8,7 +8,7 @@ contract("WitmonERC721", accounts => {
     let witmon;
     let owner = accounts[0]
     let stranger = accounts[1]
-    let signator = accounts[2]
+    let signator = accounts[4]
     let eggOwner0 = "0x184cc5908e1a3d29b4d31df67d99622c4baa7b71"
     let eggOwner1 = accounts[2]
     let eggOwner2 = accounts[3]
@@ -539,7 +539,7 @@ contract("WitmonERC721", accounts => {
                             "bad signature"
                         )
                     })
-                    it("new creature can be minted by anyone", async () => {
+                    it("common creature can be minted by anyone", async () => {
                         await witmon.mintCreature(
                             eggOwner0,
                             0, // _eggIndex
@@ -556,8 +556,10 @@ contract("WitmonERC721", accounts => {
                         // checks the new creature was assigned 1 as tokenId:
                         let _data = await witmon.getCreatureData.call(0)
                         assert.equal(_data.tokenId.toString(), "1")
+                        // checks creature category is Common
+                        assert.equal(_data.eggCategory.toString(), "2")
                     })
-                    it("minted creature cannot be minted twice", async () => {
+                    it("minted common creature cannot be minted twice", async () => {
                         truffleAssert.reverts(
                             witmon.mintCreature(
                                 eggOwner0,
@@ -571,6 +573,44 @@ contract("WitmonERC721", accounts => {
                             ),
                             "already minted"
                         )
+                    })
+                    it("legendary creature can be minted by anyone", async () => {
+                        await witmon.mintCreature(
+                            eggOwner1,
+                            1, // _eggIndex
+                            10, // _eggRanking
+                            800, // _eggScore
+                            100, // _eggTotalClaimedEggs
+                            // eslint-disable-next-line max-len
+                            "0x6b880a72e2b1fc60100ef883e74235ac5eca355985a308ef60221e819a3f151a5eb421d0a3c352449afef51e572c491c8d905761844d7ff064bf4718294a0c181c",
+                            { from: stranger }
+                        )
+                        // checks that creature #1 is now in 'Alive' status:
+                        let _status = await witmon.getCreatureStatus.call(1)
+                        assert.equal(_status.toString(), "3")
+                        // checks the new creature was assigned 2 as tokenId:
+                        let _data = await witmon.getCreatureData.call(1)
+                        assert.equal(_data.tokenId.toString(), "2")
+                        // checks creature category is Legendary
+                        assert.equal(_data.eggCategory.toString(), "0")
+                    })
+                    it("rare creature can be minted by anyone", async () => {
+                        await witmon.mintCreature(
+                            eggOwner2,
+                            2,
+                            40,
+                            800,
+                            100,
+                            "0x3a59a87d0b07063fd5e968d70ce4446160fe8cbef3da7812afd1147b4fc2eabb7e2481fe85c77bc175bbd347291feb8adf25f489be409bcdf8759767761c16a81c"
+                        )
+                        // checks that creature #2 is now in 'Alive' status:
+                        let status = await witmon.getCreatureStatus.call(2)
+                        assert.equal(status.toString(), "3")
+                        // checks the new creature was assigned 3 as tokenId:
+                        let data = await witmon.getCreatureData.call(2)
+                        assert.equal(data.tokenId.toString(), "3")
+                        // checks creature category is Rare
+                        assert.equal(data.eggCategory.toString(), "1")
                     })
                 })
                 describe("previewCreature(..)", async() => {
@@ -602,52 +642,91 @@ contract("WitmonERC721", accounts => {
                         // )
                     })
                     it("unminted creature can by previewed by anyone", async () => {
-                        // TODO
+                        // console.log(
+                            await witmon.previewCreatureImage.call(
+                                eggOwner2,
+                                0, // _eggIndex
+                                40, // _eggRanking
+                                800, // _eggScore                                
+                                100, // _eggTotalClaimedEggs
+                                // eslint-disable-next-line max-len
+                                "0x0d71bc5a298b7e945191ccaf7b3a5d8cfb4cd95c58adaadd8901b4fdeea7320e523dbf885bf88c3cbc286bfcb4c74ad4d017127ca2c4a36542015debb3957ff51b",
+                                { from: stranger }
+                            )
+                        // )
                     })
                 })
             })
             describe("IWitmonView", async () => {
                 describe("getCreatureData(_eggIndex)", async () => {
-                    it("data of a previously minted creature should be valid", async () => {
+                    it("data of a previously minted common creature should be valid", async () => {
                         let data = await witmon.getCreatureData.call(0)
-                        console.log(data)
+                        // console.log(data)
                         assert.equal(data.tokenId.toString(), "1")
                         assert.equal(data.eggIndex.toString(), "0")
                         assert.equal(data.eggScore.toString(), "800")
                         assert.equal(data.eggRanking.toString(), "1")
                         assert.equal(data.eggCategory.toString(), "2")
                     })
+                    it("data of a previously minted legendary creature should be valid", async () => {
+                        let data = await witmon.getCreatureData.call(1)
+                        // console.log(data)
+                        // assert.equal(data.eggOwner, eggOwner1)
+                        assert.equal(data.tokenId.toString(), "2")
+                        assert.equal(data.eggIndex.toString(), "1")
+                        assert.equal(data.eggScore.toString(), "800")
+                        assert.equal(data.eggRanking.toString(), "10")
+                        assert.equal(data.eggCategory.toString(), "0")
+                    })
                 })
                 describe("getCreatureImage(_eggIndex)", async () => {
-                    it("getting image from minted creature works", async () => {
-                        let image = await witmon.getCreatureImage.call(0)
-                        // console.log(image)
+                    it("getting images from minted creatures works", async () => {
+                        await witmon.getCreatureImage.call(0)
+                        await witmon.getCreatureImage.call(1)
                     })
                     it("getting image from unminted creature fails", async () => {
                         await truffleAssert.reverts(
-                            witmon.getCreatureImage.call(1),
+                            witmon.getCreatureImage.call(11),
                             "not alive yet"
                         )
                     })
                 })
                 describe("getCreatureStatus(_eggIndex)", async () => {
-                    it("creature #0 is in 'Alive' status", async() => {
+                    it("common creature #0 is in 'Alive' status", async() => {
                         let cStatus = await witmon.getCreatureStatus.call(0)
                         assert.equal(cStatus.toString(), "3")
                     })
-                    it("creature #1 is in 'Hatching' status", async() => {
+                    it("legendary creature #1 is in 'Alive' status", async() => {
                         let cStatus = await witmon.getCreatureStatus.call(1)
+                        assert.equal(cStatus.toString(), "3")
+                    })
+                    it("rare creature #2 is in 'Alive' status", async() => {
+                        let cStatus = await witmon.getCreatureStatus.call(2)
+                        assert.equal(cStatus.toString(), "3")
+                    })
+                    it("inexistent creature #3 is in 'Hatching' status", async() => {
+                        let cStatus = await witmon.getCreatureStatus.call(3)
                         assert.equal(cStatus.toString(), "2")
                     })
                 })
                 describe("getStats()", async () => {
-                    it("totalSupply should have increased to 1", async() => {
+                    it("totalSupply should have increased to 3", async() => {
                         let totalSupply = await witmon.getStats.call()
-                        assert.equal(totalSupply.toString(), "1")
+                        assert.equal(totalSupply.toString(), "3")
                     })
                 })
             })
-            describe("ERC721", async () => {
+            describe("ERC721Metadata", async () => {
+                describe("baseURI()", async () => {
+                    let baseURI
+                    it("returns no empty string", async () => {
+                        baseURI = await witmon.baseURI.call()
+                        assert(baseURI.length > 0)
+                    })
+                    it("ends up with slash", () => {
+                        assert(baseURI[baseURI.length - 1] === "/")
+                    })
+                })
                 describe("metadata(_tokenId)", async () => {
                     it("metadata of a previously minted creature should be valid", async () => {
                         let metadata = await witmon.metadata.call(1)
@@ -659,7 +738,7 @@ contract("WitmonERC721", accounts => {
                     })
                     it("getting metadata from inexistent token fails", async () => {
                         await truffleAssert.reverts(
-                            witmon.metadata.call(2),
+                            witmon.metadata.call(11),
                             "inexistent token"
                         )
                     })
@@ -667,20 +746,76 @@ contract("WitmonERC721", accounts => {
                 describe("tokenURI(_tokenId)", async () => {
                     it("tokenURI of a previously minted creature should be valid", async () => {
                         let tokenURI = await witmon.tokenURI.call(1)
-                        assert.equal(tokenURI, "https://wittycreatures.com/creatures/0")
+                        assert.equal(tokenURI, "https://wittycreatures.com/creatures/1")
+                        tokenURI = await witmon.tokenURI.call(2)
+                        assert.equal(tokenURI, "https://wittycreatures.com/creatures/2")
+                        tokenURI = await witmon.tokenURI.call(3)
+                        assert.equal(tokenURI, "https://wittycreatures.com/creatures/3")
                     })
                     it("getting tokenURI from inexistent token fails", async () => {
                         await truffleAssert.reverts(
-                            witmon.tokenURI.call(2),
+                            witmon.tokenURI.call(11),
                             "inexistent token"
                         )
                     })
                 })
-                // describe("transfer(..)", async () => {
-                //     it("", async () => {
-                //     })
-                //     // TODO
-                // })
+            })
+            describe("ERC721", async () => {
+                describe("transferFrom(..), approve(..)", async () => {
+                    it("tender cannot transfer eggOwner0's token #1 to eggOwner1", async() => {
+                        await truffleAssert.reverts(
+                            witmon.transferFrom(eggOwner0, eggOwner1, 1, { from: owner }),
+                            "not owner nor approved"
+                        )
+                    })
+                    it("eggOwner1 can transfer its token #2 to eggOwner2, without previous approval", async () => {
+                        await witmon.transferFrom(eggOwner1, eggOwner2, 2, { from: eggOwner1 })
+                        let balance2 = await witmon.balanceOf.call(eggOwner2)
+                        assert.equal(balance2.toString(), "2")
+                    })
+                    it("tender cannot approve eggOwner1 concerning eggOwner2's token #3", async () => {
+                        await truffleAssert.reverts(
+                            witmon.approve(eggOwner1, 3, { from: owner }),
+                            "not owner nor approved"
+                        )
+                    })
+                    it("eggOwner1 cannot transfer eggOwner2's token #3, without previous approval", async () => {
+                        await truffleAssert.reverts(
+                            witmon.transferFrom(eggOwner2, eggOwner1, 3, { from: eggOwner1 }),
+                            "not owner nor approved"
+                        )
+                    })
+                    it("eggOwner2 can approve eggOwner1 concerning token #3", async () => {
+                        await witmon.approve(eggOwner1, 3, { from: eggOwner2 })
+                        let approved = await witmon.getApproved.call(3)
+                        assert.equal(approved, eggOwner1)
+                    })
+                    it("eggOwner1 can transfer eggOwner2's token #3, after previous approval", async () => {
+                        await witmon.transferFrom(eggOwner2, eggOwner1, 3, { from: eggOwner1})
+                    })
+                })
+                describe("balanceOf(..)", async () => {
+                    it("eggOwner0 owns one token", async () => {
+                        let balance0 = await witmon.balanceOf.call(eggOwner0)
+                        assert.equal(balance0.toString(), "1")
+                    })
+                    it("eggOwner1 owns one token", async () => {
+                        let balance1 = await witmon.balanceOf.call(eggOwner1)
+                        assert.equal(balance1.toString(), "1")
+                    })
+                    it("eggOwner2 owns one token", async () => {
+                        let balance2 = await witmon.balanceOf.call(eggOwner2)
+                        assert.equal(balance2.toString(), "1")
+                    })
+                    it("tender owner owns no tokens", async () => {
+                        let balance = await witmon.balanceOf.call(owner)
+                        assert.equal(balance.toString(), "0")
+                    })
+                    it("signator owns no tokens", async () => {
+                        let balance = await witmon.balanceOf.call(signator)
+                        assert.equal(balance.toString(), "0")
+                    })
+                })
             })
         })
     })
