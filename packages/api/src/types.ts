@@ -26,10 +26,10 @@ export const AuthorizationHeader = Type.Object({
 })
 export type AuthorizationHeader = Static<typeof AuthorizationHeader>
 
-export const GetByKeyParams = Type.Object({
+export const GetByStringKeyParams = Type.Object({
   key: Type.String(),
 })
-export type GetByKeyParams = Static<typeof GetByKeyParams>
+export type GetByStringKeyParams = Static<typeof GetByStringKeyParams>
 
 export const JwtVerifyPayload = Type.Object({
   id: Type.String(),
@@ -101,6 +101,8 @@ export const MintOutput = Type.Object({
 export type MintOutput = Static<typeof MintOutput>
 
 export const EggMetadata = Type.Object({
+  // TODO: verify that it does not break anything with OpenSea
+  token_id: Type.Number(),
   name: Type.String(),
   description: Type.String(),
   image_data: Type.String(),
@@ -114,3 +116,8 @@ export const EggMetadata = Type.Object({
 })
 
 export type EggMetadata = Static<typeof EggMetadata>
+
+export const GetByNumericKeyParams = Type.Object({
+  key: Type.Number(),
+})
+export type GetByNumericKeyParams = Static<typeof GetByNumericKeyParams>

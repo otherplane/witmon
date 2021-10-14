@@ -6,7 +6,7 @@ import {
   AuthorizationHeader,
   EggProtected,
   ExtendedEgg,
-  GetByKeyParams,
+  GetByStringKeyParams,
   Incubation,
   IndexedEgg,
   JwtVerifyPayload,
@@ -18,11 +18,11 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   const eggRepository = new EggRepository(fastify.mongo.db)
   const incubationRepository = new IncubationRepository(fastify.mongo.db)
 
-  fastify.get<{ Params: GetByKeyParams; Reply: ExtendedEgg | Error }>(
+  fastify.get<{ Params: GetByStringKeyParams; Reply: ExtendedEgg | Error }>(
     '/eggs/:key',
     {
       schema: {
-        params: GetByKeyParams,
+        params: GetByStringKeyParams,
         headers: AuthorizationHeader,
         response: {
           200: ExtendedEgg,

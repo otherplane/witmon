@@ -1,22 +1,36 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 
-import { EggMetadata, GetByKeyParams } from '../types'
+import { MetadataRepository } from '../repositories/metadata'
+import { EggMetadata, GetByNumericKeyParams } from '../types'
 
 const metadata: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.get<{ Params: GetByKeyParams; Reply: EggMetadata | Error }>(
+  if (!fastify.mongo.db) throw Error('mongo db not found')
+  const metadataRepository = new MetadataRepository(fastify.mongo.db)
+
+  fastify.get<{ Params: GetByNumericKeyParams; Reply: EggMetadata | Error }>(
     '/metadata/:key',
     {
       schema: {
-        params: GetByKeyParams,
+        params: GetByNumericKeyParams,
         response: {
           200: EggMetadata,
         },
       },
       handler: async (
-        request: FastifyRequest<{ Params: { key: string } }>,
+        request: FastifyRequest<{ Params: { key: number } }>,
         reply
       ) => {
-        const sample: EggMetadata = {
+        const { key } = request.params
+
+        // Check if metadata already exists in DB
+        const eggMetadataFromDb = await metadataRepository.get(key)
+        if (eggMetadataFromDb) {
+          return reply.status(200).send(eggMetadataFromDb)
+        }
+
+        // TODO: Fetch data from Web3
+        const data: EggMetadata = {
+          token_id: 77,
           name: 'Witty Creature #77',
           description: 'Witty Creatures 2.0 at Liscon 2021. Powered by Witnet!',
           image_data:
@@ -30,7 +44,9 @@ const metadata: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           ],
         }
 
-        return reply.status(200).send(sample)
+        await metadataRepository.create(data)
+
+        return reply.status(200).send(data)
       },
     }
   )
