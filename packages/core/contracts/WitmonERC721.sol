@@ -43,7 +43,7 @@ contract WitmonERC721
     modifier tokenExists(uint256 _tokenId) {
         require(
             _exists(_tokenId),
-            "WitnetERC721: inexistent token"
+            "WitmonERC721: inexistent token"
         );
         _;
     }
