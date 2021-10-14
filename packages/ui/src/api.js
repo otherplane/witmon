@@ -61,7 +61,7 @@ export class WittyCreaturesApi {
     })
   }
 
-  getArgs ({ address, token }) {
+  getContractArgs ({ address, token }) {
     console.log('address', address)
     console.log('token', token)
     return this._post({

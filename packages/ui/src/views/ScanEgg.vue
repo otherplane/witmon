@@ -50,10 +50,7 @@ export default {
     const previousRoute = ref('')
 
     function saveInfo () {
-      localStorage.setItem(
-        'tokenInfo',
-        JSON.stringify(fileUploader.fileInfo.value)
-      )
+      egg.saveClaimInfo(fileUploader.fileInfo.value)
       router.push({
         name: 'egg',
         params: { id: fileUploader.fileInfo.value.key }

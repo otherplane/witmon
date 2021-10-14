@@ -26,7 +26,7 @@ export function useWeb3Witmon () {
   async function openEgg () {
     const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
     const from = (await requestAccounts(web3))[0]
-    const previewArgs = await egg.getArgs(from)
+    const previewArgs = await egg.getContractArgs(from)
     contract.methods
       .previewCreatureImage(...previewArgs)
       .send({ from })
@@ -59,7 +59,7 @@ export function useWeb3Witmon () {
   async function mint () {
     const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
     const from = (await requestAccounts(web3))[0]
-    const mintArgs = await egg.getArgs(from)
+    const mintArgs = await egg.getContractArgs(from)
 
     contract.methods
       .mintCreature(...mintArgs)

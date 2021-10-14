@@ -106,7 +106,6 @@ export default {
     const modal = useModal()
     const egg = useEggStore()
     const web3Witmon = useWeb3Witmon()
-    const routeId = ref('')
     const modals = reactive({
       mint: false,
       export: false
@@ -146,7 +145,6 @@ export default {
     }
 
     return {
-      routeId,
       egg,
       type,
       incubateMyEgg,
@@ -162,11 +160,6 @@ export default {
       creaturePreview: web3Witmon.creaturePreview,
       mint: web3Witmon.mint
     }
-  },
-  beforeRouteEnter (to, _from, next) {
-    next(vm => {
-      vm.routeId = to.params.id
-    })
   }
 }
 </script>

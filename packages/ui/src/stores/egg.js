@@ -12,7 +12,6 @@ export const useEggStore = defineStore('egg', {
       score: null,
       rarityIndex: null,
       timeToBirth: 1635080212000,
-      timeToBirth: Date.now() - 1,
       incubatedByTimeLeft: null,
       incubated: null,
       incubatingTimeLeft: null,
@@ -153,9 +152,9 @@ export const useEggStore = defineStore('egg', {
         this.claim({ key: router.currentRoute.value.params.id })
       }
     },
-    async getArgs (address) {
+    async getContractArgs (address) {
       const tokenInfo = this.getToken()
-      const request = await this.api.getArgs({
+      const request = await this.api.getContractArgs({
         address,
         token: tokenInfo.token
       })
