@@ -125,7 +125,7 @@ export default {
       clearTimeout(timeout)
     })
 
-    const type = computed(() => (egg.incubator ? 'disable' : 'default'))
+    const type = computed(() => (egg.incubating ? 'disable' : 'default'))
 
     function incubateMyEgg () {
       if (type.value !== 'disable') {
