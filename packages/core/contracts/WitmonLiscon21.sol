@@ -196,7 +196,7 @@ contract WitmonLiscon21
             _creature.eggCategory
         );
         return string(abi.encodePacked(
-            "<svg width='32' height='32' version='1.1' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>",
+            "<svg width='32' height='32' version='1.1' viewBox='0 0 32 32' xmlns:xlink='http://www.w3.org/1999/xlink'>",
                 _styles(_creature.eggIndex, _traits),
                 "<rect width='32' height='32' class='a'/>",
                 art.backgrounds[_traits.background].svg,
