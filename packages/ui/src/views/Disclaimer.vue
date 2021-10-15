@@ -3,9 +3,11 @@
   <div class="container">
     <p class="warning">⚠️</p>
     <p class="small-title">
-      Remember that once you claim your egg, it cannot be claimed or seen again
-      in another browser. Export your egg in case you want to keep a backup of
-      your egg data.
+      Remember: once you claim your egg, it will be forever linked to your web
+      browser and the QR code will not work in a different browser. You are
+      highly encouraged to export your egg from the main screen of the game as
+      backup, or in case that you need to move your egg into a different
+      browser.
     </p>
     <router-link to="/scan-egg" class="link">
       <Button class="btn" color="black">
@@ -27,6 +29,9 @@
   justify-items: center;
   align-content: center;
   text-align: center;
+  .bold {
+    font-weight: bold;
+  }
   .witnet-logo {
     width: 150px;
   }
