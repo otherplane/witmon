@@ -5,7 +5,10 @@
         <p class="subtitle">EGG ID: {{ egg.username }}</p>
         <p class="title">My Witty Creature</p>
       </div>
-      <WittyCreature v-if="creaturePreview" />
+      <WittyCreature
+        v-if="egg.creaturePreview"
+        :creature-preview="egg.creaturePreview"
+      />
       <Egg v-else class="egg-image" :index="egg.index" />
       <EggInfo
         :score="egg.score"
@@ -14,10 +17,11 @@
         :hasBorn="egg.hasBorn"
       />
       <a
-        v-if="mintedCreatureAddress"
-        :href="`https://etherscan.io/address/${mintedCreatureAddress}`"
+        v-if="egg.mintInfo && egg.mintInfo.transactionHash"
+        :href="`https://goerli.etherscan.io/tx/${egg.mintInfo.transactionHash}`"
+        target="_blank"
         class="address"
-        >{{ mintedCreatureAddress }}</a
+        >{{ egg.mintInfo.transactionHash }}</a
       >
       <IncubationInfo
         v-if="!egg.hasBorn"
@@ -30,7 +34,7 @@
     </div>
     <div class="buttons">
       <Button
-        v-if="egg.hasBorn && isProviderConnected && !creaturePreview"
+        v-if="egg.hasBorn && isProviderConnected && !egg.creaturePreview"
         @click="openEgg"
         color="black"
         class="center-item"
@@ -38,7 +42,7 @@
         Open my egg
       </Button>
       <Button
-        v-else-if="egg.hasBorn && isProviderConnected && creaturePreview"
+        v-else-if="egg.hasBorn && isProviderConnected && egg.creaturePreview"
         @click="openModal('mint')"
         color="black"
         class="center-item"
@@ -88,14 +92,7 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
-import {
-  computed,
-  onBeforeMount,
-  onBeforeUnmount,
-  ref,
-  onBeforeUpdate,
-  reactive
-} from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, reactive } from 'vue'
 
 import imageUrl from '@/assets/egg-example.png'
 import { useModal } from '@/composables/useModal'
@@ -114,6 +111,9 @@ export default {
 
     onBeforeMount(async () => {
       await egg.getEggInfo()
+      await egg.getMintInfo()
+      await egg.getPreview()
+
       if (!egg.hasBorn) {
         timeout = setTimeout(() => {
           egg.timeToBirth -= 1
@@ -155,9 +155,7 @@ export default {
       modals,
       enableProvider: web3Witmon.enableProvider,
       openEgg: web3Witmon.openEgg,
-      mintedCreatureAddress: web3Witmon.mintedCreatureAddress,
       isProviderConnected: web3Witmon.isProviderConnected,
-      creaturePreview: web3Witmon.creaturePreview,
       mint: web3Witmon.mint
     }
   }
@@ -185,9 +183,12 @@ export default {
     width: 100px;
     height: min-content;
     justify-self: center;
+    align-self: center;
   }
   .address {
     font-weight: 600;
+    max-width: 100%;
+    word-break: break-all;
     font-size: 24px;
     text-decoration: underline;
     cursor: pointer;

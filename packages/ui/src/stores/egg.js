@@ -15,6 +15,8 @@ export const useEggStore = defineStore('egg', {
       incubatedByTimeLeft: null,
       incubated: null,
       incubatingTimeLeft: null,
+      creaturePreview: null,
+      mintInfo: null,
       incubating: null,
       list: [],
       color: null,
@@ -31,9 +33,8 @@ export const useEggStore = defineStore('egg', {
       return [
         this.mintInformation.data.address,
         this.mintInformation.data.index,
-        this.mintInformation.data.color,
-        this.mintInformation.data.score,
         this.mintInformation.data.rank,
+        this.mintInformation.data.score,
         this.mintInformation.data.total,
         '0x' + this.mintInformation.envelopedSignature.signature
       ]
@@ -55,6 +56,27 @@ export const useEggStore = defineStore('egg', {
         'tokenInfo',
         JSON.stringify({ ...this.getToken(), ...info })
       )
+    },
+    savePreview (creature) {
+      localStorage.setItem('creature', creature)
+      this.creaturePreview = creature
+      console.log('creaturePreview', this.creaturePreview)
+    },
+    saveMintInfo (info) {
+      localStorage.setItem('mintInfo', JSON.stringify({ ...info }))
+      this.mintInfo = info
+    },
+    getPreview () {
+      const preview = localStorage.getItem('creature')
+      if (preview) {
+        this.creaturePreview = preview
+      }
+    },
+    getMintInfo () {
+      const mintInfo = JSON.parse(localStorage.getItem('mintInfo'))
+      if (mintInfo) {
+        this.mintInfo = mintInfo
+      }
     },
     getToken () {
       return JSON.parse(localStorage.getItem('tokenInfo'))

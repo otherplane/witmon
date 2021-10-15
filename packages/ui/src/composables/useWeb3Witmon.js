@@ -27,24 +27,12 @@ export function useWeb3Witmon () {
     const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
     const from = (await requestAccounts(web3))[0]
     const previewArgs = await egg.getContractArgs(from)
-    contract.methods
-      .previewCreatureImage(...previewArgs)
-      .send({ from })
-      .on('error', error => {
-        console.error(error)
-      })
-      .on('confirmation', (confirmationNumber, receipt) => {
-        console.log('confirmationNumber', confirmationNumber)
-        console.log('receipt', receipt)
-        // TODO: get address from receipt
-        creaturePreview.value = 'creature'
-      })
-      .then(newContractInstance => {
-        console.log('newContractInstance', newContractInstance)
-
-        // const witmon = newContractInstance.events.NewCreature.returnValues
-        // console.log('witmon minted: ', witmon)
-      })
+    const preview = await contract.methods
+      .previewCreatureImage(...previewArgs.values())
+      .call()
+    if (preview) {
+      egg.savePreview(preview)
+    }
   }
 
   onMounted(() => {
@@ -60,24 +48,20 @@ export function useWeb3Witmon () {
     const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
     const from = (await requestAccounts(web3))[0]
     const mintArgs = await egg.getContractArgs(from)
-
     contract.methods
-      .mintCreature(...mintArgs)
+      .mintCreature(...mintArgs.values())
       .send({ from })
       .on('error', error => {
         console.error(error)
       })
       .on('confirmation', (confirmationNumber, receipt) => {
-        console.log('confirmationNumber', confirmationNumber)
-        console.log('receipt', receipt)
-        // TODO: get address from receipt
-        mintedCreatureAddress.value = 'adress'
+        egg.saveMintInfo(receipt)
       })
       .then(newContractInstance => {
         console.log('newContractInstance', newContractInstance)
 
         const witmon = newContractInstance.events.NewCreature.returnValues
-        console.log('witmon minted: ', witmon)
+        console.log('Witmon minted: ', witmon)
       })
   }
 
