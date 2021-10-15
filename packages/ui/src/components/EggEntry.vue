@@ -16,7 +16,7 @@ export default {
     index: Number,
     username: String,
     score: Number,
-    rarityIndex: Number,
+    rarityIndex: String,
     dark: Number
   }
 }

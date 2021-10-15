@@ -1,11 +1,11 @@
 <template>
   <div class="info-container">
     <div>
-      <p class="label">EggScore™</p>
+      <p class="label">EGGSCORE™</p>
       <p class="info">{{ score }}</p>
     </div>
     <div>
-      <p class="label">RARITY INDEX</p>
+      <p class="label">RARITY RANK</p>
       <p class="info">{{ rarityIndex }}</p>
     </div>
     <div>
@@ -28,7 +28,7 @@
 export default {
   props: {
     score: Number,
-    rarityIndex: Number,
+    rarityIndex: String,
     timeToBirth: Number,
     hasBorn: Boolean,
     mintStatus: {
