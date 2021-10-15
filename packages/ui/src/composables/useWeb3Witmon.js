@@ -3,10 +3,18 @@ import Web3 from 'web3/dist/web3.min.js'
 
 import { useEggStore } from '@/stores/egg'
 import jsonInterface from '../WitmonERC721.json'
-import { CONTRACT_ADDRESS } from '../constants'
+import { CONTRACT_ADDRESS, NETWORK } from '../constants'
 
 async function requestAccounts (web3) {
   return await web3.givenProvider.request({ method: 'eth_requestAccounts' })
+}
+
+const errorNetworkMessage = {
+  response: {
+    data: {
+      message: `Your MetaMask should be connected to the ${NETWORK} network`
+    }
+  }
 }
 
 export function useWeb3Witmon () {
@@ -24,14 +32,21 @@ export function useWeb3Witmon () {
   }
 
   async function openEgg () {
-    const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
-    const from = (await requestAccounts(web3))[0]
-    const previewArgs = await egg.getContractArgs(from)
-    const preview = await contract.methods
-      .previewCreatureImage(...previewArgs.values())
-      .call()
-    if (preview) {
-      egg.savePreview(preview)
+    if ((await web3.eth.net.getNetworkType()) !== NETWORK) {
+      return egg.setError('network', errorNetworkMessage)
+    } else {
+      const contract = new web3.eth.Contract(
+        jsonInterface.abi,
+        CONTRACT_ADDRESS
+      )
+      const from = (await requestAccounts(web3))[0]
+      const previewArgs = await egg.getContractArgs(from)
+      const preview = await contract.methods
+        .previewCreatureImage(...previewArgs.values())
+        .call()
+      if (preview) {
+        egg.savePreview(preview)
+      }
     }
   }
 
@@ -45,27 +60,34 @@ export function useWeb3Witmon () {
   })
 
   async function mint () {
-    const contract = new web3.eth.Contract(jsonInterface.abi, CONTRACT_ADDRESS)
-    const from = (await requestAccounts(web3))[0]
-    const mintArgs = await egg.getContractArgs(from)
-    contract.methods
-      .mintCreature(...mintArgs.values())
-      .send({ from })
-      .on('error', error => {
-        console.error(error)
-      })
-      .on('transactionHash', function (transactionHash) {
-        egg.saveMintInfo({ transactionHash })
-      })
-      .on('confirmation', (confirmationNumber, receipt) => {
-        egg.saveMintInfo(receipt)
-      })
-      .then(newContractInstance => {
-        console.log('newContractInstance', newContractInstance)
+    if ((await web3.eth.net.getNetworkType()) !== NETWORK) {
+      return egg.setError('network', errorNetworkMessage)
+    } else {
+      const contract = new web3.eth.Contract(
+        jsonInterface.abi,
+        CONTRACT_ADDRESS
+      )
+      const from = (await requestAccounts(web3))[0]
+      const mintArgs = await egg.getContractArgs(from)
+      contract.methods
+        .mintCreature(...mintArgs.values())
+        .send({ from })
+        .on('error', error => {
+          console.error(error)
+        })
+        .on('transactionHash', function (transactionHash) {
+          egg.saveMintInfo({ transactionHash })
+        })
+        .on('confirmation', (confirmationNumber, receipt) => {
+          egg.saveMintInfo(receipt)
+        })
+        .then(newContractInstance => {
+          console.log('newContractInstance', newContractInstance)
 
-        const witmon = newContractInstance.events.NewCreature.returnValues
-        console.log('Witmon minted: ', witmon)
-      })
+          const witmon = newContractInstance.events.NewCreature.returnValues
+          console.log('Witmon minted: ', witmon)
+        })
+    }
   }
 
   return {

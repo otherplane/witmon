@@ -3,12 +3,14 @@
   <div class="container">
     <p class="small-title import-label">Scan a QR code</p>
     <QrStream class="qr-code pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
-    <p class="small-title import-label">Or import your profile</p>
+    <p v-if="!tokenInfo" class="small-title import-label">
+      Or import your profile
+    </p>
 
     <Button
       class="select-file-btn"
       color="orange"
-      v-if="!fileInfo"
+      v-if="!fileInfo && !tokenInfo"
       @click="triggerSelectFile"
     >
       <label v-if="!fileInfo" class="select-file-btn">
@@ -16,7 +18,7 @@
       </label>
     </Button>
 
-    <div v-else>
+    <div v-else-if="!tokenInfo">
       <p>You are going to import:</p>
       <p>{{ fileInfo.username }}</p>
       <p>{{ fileInfo.key }}</p>
@@ -44,7 +46,7 @@ export default {
     const instance = getCurrentInstance()
     const egg = useEggStore()
     const eggKey = ref(null)
-
+    const tokenInfo = egg.getToken()
     const router = useRouter()
     const fileUploader = useFileUploader()
     const previousRoute = ref('')
@@ -72,6 +74,7 @@ export default {
 
     return {
       egg,
+      tokenInfo,
       onFileSelected: fileUploader.onFileSelected,
       triggerSelectFile: fileUploader.triggerSelectFile,
       myFile: fileUploader.myFile,

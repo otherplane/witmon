@@ -54,6 +54,7 @@
       <Button
         v-else-if="egg.hasBorn && isProviderConnected && egg.creaturePreview"
         @click="openModal('mint')"
+        :type="type"
         color="black"
         class="center-item"
       >
@@ -137,7 +138,12 @@ export default {
       clearTimeout(timeout)
     })
 
-    const type = computed(() => (egg.incubating ? 'disable' : 'default'))
+    const type = computed(() =>
+      egg.incubating || (egg.mintInfo && egg.mintInfo.blockHash)
+        ? 'disable'
+        : 'default'
+    )
+    console.log(type.value)
     const mintStatus = computed(() =>
       egg.mintInfo.blockHash ? 'minted' : 'pending'
     )
@@ -149,8 +155,10 @@ export default {
     }
 
     function openModal (name) {
-      modals[name] = true
-      modal.showModal()
+      if (type.value !== 'disable') {
+        modals[name] = true
+        modal.showModal()
+      }
     }
 
     function closeModal () {
