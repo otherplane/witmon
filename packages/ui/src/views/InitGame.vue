@@ -18,7 +18,7 @@
       <p class="subtitle">aka "O JOGO DOS OVOS"</p>
     </div>
     <p class="small-title">
-      Join us in the funniest and most gamified NFT minting ceremony even,
+      Join us in the funniest and most gamified NFT minting ceremony event,
       featuring the cutest creatures in crypto
     </p>
     <router-link to="/disclaimer" class="link">

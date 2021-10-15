@@ -4,7 +4,7 @@
     <p class="warning">⚠️</p>
     <p class="small-title">
       Remember that once you claim your egg, it cannot be claimed or seen again
-      in another natigator. Export your egg in case you want to keep a backup of
+      in another browser. Export your egg in case you want to keep a backup of
       your egg data.
     </p>
     <router-link to="/scan-egg" class="link">

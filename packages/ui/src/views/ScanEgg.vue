@@ -1,5 +1,5 @@
 <template>
-  <SectionHeader>IMPORT AN EGG</SectionHeader>
+  <SectionHeader>SCAN EGG</SectionHeader>
   <div class="container">
     <p class="small-title import-label">Scan a QR code</p>
     <QrStream class="qr-code pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
