@@ -143,7 +143,6 @@ export default {
         ? 'disable'
         : 'default'
     )
-    console.log(type.value)
     const mintStatus = computed(() =>
       egg.mintInfo.blockHash ? 'minted' : 'pending'
     )
@@ -155,10 +154,8 @@ export default {
     }
 
     function openModal (name) {
-      if (type.value !== 'disable') {
         modals[name] = true
         modal.showModal()
-      }
     }
 
     function closeModal () {
