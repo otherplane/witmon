@@ -78,6 +78,25 @@ const routes = [
     name: 'init-game',
     path: '/init-game',
     component: InitGame
+  },
+  {
+    name: 'import',
+    path: '/import',
+    beforeEnter: (to, from, next) => {
+      console.log('to', to)
+      const { username, token, key } = to.query
+
+      if (!username || !token || !key) {
+        next('/')
+      } else {
+        localStorage.setItem(
+          'tokenInfo',
+          JSON.stringify({ username, token, key })
+        )
+
+        next(`/egg/${key}`)
+      }
+    }
   }
 ]
 

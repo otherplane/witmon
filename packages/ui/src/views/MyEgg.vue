@@ -143,7 +143,6 @@ export default {
         ? 'disable'
         : 'default'
     )
-    console.log(type.value)
     const mintStatus = computed(() =>
       egg.mintInfo.blockHash ? 'minted' : 'pending'
     )
