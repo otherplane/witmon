@@ -194,7 +194,6 @@ contract WitmonERC721
         );
         Witnet.Result memory _result = witnet.readResponseResult(_queryId);
         if (_result.success) {
-            _result.value.buffer.data[1] = 0x1f; // 31-byte randomness
             bytes32 _randomness = _bytesToBytes32(witnet.asBytes(_result));
             _state.hatchingBlock = block.number;
             _state.witnetRandomness = _randomness;
