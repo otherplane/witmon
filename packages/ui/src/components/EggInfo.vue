@@ -17,6 +17,10 @@
         :seconds="false"
       />
     </div>
+    <div>
+      <p v-if="mintStatus" class="label">STATUS</p>
+      <Label v-if="mintStatus" :status="mintStatus" />
+    </div>
   </div>
 </template>
 
@@ -26,7 +30,11 @@ export default {
     score: Number,
     rarityIndex: Number,
     timeToBirth: Number,
-    hasBorn: Boolean
+    hasBorn: Boolean,
+    mintStatus: {
+      type: String,
+      default: null
+    }
   }
 }
 </script>
@@ -35,5 +43,8 @@ export default {
 .info-container {
   display: flex;
   justify-content: space-between;
+}
+.label {
+  margin-bottom: 4px;
 }
 </style>

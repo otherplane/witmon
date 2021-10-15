@@ -54,6 +54,9 @@ export function useWeb3Witmon () {
       .on('error', error => {
         console.error(error)
       })
+      .on('transactionHash', function (transactionHash) {
+        egg.saveMintInfo({ transactionHash })
+      })
       .on('confirmation', (confirmationNumber, receipt) => {
         egg.saveMintInfo(receipt)
       })

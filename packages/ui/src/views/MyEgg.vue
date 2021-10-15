@@ -15,14 +15,24 @@
         :rarityIndex="egg.rarityIndex"
         :timeToBirth="egg.timeToBirth"
         :hasBorn="egg.hasBorn"
+        :mintStatus="egg.mintInfo ? mintStatus : null"
       />
-      <a
+      <div
+        class="mint-status"
         v-if="egg.mintInfo && egg.mintInfo.transactionHash"
-        :href="`https://goerli.etherscan.io/tx/${egg.mintInfo.transactionHash}`"
-        target="_blank"
-        class="address"
-        >{{ egg.mintInfo.transactionHash }}</a
       >
+        <p class="label">CONTRACT ADDRESS</p>
+        <div class="address">
+          <a
+            :href="
+              `https://rinkeby.etherscan.io/tx/${egg.mintInfo.transactionHash}`
+            "
+            target="_blank"
+            >{{ egg.mintInfo.transactionHash }}
+          </a>
+          <img class="external-link-icon" src="@/assets/external.svg" alt="" />
+        </div>
+      </div>
       <IncubationInfo
         v-if="!egg.hasBorn"
         :incubatedByTimeLeft="egg.incubatedByTimeLeft"
@@ -35,7 +45,7 @@
     <div class="buttons">
       <Button
         v-if="egg.hasBorn && isProviderConnected && !egg.creaturePreview"
-        @click="openEgg"
+        @click="openModal('openEgg')"
         color="black"
         class="center-item"
       >
@@ -87,6 +97,7 @@
   <ModalDialog :show="modal.visible.value" v-on:close="closeModal">
     <ModalExport v-if="modals.export" />
     <ModalMint v-if="modals.mint" />
+    <ModalOpenEgg v-if="modals.openEgg" />
   </ModalDialog>
 </template>
 
@@ -105,7 +116,8 @@ export default {
     const web3Witmon = useWeb3Witmon()
     const modals = reactive({
       mint: false,
-      export: false
+      export: false,
+      openEgg: false
     })
     let timeout
 
@@ -126,6 +138,9 @@ export default {
     })
 
     const type = computed(() => (egg.incubating ? 'disable' : 'default'))
+    const mintStatus = computed(() =>
+      egg.mintInfo.blockHash ? 'minted' : 'pending'
+    )
 
     function incubateMyEgg () {
       if (type.value !== 'disable') {
@@ -141,6 +156,7 @@ export default {
     function closeModal () {
       modals.mint = false
       modals.export = false
+      modals.openEgg = false
       modal.hideModal()
     }
 
@@ -153,6 +169,7 @@ export default {
       imageUrl,
       modal,
       modals,
+      mintStatus,
       enableProvider: web3Witmon.enableProvider,
       openEgg: web3Witmon.openEgg,
       isProviderConnected: web3Witmon.isProviderConnected,
@@ -180,22 +197,33 @@ export default {
   text-align: left;
   row-gap: 16px;
   .egg-image {
-    width: 100px;
-    height: min-content;
+    width: 125px;
+    height: auto;
     justify-self: center;
     align-self: center;
   }
-  .address {
-    font-weight: 600;
-    max-width: 100%;
-    word-break: break-all;
-    font-size: 24px;
-    text-decoration: underline;
-    cursor: pointer;
-    background-color: rgb(237, 240, 247);
-    color: rgb(242, 157, 98);
-    padding: 16px;
-    border-radius: 15px;
+  .mint-status {
+    .label {
+      margin-bottom: 8px;
+    }
+    .address {
+      font-weight: 600;
+      max-width: 100%;
+      word-break: break-all;
+      font-size: 16px;
+      text-decoration: underline;
+      cursor: pointer;
+      background-color: rgb(237, 240, 247);
+      color: rgb(242, 157, 98);
+      padding: 16px;
+      border-radius: 15px;
+    }
+    .external-link-icon {
+      width: 12px;
+      display: inline;
+      margin-left: 4px;
+      margin-bottom: 4px;
+    }
   }
 }
 .buttons {

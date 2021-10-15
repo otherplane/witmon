@@ -43,8 +43,8 @@ export default {
     word-break: break-all;
   }
   .egg-image {
+    height: auto;
     width: 50px;
-    height: min-content;
   }
 }
 </style>

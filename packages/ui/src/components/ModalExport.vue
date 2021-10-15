@@ -54,7 +54,6 @@
     <a
       ref="download"
       :href="downloadLink"
-      name="information.json"
       download="information.json"
       style="display: none"
     />
