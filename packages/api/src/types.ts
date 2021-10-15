@@ -110,7 +110,7 @@ export const EggMetadata = Type.Object({
   attributes: Type.Array(
     Type.Object({
       trait_type: Type.String(),
-      value: Type.String(),
+      value: Type.Union([Type.String(), Type.Number()]),
     })
   ),
 })
