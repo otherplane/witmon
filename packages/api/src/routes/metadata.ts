@@ -35,13 +35,13 @@ const metadata: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         // Fetch metadata from contract using Web3
         const web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER))
         const { abi } = WITMON_ERCC721
-
         const contract = new web3.eth.Contract(abi, WITMON_ERC721_ADDRESS)
 
         let callResult
         try {
           callResult = await contract.methods.metadata(key).call()
         } catch (err) {
+          console.error('[Server] Metadata error:', err)
           return reply
             .status(404)
             .send(
