@@ -2,11 +2,11 @@
   <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
     <div class="sm:flex sm:items-start">
       <div
-        class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+        class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 sm:mx-0 sm:h-10 sm:w-10"
       >
         <!-- Heroicon name: outline/exclamation -->
         <svg
-          class="h-6 w-6 text-red-600"
+          class="h-6 w-6 text-yellow-600"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -29,55 +29,62 @@
           Export information
         </h3>
         <div class="mt-2">
-          <p class="text-sm text-gray-500">
-            Are you sure you want to export your information?
+          <p class="text-sm text-gray-500 mb-2">
+            Go to the following link to import your creature in that browser:
           </p>
+          <p class="import-link text-xs text-gray-400">{{ importLink }}</p>
         </div>
       </div>
     </div>
   </div>
   <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
     <button
-      @click="exportInfo"
+      @click="copyToClipboard"
       type="button"
-      class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+      class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
     >
-      Eggxport &trade;
+      Copy to clipboard
     </button>
     <button
       @click="$parent.$emit('close')"
       type="button"
       class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
     >
-      Cancel
+      Close
     </button>
-    <a
-      ref="download"
-      :href="downloadLink"
-      download="information.json"
-      style="display: none"
-    />
   </div>
 </template>
 
 <script>
 import { defineComponent, getCurrentInstance } from 'vue'
-import { useExportInformation } from '@/composables/useExportInformation'
+import { createImportLink } from '../services/exportInformation'
+import { copyTextToClipboard } from '../services/copyToClipboard'
+import { useEggStore } from '../stores/egg'
 
 export default defineComponent({
   setup (props, ctx) {
-    const exportInformation = useExportInformation()
-
     const instance = getCurrentInstance()
 
+    const importLink = createImportLink()
+    const egg = useEggStore()
     return {
-      download: exportInformation.download,
-      downloadLink: exportInformation.downloadLink,
       exportInfo () {
-        exportInformation.triggerDownload()
         instance.parent.emit('close')
+      },
+      importLink,
+      async copyToClipboard () {
+        await copyTextToClipboard(importLink)
+
+        egg.notify({ message: 'Copied', icon: 'none' })
       }
     }
   }
 })
 </script>
+
+<style scoped>
+.import-link {
+  word-break: break-all;
+  word-wrap: anywhere;
+}
+</style>

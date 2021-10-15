@@ -4,7 +4,7 @@
       <p class="message">
         {{ message }}
       </p>
-      <p class="warning">{{ icon }} ️</p>
+      <p v-if="icon" class="warning">{{ icon }} ️</p>
     </div>
   </transition>
 </template>
@@ -13,18 +13,19 @@
 import { getCurrentInstance, onMounted, ref } from 'vue'
 const ICONS = {
   warn: '⚠️️',
-  party: '🎉'
+  party: '🎉',
+  none: ''
 }
 export default {
   setup () {
     const toggle = ref(false)
     const message = ref('')
-    const icon = ref('⚠️')
+    const icon = ref('️')
     const counter = ref(0)
 
     const show = payload => {
       message.value = payload.message
-      if (payload.icon) {
+      if (payload.icon !== 'none') {
         icon.value = ICONS[payload.icon] || ICONS['warn']
       }
       toggle.value = true
@@ -65,6 +66,7 @@ export default {
 }
 
 .notification {
+  z-index: 100;
   background-color: black;
   border-radius: 4px;
   top: 40px;

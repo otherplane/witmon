@@ -3,50 +3,38 @@
   <div class="container">
     <p class="small-title import-label">Scan a QR code</p>
     <QrStream class="qr-code pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
-    <p v-if="!tokenInfo" class="small-title import-label">
-      Or import your profile
-    </p>
 
-    <Button
-      class="select-file-btn"
-      color="orange"
-      v-if="!fileInfo && !tokenInfo"
-      @click="triggerSelectFile"
-    >
+    <Button class="select-file-btn" color="orange" @click="triggerSelectFile">
       <label v-if="!fileInfo" class="select-file-btn">
         <span class="mt-2 text-base leading-normal">Select a file</span>
       </label>
     </Button>
 
-    <div v-else-if="!tokenInfo">
-      <p>You are going to import:</p>
-      <p>{{ fileInfo.username }}</p>
-      <p>{{ fileInfo.key }}</p>
-
-      <Button color="black" @click="saveInfo">
-        Import
-      </Button>
-    </div>
     <input ref="myFile" type="file" class="hidden" @change="onFileSelected" />
+    <ModalDialog :show="modal.visible.value" v-on:close="modal.hideModal">
+      <ModalClaimConfirmation v-on:claim="claimEgg" />
+    </ModalDialog>
   </div>
 </template>
 
 <script>
-import { getCurrentInstance, ref } from 'vue'
+import { ref } from 'vue'
 import { useEggStore } from '@/stores/egg'
 import { QrStream } from 'vue3-qr-reader'
 import { useRouter } from 'vue-router'
 import { useFileUploader } from '@/composables/useFileUploader'
+import { useModal } from '../composables/useModal'
 
 export default {
   components: {
     QrStream
   },
   setup (props, ctx) {
-    const instance = getCurrentInstance()
+    const modal = useModal()
     const egg = useEggStore()
     const eggKey = ref(null)
-    const tokenInfo = egg.getToken()
+    const decodedString = ref('')
+
     const router = useRouter()
     const fileUploader = useFileUploader()
     const previousRoute = ref('')
@@ -63,8 +51,15 @@ export default {
       router.push({ name: 'egg', params: { id: eggKey.value } })
     }
 
-    function onDecode (decodedString) {
-      const chunks = decodedString.split('/')
+    function onDecode (value) {
+      if (value) {
+        decodedString.value = value
+        modal.showModal()
+      }
+    }
+
+    function claimEgg () {
+      const chunks = decodedString.value.split('/')
       const key = chunks[chunks.length - 1]
       if (key) {
         eggKey.value = key
@@ -74,7 +69,6 @@ export default {
 
     return {
       egg,
-      tokenInfo,
       onFileSelected: fileUploader.onFileSelected,
       triggerSelectFile: fileUploader.triggerSelectFile,
       myFile: fileUploader.myFile,
@@ -83,7 +77,9 @@ export default {
       saveInfo,
       submitAndRedirect,
       onDecode,
-      previousRoute
+      previousRoute,
+      claimEgg,
+      modal
     }
   },
 
