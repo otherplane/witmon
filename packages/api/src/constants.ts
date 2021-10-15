@@ -21,7 +21,7 @@ export const JWT_SECRET: string = process.env.JWT_SECRET || 'secret'
 // Egg incubation duration in millis
 export const INCUBATION_DURATION_MILLIS = process.env.INCUBATION_DURATION_MILLIS
   ? parseInt(process.env.INCUBATION_DURATION_MILLIS)
-  : 5 * 60 * 1000
+  : 2 * 60 * 1000
 
 // Egg incubation cooldown in millis
 export const INCUBATION_COOLDOWN_MILLIS = process.env.INCUBATION_COOLDOWN_MILLIS
@@ -57,7 +57,7 @@ export const EGG_COLORS_COUNT = process.env.EGG_COLORS_COUNT
   : 7
 
 // Egg birth/hatch date in millis
-// If `EGG_BIRTH_DATE=0`, checks are ignored (for testing purposes)
+// If `EGG_MINT_TIMESSTAMP=0`, checks are ignored (for testing purposes)
 export const EGG_MINT_TIMESSTAMP = process.env.EGG_MINT_TIMESSTAMP
   ? parseInt(process.env.EGG_MINT_TIMESSTAMP)
   : 1635116400 // Sunday, October 24, 2021 11:00:00 PM (GMT)
@@ -69,7 +69,7 @@ export const WEB3_PROVIDER =
 // WitmonERC721 contract address
 export const WITMON_ERC721_ADDRESS =
   process.env.WITMON_ERC721_ADDRESS ||
-  '0xBD2DF6AD6Bed62ace86E9C165f5BA1682ab54909'
+  '0xadE064924d365A90975cdfaD8515E44bC31402C0'
 
 export default {
   EGG_COLORS_COUNT,

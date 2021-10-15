@@ -17,7 +17,7 @@ export type Egg = Static<typeof Egg>
 
 export const IndexedEgg = Type.Intersect([
   Egg,
-  Type.Object({ rarityIndex: Type.Number() }),
+  Type.Object({ rarityIndex: Type.String() }),
 ])
 export type IndexedEgg = Static<typeof IndexedEgg>
 
@@ -40,7 +40,7 @@ export type JwtVerifyPayload = Static<typeof JwtVerifyPayload>
 export const EggProtected = Type.Object({
   color: Type.Number(),
   index: Type.Number(),
-  rarityIndex: Type.Number(),
+  rarityIndex: Type.String(),
   score: Type.Number(),
   username: Type.Optional(Type.String()),
 })

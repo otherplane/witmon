@@ -111,7 +111,7 @@ export class EggRepository {
       color: egg.color,
       index: egg.index,
       key: egg.key,
-      rarityIndex: index,
+      rarityIndex: `${index + 1}/${eggsArray.length}`,
       score: egg.score,
       username: egg.username,
     }))
@@ -131,15 +131,16 @@ export class EggRepository {
   public async calculateRarityIndex(egg: Egg): Promise<number> {
     const eggs = await this.getListSortByScore()
 
-    return (await eggs.toArray()).findIndex(
+    const index = (await eggs.toArray()).findIndex(
       (eggSorted) => eggSorted.key === egg.key
     )
+    return index + 1
   }
 
   private async getListSortByScore() {
     return await this.collection.find(
       { token: { $exists: true } },
-      { sort: { score: 1 } }
+      { sort: { score: -1 } }
     )
   }
 }

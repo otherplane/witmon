@@ -81,12 +81,15 @@ const eggs: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           incubatingLast && isIncubationActive(incubatingLast)
             ? getIncubationExtendedFromBase(incubatingLast)
             : undefined
+        const rarityIndex = `${await eggRepository.calculateRarityIndex(
+          egg
+        )}/${await eggRepository.countClaimed()}`
         const extendedEgg: ExtendedEgg = {
           egg: {
             color: egg.color,
             index: egg.index,
             key: egg.key,
-            rarityIndex: await eggRepository.calculateRarityIndex(egg),
+            rarityIndex,
             score: egg.score,
             username: egg.username,
           },
