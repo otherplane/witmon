@@ -1,7 +1,9 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify'
 
-import { Egg, ClaimEggParams } from '../types'
+import { EGG_MINT_TIMESSTAMP } from '../constants'
 import { EggRepository } from '../repositories/egg'
+import { Egg, ClaimEggParams } from '../types'
+import { isTimeToMint } from '../utils'
 
 const claim: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   if (!fastify.mongo.db) throw Error('mongo db not found')
@@ -18,6 +20,10 @@ const claim: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       request: FastifyRequest<{ Body: ClaimEggParams }>,
       reply
     ) => {
+      // Check 0: check if game is over
+      if (EGG_MINT_TIMESSTAMP && isTimeToMint())
+        return reply.status(403).send(new Error(`Claiming is not posssible because the game is over.`))
+
       const key = request.body.key
       const egg = await repository.get(key)
 
