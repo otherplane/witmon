@@ -2,8 +2,7 @@ import Fastify from 'fastify'
 import Web3 from 'web3'
 
 import app from './app'
-
-import { MINT_PRIVATE_KEY } from './constants'
+import constants, { MINT_PRIVATE_KEY } from './constants'
 
 const server = Fastify({
   logger: {
@@ -21,6 +20,7 @@ server
       MINT_PRIVATE_KEY
     )
     console.log('[Server] ECDSA public Key: ', account.address)
+    console.log('[Server] Non-sensitive config:', constants)
 
     server.listen(3000, '0.0.0.0', function (err, address) {
       if (err) {

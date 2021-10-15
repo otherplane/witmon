@@ -19,16 +19,14 @@ export const EGG_KEY_SALT: string = process.env.EGG_KEY_SALT || ''
 export const JWT_SECRET: string = process.env.JWT_SECRET || 'secret'
 
 // Egg incubation duration in millis
-export const INCUBATION_DURATION_MILLIS = process.env
-  .INCUBATION_DURATION_SECONDS
-  ? parseInt(process.env.INCUBATION_DURATION_SECONDS) * 1000
+export const INCUBATION_DURATION_MILLIS = process.env.INCUBATION_DURATION_MILLIS
+  ? parseInt(process.env.INCUBATION_DURATION_MILLIS)
   : 5 * 60 * 1000
 
 // Egg incubation cooldown in millis
-export const INCUBATION_COOLDOWN_MILLIS = process.env
-  .INCUBATION_COOLDOWN_SECONDS
+export const INCUBATION_COOLDOWN_MILLIS = process.env.INCUBATION_COOLDOWN_MILLIS
   ? Math.max(
-      parseInt(process.env.INCUBATION_COOLDOWN_SECONDS) * 1000,
+      parseInt(process.env.INCUBATION_COOLDOWN_MILLIS),
       INCUBATION_DURATION_MILLIS
     )
   : Math.max(2 * 60 * 60 * 1000, INCUBATION_DURATION_MILLIS)
@@ -72,3 +70,15 @@ export const WEB3_PROVIDER =
 export const WITMON_ERC721_ADDRESS =
   process.env.WITMON_ERC721_ADDRESS ||
   '0xBD2DF6AD6Bed62ace86E9C165f5BA1682ab54909'
+
+export default {
+  EGG_COLORS_COUNT,
+  EGG_KEY_LENGTH_BYTES,
+  EGG_MINT_TIMESSTAMP,
+  INCUBATION_COOLDOWN_MILLIS,
+  INCUBATION_DURATION_MILLIS,
+  INCUBATION_POINTS,
+  INCUBATION_POINTS_DIVISOR,
+  INCUBATION_POINTS_MIN,
+  WITMON_ERC721_ADDRESS,
+}
