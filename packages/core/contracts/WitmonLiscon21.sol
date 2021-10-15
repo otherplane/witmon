@@ -260,10 +260,10 @@ contract WitmonLiscon21
         returns (string memory)
     {
         return string(abi.encodePacked(
-            "<style>#witmon", _creatureId.toString(), " .a { fill: #", art.colors[_traits.baseColor],
-            "; } #witmon", _creatureId.toString(), " .b { fill: #", art.colors[_traits.eyesColor],
-            "; } #witmon", _creatureId.toString(), " .c { fill: #", art.colors[_traits.eyewearColor],
-            "; } #witmon", _creatureId.toString(), " .d { fill: #", art.colors[_traits.hatColor],
+            "<style> .a { fill: #", art.colors[_traits.baseColor],
+            "; } .b { fill: #", art.colors[_traits.eyesColor],
+            "; } .c { fill: #", art.colors[_traits.eyewearColor],
+            "; } .d { fill: #", art.colors[_traits.hatColor],
             "; }</style>"
         ));
     }
