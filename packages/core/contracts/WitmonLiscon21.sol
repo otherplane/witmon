@@ -45,14 +45,20 @@ contract WitmonLiscon21
     bool public forged;
     TraitRanges internal ranges;
     address internal immutable deployer;
-    
-    modifier isForged {
-        require(forged, "WitmonLiscon21: not forged");
-        _;
-    }
+
 
     modifier notForged {
         require(!forged, "WitmonLiscon21: already forged");
+        _;
+    }
+
+    modifier onlyDeployer {
+        require(msg.sender == deployer, "WitmonLiscon21: only deployer");
+        _;
+    }
+
+    modifier isForged {
+        require(forged, "WitmonLiscon21: not forged");
         _;
     }
 
@@ -74,8 +80,8 @@ contract WitmonLiscon21
     function forge()
         external virtual
         notForged
+        onlyDeployer
     {
-        require(msg.sender == deployer, "WitmonLiscon21: only deployer");
         require(ranges.backgrounds > 0, "WitmonLiscon21: no backgrounds");
         require(ranges.eyewears > 0, "WitmonLiscon21: no eyewears");
         require(ranges.hats > 0, "WitmonLiscon21: no hats");
@@ -204,6 +210,7 @@ contract WitmonLiscon21
     function setArtBackgrounds(Item[] calldata _items)
         external virtual
         notForged
+        onlyDeployer
     {
         require(_items.length > 0 && _items.length < 256, "WitmonERC721: no backgrounds");
         ranges.backgrounds = uint8(_items.length);
@@ -215,6 +222,7 @@ contract WitmonLiscon21
     function setArtEyewears(Item[] calldata _items)
         external virtual
         notForged
+        onlyDeployer
     {
         require(_items.length > 0 && _items.length < 256, "WitmonERC721: no eyewears");
         ranges.eyewears = uint8(_items.length);
@@ -226,6 +234,7 @@ contract WitmonLiscon21
     function setArtHats(Item[] calldata _items)
         external virtual
         notForged
+        onlyDeployer
     {
         require(_items.length > 0 && _items.length < 256, "WitmonERC721: no hats");
         ranges.hats = uint8(_items.length);
@@ -237,6 +246,7 @@ contract WitmonLiscon21
     function setArtSpecies(Item[] calldata _items)
         external virtual
         notForged
+        onlyDeployer
     {
         require(_items.length > 0 && _items.length < 256, "WitmonERC721: no species");
         ranges.species = uint8(_items.length);
