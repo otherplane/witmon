@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./WitmonDecoratorBase.sol";
 
 contract WitmonLiscon21
     is
+        Ownable,
         WitmonDecoratorBase
 {
     using Strings for uint256;
+    using Witmons for bytes32;
    
     struct TraitIndexes {
         uint8 baseColor;
@@ -46,14 +49,8 @@ contract WitmonLiscon21
     TraitRanges internal ranges;
     address internal immutable deployer;
 
-
     modifier notForged {
         require(!forged, "WitmonLiscon21: already forged");
-        _;
-    }
-
-    modifier onlyDeployer {
-        require(msg.sender == deployer, "WitmonLiscon21: only deployer");
         _;
     }
 
@@ -66,13 +63,13 @@ contract WitmonLiscon21
         WitmonDecoratorBase(_baseURI)
     {
         art.colors = [
-            "ebebf7",
-            "1c1d2f", 
-            "cc0d3d",
-            "d22f94",
-            "890ec1", 
-            "1c49d8",
-            "19b554"
+            "080", 
+            "333",
+            "f00",
+            "627", 
+            "eee", 
+            "fd2",
+            "00d"
         ];
         deployer = msg.sender;
     }
@@ -80,7 +77,7 @@ contract WitmonLiscon21
     function forge()
         external virtual
         notForged
-        onlyDeployer
+        onlyOwner
     {
         require(ranges.backgrounds > 0, "WitmonLiscon21: no backgrounds");
         require(ranges.eyewears > 0, "WitmonLiscon21: no eyewears");
@@ -90,7 +87,7 @@ contract WitmonLiscon21
     }
 
     function getArtBackgrounds()
-        external virtual
+        external virtual view
         returns (Item[] memory _items)
     {
         _items = new Item[](ranges.backgrounds);
@@ -99,8 +96,15 @@ contract WitmonLiscon21
         }
     }
 
+    function getArtColors()
+        external virtual view
+        returns (string[] memory)
+    {
+        return art.colors;
+    }
+
     function getArtEyewears()
-        external virtual
+        external virtual view
         returns (Item[] memory _items)
     {
         _items = new Item[](ranges.eyewears);
@@ -110,7 +114,7 @@ contract WitmonLiscon21
     }
 
     function getArtHats()
-        external virtual
+        external virtual view
         returns (Item[] memory _items)
     {
         _items = new Item[](ranges.hats);
@@ -120,7 +124,7 @@ contract WitmonLiscon21
     }
 
     function getArtSpecies()
-        external virtual
+        external virtual view
         returns (Item[] memory _species)
     {
         _species = new Item[](ranges.species);
@@ -164,19 +168,21 @@ contract WitmonLiscon21
                 ));
             }
         }
-        // add egg's score and ranking as trait_types in the attributes part
+        // add egg's score, birthday and ranking as trait_types in the attributes part
         _attributes = string(abi.encodePacked(
             _attributes,
-            ", { \"trait_type\": \"Score\",\"value\": ", 
+            ", { \"trait_type\": \"EggScore\",\"value\": ", 
                 _creature.eggScore.toString(),
-            " }, { \"trait_type\": \"Ranking\",\"value\": \"#",
+            " }, { \"display_type\": \"number\",\"trait_type\": \"Ranking\",\"value\": ",
                 _creature.eggRanking.toString(),
-            "\" }"
+            " }, { \"display_type\": \"date\",\"trait_type\": \"birthday\",\"value\": ",
+                _creature.eggBirth.toString(),
+            " }"
         ));
         return string(abi.encodePacked(
             "{",
                 "\"name\": \"Witty Creature #", _creature.tokenId.toString(), "\",",
-                "\"description\": \"Witty Creatures 2.0 at Liscon 2021. Powered by Witnet!\",",
+                "\"description\": \"Witty Creatures LisCon 2021 Special Edition.\",",
                 "\"image_data\": \"", getCreatureImage(_creature), "\",",
                 "\"external_url\": \"", baseURI, _creature.tokenId.toString(), "\",",
                 "\"attributes\": [", _attributes, "]",
@@ -196,66 +202,95 @@ contract WitmonLiscon21
             _creature.eggCategory
         );
         return string(abi.encodePacked(
-            "<svg width='32' height='32' version='1.1' viewBox='0 0 32 32' xmlns:xlink='http://www.w3.org/1999/xlink'>",
-                _styles(_creature.eggIndex, _traits),
+            "<svg version='1.1' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>",
+                _styles(_traits),
                 "<rect width='32' height='32' class='a'/>",
                 art.backgrounds[_traits.background].svg,
                 art.species[_traits.species].svg,
-                art.hats[_traits.hat].svg,
                 art.eyewears[_traits.eyewear].svg,
+                art.hats[_traits.hat].svg,                
             "</svg>"
         ));
     }
 
-    function setArtBackgrounds(Item[] calldata _items)
+    function pushArtBackground(Item calldata _item)
         external virtual
         notForged
-        onlyDeployer
+        onlyOwner
     {
-        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no backgrounds");
-        ranges.backgrounds = uint8(_items.length);
-        for (uint _i = 0; _i < _items.length; _i ++) {
-            art.backgrounds[_i] = _items[_i];
-        }
+        art.backgrounds[ranges.backgrounds ++] = _item;
     }
 
-    function setArtEyewears(Item[] calldata _items)
+    function pushArtEyewear(Item calldata _item)
         external virtual
         notForged
-        onlyDeployer
+        onlyOwner
     {
-        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no eyewears");
-        ranges.eyewears = uint8(_items.length);
-        for (uint _i = 0; _i < _items.length; _i ++) {
-            art.eyewears[_i] = _items[_i];
-        }
+        art.eyewears[ranges.eyewears ++] = _item;
     }
 
-    function setArtHats(Item[] calldata _items)
+    function pushArtHat(Item calldata _item)
         external virtual
         notForged
-        onlyDeployer
+        onlyOwner
     {
-        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no hats");
-        ranges.hats = uint8(_items.length);
-        for (uint _i = 0; _i < _items.length; _i ++) {
-            art.hats[_i] = _items[_i];
-        }
-    }
-   
-    function setArtSpecies(Item[] calldata _items)
-        external virtual
-        notForged
-        onlyDeployer
-    {
-        require(_items.length > 0 && _items.length < 256, "WitmonERC721: no species");
-        ranges.species = uint8(_items.length);
-        for (uint _i = 0; _i < _items.length; _i ++) {
-            art.species[_i] = _items[_i];
-        }
+        art.hats[ranges.hats ++] = _item;
     }
 
-    function _styles(uint256 _creatureId, TraitIndexes memory _traits)
+    function pushArtSpecies(Item calldata _item)
+        external virtual
+        notForged
+        onlyOwner
+    {
+        art.species[ranges.species ++] = _item;
+    }
+
+    function setArtBackground(uint8 _index, Item calldata _item)
+        external virtual
+        // notForged
+        onlyOwner
+    {
+        require(_index < ranges.backgrounds, "WitmonLiscon21: out of bounds");
+        art.backgrounds[_index] = _item;
+    }
+
+    function setArtColor(uint8 _index, string calldata _colorHex)
+        external virtual
+        // notForged
+        onlyOwner
+    {
+        require(_index < art.colors.length, "WitmonLiscon21: out of bounds");
+        art.colors[_index] = _colorHex;
+    }
+
+    function setArtEyewear(uint8 _index, Item calldata _item)
+        external virtual
+        // notForged
+        onlyOwner
+    {
+        require(_index < ranges.eyewears, "WitmonLiscon21: out of bounds");
+        art.eyewears[_index] = _item;
+    }
+
+    function setArtHat(uint8 _index, Item calldata _item)
+        external virtual
+        // notForged
+        onlyOwner
+    {
+        require(_index < ranges.hats, "WitmonLiscon21: out of bounds");
+        art.hats[_index] = _item;
+    }
+
+    function setArtSpecies(uint8 _index, Item calldata _item)
+        external virtual
+        // notForged
+        onlyOwner
+    {
+        require(_index < ranges.species, "WitmonLiscon21: out of bounds");
+        art.species[_index] = _item;
+    }
+
+    function _styles(TraitIndexes memory _traits)
         internal view
         returns (string memory)
     {
@@ -277,20 +312,24 @@ contract WitmonLiscon21
         virtual
         returns (TraitIndexes memory _traits)
     {
-        uint256 _seed; uint8 _numColors = uint8(art.colors.length);
-        _traits.background = (_eggCategory == Witmons.CreatureCategory.Legendary
-                ? 1 + randomUniform(_eggPhenotype, _seed ++, ranges.backgrounds - 1)
-                : 0
-            );
+        uint _seed; uint8 _numColors = uint8(art.colors.length);
+
         _traits.baseColor = uint8(_eggIndex % _numColors);
-        _traits.eyesColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
-        _traits.eyewear = (_eggCategory != Witmons.CreatureCategory.Common
-                ? 1 + randomUniform(_eggPhenotype, _seed ++, ranges.eyewears - 1)
+        _traits.eyesColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
+        _traits.species = _eggPhenotype.randomUint8(_seed ++, ranges.species);
+
+        _traits.background = (_eggCategory == Witmons.CreatureCategory.Legendary
+                ? 1 + _eggPhenotype.randomUint8(_seed ++, ranges.backgrounds - 1)
                 : 0
             );
-        _traits.eyewearColor = randomUniform(_eggPhenotype, _seed ++, _numColors);
-        _traits.hat = randomUniformBase2(_eggPhenotype, _seed ++, 5); // TODO: set number of bits
-        _traits.hatColor = randomUniform(_eggPhenotype, _seed ++, _numColors);       
-        _traits.species = randomUniform(_eggPhenotype, _seed ++, ranges.species);
+
+        _traits.eyewear = (_eggCategory != Witmons.CreatureCategory.Common
+                ? 1 + _eggPhenotype.randomUint8(_seed ++, (ranges.eyewears * 2) / 3)
+                : 0
+            );
+        _traits.eyewearColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
+
+        _traits.hat = _eggPhenotype.randomUint8(_seed ++, (ranges.hats * 2) / 3);
+        _traits.hatColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
     }
 }
