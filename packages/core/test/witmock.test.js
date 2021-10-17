@@ -7,7 +7,7 @@ contract("WitmonMock", accounts => {
   describe("mintCreature(): ", () => {
     let witmock
     before(async () => {
-      witmock = await WitmonMock.deployed()
+      witmock = await WitmonMock.new("0x12890D2cce102216644c59daE5baed380d84830c")
     })
 
     it("should mint a new creature", async () => {

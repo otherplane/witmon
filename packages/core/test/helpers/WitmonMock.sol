@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../contracts/WitmonDecoratorBase.sol";
-import "../contracts/interfaces/IWitmonEvents.sol";
-import "../contracts/interfaces/IWitmonSurrogates.sol";
-import "../contracts/libs/Witmons.sol";
+import "../../contracts/WitmonDecoratorBase.sol";
+import "../../contracts/interfaces/IWitmonEvents.sol";
+import "../../contracts/interfaces/IWitmonSurrogates.sol";
+import "../../contracts/libs/Witmons.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 
