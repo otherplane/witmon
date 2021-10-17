@@ -365,6 +365,14 @@ contract WitmonERC721
         return _state.params;
     }
 
+    function getTokenEggIndex(uint256 _tokenId)
+        external view
+        override
+        returns (uint256)
+    {
+        return _state.eggIndex_[_tokenId];
+    }
+
     function totalSupply()
         public view
         override
