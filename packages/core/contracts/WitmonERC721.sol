@@ -252,7 +252,7 @@ contract WitmonERC721
         // Fulfill creature data:
         Witmons.Creature memory _creature = _mintCreature(
             _tokenId,
-            block.number,
+            block.timestamp,
             _eggIndex,
             _eggRanking,
             _eggScore,
