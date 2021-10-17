@@ -22,101 +22,6 @@ contract("WitmonLiscon21", _accounts => {
                 assert(baseURI[baseURI.length - 1] === "/")
             })
         })
-        describe("randomUniform(bytes32,uint256,uint8)", async () => {
-            it("zero range fails", async () => {
-                await truffleAssert.reverts(
-                    decorator.randomUniform.call(phenotype1, 0, 0),
-                    "VM Exception"
-                )
-            })
-            it("variable result when called with same seed and range but different phenotype", async () => {
-                let rnd1 = await decorator.randomUniform.call(phenotype1, 0, 254)
-                let rnd2 = await decorator.randomUniform.call(phenotype2, 0, 254)
-                assert(rnd1.toString() !== rnd2.toString())
-            })
-            it("variable result when called with same phenotype and range but different seed", async () => {
-                let rnd1 = await decorator.randomUniform.call(phenotype1, 0, 128)
-                let rnd2 = await decorator.randomUniform.call(phenotype1, 1, 128)
-                assert(rnd1.toString() !== rnd2.toString())
-            })
-            it("same result when called with same parameters", async () => {
-                let rnd1 = await decorator.randomUniform.call(phenotype2, 2, 4)
-                let rnd2 = await decorator.randomUniform.call(phenotype2, 2, 4)
-                assert.equal(rnd1.toString(), rnd2.toString())
-            })
-            // it("performing full range test works", async () => {
-            //     for (let j = 1 ; j < 256; j ++) {
-            //         await decorator.randomUniform.call(phenotype1, j, j)
-            //     }  
-            // })
-            // // it("uniformity", async () => {
-            // //     let hist = []
-            // //     hist.length = 17
-            // //     for (let j = 0 ; j < 1000; j ++) {
-            // //         let rnd = await decorator.randomUniform.call(phenotype2, j, 17)
-            // //         hist[rnd] = hist[rnd] ? hist[rnd] + 1 : 1
-            // //     }  
-            // //     console.log(JSON.stringify(hist))
-            // // })
-        })        
-        describe("randomUniformBase2(bytes32,uint256,uint8)", async () => {
-            it("zero bits fails", async () => {
-                await truffleAssert.reverts(
-                    decorator.randomUniformBase2.call(phenotype1, 0, 0),
-                    "VM Exception"
-                )
-            })
-            it("more than 8 bits fails", async () => {
-                await truffleAssert.reverts(
-                    decorator.randomUniformBase2.call(phenotype1, 0, 9),
-                    "VM Exception"
-                )
-            })
-            it("variable result when called with same seed and range but different phenotype", async () => {
-                let rnd1 = await decorator.randomUniformBase2.call(
-                    phenotype1,
-                    0,
-                    8
-                )
-                let rnd2 = await decorator.randomUniformBase2.call(
-                    phenotype2,
-                    0,
-                    8
-                )
-                assert(rnd1.toString() !== rnd2.toString())
-            })
-            it("variable result when called with same phenotype and range but different seed", async () => {
-                let rnd1 = await decorator.randomUniformBase2.call(
-                    phenotype1,
-                    0,
-                    8
-                )
-                let rnd2 = await decorator.randomUniformBase2.call(
-                    phenotype1,
-                    1,
-                    8
-                )
-                assert(rnd1.toString() !== rnd2.toString())
-            })
-            it("same result when called with same parameters", async () => {
-                let rnd1 = await decorator.randomUniformBase2.call(
-                    phenotype2,
-                    2,
-                    8
-                )
-                let rnd2 = await decorator.randomUniformBase2.call(
-                    phenotype2,
-                    2,
-                    8
-                )
-                assert.equal(rnd1.toString(), rnd2.toString())
-            })
-            it("performing full range test works", async () => {
-                for (let j = 1 ; j < 9; j ++) {
-                    await decorator.randomUniformBase2.call(phenotype1, j, j)
-                }  
-            })
-        })
     })
   
     describe("IWitmonDecorator", async () => {
@@ -134,6 +39,7 @@ contract("WitmonLiscon21", _accounts => {
                 ]
                 it("generates valid JSON", async() => {
                     metadata = await decorator.getCreatureMetadata.call(creature)
+                    // console.log(metadata)
                     // remove non-printable and other non-valid JSON chars
                     metadata = JSON.parse(metadata)
                 })
@@ -144,7 +50,7 @@ contract("WitmonLiscon21", _accounts => {
                     assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
                 it("contains no neckware attribute", async () => {
-                    console.log(metadata.attributes)
+                    // console.log(metadata.attributes)
                     assert(
                         metadata.attributes.filter(val => {
                             if (val.trait_type && val.trait_type === "Neckwear") {
