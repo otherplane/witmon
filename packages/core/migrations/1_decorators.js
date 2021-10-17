@@ -11,7 +11,7 @@ module.exports = async function (deployer, network) {
       witmonAddresses[network].WitmonLiscon21 = ""
     }
     if (witmonAddresses[network].WitmonLiscon21 === "") {
-      await deployer.deploy(WitmonLiscon21, "https://wittycreatures.com/metadata/")
+      await deployer.deploy(WitmonLiscon21, "https://api-liscon21.wittycreatures.com/metadata/")
       witmonAddresses[network].WitmonLiscon21 = WitmonLiscon21.address
       fs.writeFileSync("./migrations/witmon.addresses.json", JSON.stringify(witmonAddresses, null, 4), { flag: 'w+' })
     } else {
@@ -19,7 +19,7 @@ module.exports = async function (deployer, network) {
       console.info("   > Skipped: presumably deployed at", WitmonLiscon21.address)
     }
   } else {
-    await deployer.deploy(WitmonLiscon21, "https://wittycreatures.com/metadata/");
+    await deployer.deploy(WitmonLiscon21, "https://api-liscon21.wittycreatures.com/metadata/");
   }
   let tx, gasUsed = 0
   let decorator = await WitmonLiscon21.at(WitmonLiscon21.address)
@@ -90,6 +90,8 @@ module.exports = async function (deployer, network) {
           ["Topper", "<path class='d' d='m17 1h-2v1h-2v1h-2v1h-1v1h-1v1h-1v2h-2v4h2v-2h1v-1h2v-1h3v1h3v-1h4v1h2v1h2v1h2v1h1v-3h-1v-2h-2v-2h-2v-1h-2v-1h-1v-1h-3z'/><path class='b' d='m17 3h-3v1h-1v3h1v1h3v-1h1v-3h-1z'/><path d='m14 3v1h1v-1zm1 1v1h1v-1zm1 0h1v-1h-1zm-1 1h-1v1h1zm-1 1h-1v1h1zm0-1v-1h-1v1z' fill='#fff' opacity='.3'/><path d='m14 2v1h3v-1zm3 1v3h-1v1h-3v1h1v1h3v-1h1v-1h1v-3h-1v-1zm-4 4v-3h-1v3zm0-3h1v-1h-1z' opacity='.1'/>"],
         ]
       )
+      gasUsed += tx.receipt.gasUsed
+        gasUsed += tx.receipt.gasUsed  
       gasUsed += tx.receipt.gasUsed
     }
     console.info("     >> Forging WitmonLiscon21 decorator at", decorator.address)
