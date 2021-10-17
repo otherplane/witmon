@@ -117,7 +117,7 @@ contract WitmonERC721
         // inState(Witmons.Status.Batching)
     {
         require(address(_decorator) != address(0), "WitmonERC721: no decorator");
-        _state.decorator = _decorator;
+        _state.decorator = address(_decorator);
         emit DecoratorSet(_decorator);
     }
 
@@ -292,7 +292,7 @@ contract WitmonERC721
         );
 
         // Preview creature image:
-        return _state.decorator.getCreatureImage(
+        return IWitmonDecorator(_state.decorator).getCreatureImage(
             _mintCreature(
                 0,
                 0,
@@ -354,7 +354,7 @@ contract WitmonERC721
         override
         returns (IWitmonDecorator)
     {
-        return _state.decorator;
+        return IWitmonDecorator(_state.decorator);
     }
 
     function getParameters()
