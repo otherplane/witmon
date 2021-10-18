@@ -17,6 +17,22 @@ const errorNetworkMessage = {
   }
 }
 
+const errorMintMessage = {
+  response: {
+    data: {
+      message: `There was an error minting your NFT.`
+    }
+  }
+}
+
+const errorPreviewMessage = {
+  response: {
+    data: {
+      message: `There was an error showing the preview of your NFT.`
+    }
+  }
+}
+
 export function useWeb3Witmon () {
   let web3
   const egg = useEggStore()
@@ -35,17 +51,22 @@ export function useWeb3Witmon () {
     if ((await web3.eth.net.getNetworkType()) !== NETWORK) {
       return egg.setError('network', errorNetworkMessage)
     } else {
-      const contract = new web3.eth.Contract(
-        jsonInterface.abi,
-        CONTRACT_ADDRESS
-      )
-      const from = (await requestAccounts(web3))[0]
-      const previewArgs = await egg.getContractArgs(from)
-      const preview = await contract.methods
-        .previewCreatureImage(...previewArgs.values())
-        .call()
-      if (preview) {
-        egg.savePreview(preview)
+      try {
+        const contract = new web3.eth.Contract(
+          jsonInterface.abi,
+          CONTRACT_ADDRESS
+        )
+        const from = (await requestAccounts(web3))[0]
+        const previewArgs = await egg.getContractArgs(from)
+        const preview = await contract.methods
+          .previewCreatureImage(...previewArgs.values())
+          .call()
+        if (preview) {
+          egg.savePreview(preview)
+        }
+      } catch (err) {
+        console.error(err)
+        egg.setError('preview', errorPreviewMessage)
       }
     }
   }
@@ -73,6 +94,7 @@ export function useWeb3Witmon () {
         .mintCreature(...mintArgs.values())
         .send({ from })
         .on('error', error => {
+          egg.setError('mint', errorMintMessage)
           console.error(error)
         })
         .on('transactionHash', function (transactionHash) {
