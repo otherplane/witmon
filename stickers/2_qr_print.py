@@ -7,8 +7,13 @@ from brother_ql.conversion import convert
 from brother_ql.devicedependent import label_sizes, label_type_specs, models
 from brother_ql.raster import BrotherQLRaster
 import glob
-from PIL import Image
+from PIL import Image, ImageFont
+from PIL import ImageDraw
 from typing import List, Tuple
+
+
+def tell_color(path: str):
+    return path.split('-')[-1].split('.')[0]
 
 
 def load_image(path: str, resolution: Tuple[int, int]):
@@ -22,7 +27,14 @@ def load_image(path: str, resolution: Tuple[int, int]):
 def load_images(input_dir: str, resolution: Tuple[int, int]):
     files = glob.glob(f'{input_dir}/*-*-*.png')
 
-    return [load_image(file, resolution) for file in files]
+    return [[tell_color(file), load_image(file, resolution)] for file in files]
+
+
+def image_with_text(text: str):
+    image = Image.new('RGBA', (250, 225), 'white')
+    ImageDraw.Draw(image).text((20, 10), text, (0, 0, 0), align='center')
+
+    return image
 
 
 def ql_bulk_print(images: List[str], label: str, backend: str, model: str, printer: str, **kwargs):
@@ -42,8 +54,24 @@ def ql_resolution(label: str):
 def main(config):
     resolution = ql_resolution(config.label)
     images = load_images(config.input_dir, resolution)
-    ql_bulk_print(images[:-1], config.label, config.backend, config.model, config.printer, cut=False)
-    ql_bulk_print(images[-1:], config.label, config.backend, config.model, config.printer, cut=True)
+
+    colored_images = {
+        'green': [],
+        'black': [],
+        'red': [],
+        'purple': [],
+        'negative': [],
+        'yellow': [],
+        'blue': []
+    }
+
+    for [color, image] in images:
+        colored_images[color].append(image)
+
+    for color in colored_images:
+        ql_bulk_print([image_with_text(color)], config.label, config.backend, config.model, config.printer, cut=False)
+        ql_bulk_print(colored_images[color][:-1], config.label, config.backend, config.model, config.printer, cut=False)
+        ql_bulk_print(colored_images[color][-1:], config.label, config.backend, config.model, config.printer, cut=True)
 
 
 if __name__ == '__main__':
