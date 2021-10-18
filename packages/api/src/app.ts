@@ -5,15 +5,8 @@ import { FastifyPluginAsync } from 'fastify'
 import { fastifyMongodb } from 'fastify-mongodb'
 import { join } from 'path'
 
-import { JWT_SECRET } from './constants'
+import { EGGS_COUNT, JWT_SECRET, MONGO_URI } from './constants'
 import { EggRepository } from './repositories/egg'
-
-require('dotenv').config()
-
-// Tell how many eggs to generate
-const EGGS_COUNT = process.env.EGGS_COUNT
-  ? parseInt(process.env.EGGS_COUNT)
-  : 10
 
 export type AppOptions = {
   // Place your custom options for app below here.
@@ -49,7 +42,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   fastify.register(fastifyMongodb, {
     // force to close the mongodb connection when app stopped
     forceClose: true,
-    url: process.env.MONGO_URI,
+    url: MONGO_URI,
   })
 
   // Initialize egg repository from `eggs.json`

@@ -48,8 +48,13 @@ export const INCUBATION_POINTS_DIVISOR = process.env.INCUBATION_POINTS_DIVISOR
 
 // Secp256k1 private key used for signing in the `mint` endpoint
 export const MINT_PRIVATE_KEY =
-  process.env.MINT_PRIVATE_KEY ||
-  '0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7'
+  process.env.MINT_PRIVATE_KEY || '0x00'
+  // '0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7'
+
+// Tell how many eggs to generate
+export const EGGS_COUNT: number = process.env.EGGS_COUNT
+  ? parseInt(process.env.EGGS_COUNT)
+  : 10
 
 // Number of different egg colors
 export const EGG_COLORS_COUNT = process.env.EGG_COLORS_COUNT
@@ -71,14 +76,18 @@ export const WITMON_ERC721_ADDRESS =
   process.env.WITMON_ERC721_ADDRESS ||
   '0xadE064924d365A90975cdfaD8515E44bC31402C0'
 
+export const MONGO_URI: string = process.env.MONGO_URI || 'MONGO_URI=mongodb://your_username:your_password@localhost:27017/database'
+
 export default {
   EGG_COLORS_COUNT,
   EGG_KEY_LENGTH_BYTES,
   EGG_MINT_TIMESSTAMP,
+  EGGS_COUNT,
   INCUBATION_COOLDOWN_MILLIS,
   INCUBATION_DURATION_MILLIS,
   INCUBATION_POINTS,
   INCUBATION_POINTS_DIVISOR,
   INCUBATION_POINTS_MIN,
+  MONGO_URI,
   WITMON_ERC721_ADDRESS,
 }
