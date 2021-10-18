@@ -39,21 +39,21 @@ contract("Witmons library", _accounts => {
         it("uniformity", async () => {
             let iters = []
             let seeds = [ 
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c2",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c3",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c4",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c5",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c6",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c7",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c8",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c9",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5ca",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5cb",
-                "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5cc",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c2",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c3",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c4",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c5",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c6",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c7",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c8",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c9",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5ca",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5cb",
+                "0xc754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5cc",
             ]
             for (let i = 0; i < seeds.length; i ++) {
                 let sides = []
-                sides.length = 6
+                sides.length = 3
                 for (let j = 0 ; j < sides.length * 11; j ++) {
                     let rnd = await witmons.randomUniform.call(seeds[i], j, sides.length)
                     sides[rnd] = sides[rnd] ? sides[rnd] + 1 : 1

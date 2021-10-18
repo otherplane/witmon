@@ -28,6 +28,7 @@ contract WitmonLiscon21
     }
 
     struct TraitRanges {
+        uint8 colors;
         uint8 species;
         uint8 backgrounds;
         uint8 eyewears;
@@ -35,7 +36,7 @@ contract WitmonLiscon21
     }
 
     struct Art {
-        string[] colors;
+        mapping(uint256 => Item) colors;
         mapping(uint256 => Item) species;
         mapping(uint256 => Item) backgrounds;
         mapping(uint256 => Item) eyewears;
@@ -50,7 +51,6 @@ contract WitmonLiscon21
     Art internal art;
     bool public forged;
     TraitRanges internal ranges;
-    address internal immutable deployer;
 
     modifier notForged {
         require(!forged, "WitmonLiscon21: already forged");
@@ -64,18 +64,7 @@ contract WitmonLiscon21
 
     constructor(string memory _baseURI)
         WitmonDecoratorBase(_baseURI)
-    {
-        art.colors = [
-            "080", 
-            "333",
-            "f00",
-            "627", 
-            "eee", 
-            "fd2",
-            "00d"
-        ];
-        deployer = msg.sender;
-    }
+    {}
 
     function forge()
         external virtual
@@ -101,9 +90,12 @@ contract WitmonLiscon21
 
     function getArtColors()
         external virtual view
-        returns (string[] memory)
+        returns (Item[] memory _items)
     {
-        return art.colors;
+        _items = new Item[](ranges.colors);
+        for (uint _i = 0; _i < ranges.colors; _i ++) {
+            _items[_i] = art.colors[_i];
+        }
     }
 
     function getArtEyewears()
@@ -147,29 +139,48 @@ contract WitmonLiscon21
             _creature.eggPhenotype,
             _creature.eggCategory
         );
-        Item[4] memory _items = [
+        Item[8] memory _items = [
             art.species[_traits.species],
+            art.colors[_traits.baseColor],
+            art.colors[_traits.eyesColor],
             art.backgrounds[_traits.background],
             art.eyewears[_traits.eyewear],
-            art.hats[_traits.hat]
+            art.colors[_traits.eyewearColor],
+            art.hats[_traits.hat],
+            art.colors[_traits.hatColor]
         ];
-        string[4] memory _traitTypes = [
+        string[4] memory _simpleTraits = [
             "Creature",
-            "Background",
-            "Eyewear",
-            "Hat"
+            "Base Color",
+            "Eyes Color",
+            "Background"
         ];
         string memory _attributes;
-        for (uint8 _i = 0; _i < _items.length; _i ++) {
+        for (uint8 _i = 0; _i < _simpleTraits.length; _i ++) {
             if (bytes(_items[_i].name).length > 0) {
                 _attributes = string(abi.encodePacked(
                     _attributes,
                     bytes(_attributes).length == 0 ? "{" : ", {",
-                        "\"trait_type\": \"", _traitTypes[_i], "\",",
+                        "\"trait_type\": \"", _simpleTraits[_i], "\",",
                         "\"value\": \"", _items[_i].name, "\"",
                     "}"
                 ));
             }
+        }
+        // add optional coloured traits, if any
+        if (bytes(_items[4].name).length > 0) {
+            _attributes = string(abi.encodePacked(
+                _attributes,
+                ", { \"trait_type\": \"Eyewear\",\"value\": \"", _items[4].name, "\" }",
+                ", { \"trait_type\": \"Eyewear Color\",\"value\": \"", _items[5].name, "\" }"
+            ));
+        }
+        if (bytes(_items[6].name).length > 0) {
+            _attributes = string(abi.encodePacked(
+                _attributes,
+                ", { \"trait_type\": \"Hat\",\"value\": \"", _items[6].name, "\" }",
+                ", { \"trait_type\": \"Hat Color\",\"value\": \"", _items[7].name, "\" }"
+            ));
         }
         // add egg's score, birthday and ranking as trait_types in the attributes part
         _attributes = string(abi.encodePacked(
@@ -185,7 +196,7 @@ contract WitmonLiscon21
         return string(abi.encodePacked(
             "{",
                 "\"name\": \"Witty Creature #", _creature.tokenId.toString(), "\",",
-                "\"description\": \"Witty Creatures LisCon 2021 Special Edition.\",",
+                "\"description\": \"Powered by Witnet oracle's Random Number Generator.\",",
                 "\"image_data\": \"", getCreatureImage(_creature), "\",",
                 "\"external_url\": \"", baseURI, _creature.tokenId.toString(), "\",",
                 "\"attributes\": [", _attributes, "]",
@@ -224,6 +235,14 @@ contract WitmonLiscon21
         art.backgrounds[ranges.backgrounds ++] = _item;
     }
 
+    function pushArtColor(Item calldata _item)
+        external virtual
+        notForged
+        onlyOwner
+    {
+        art.colors[ranges.colors ++] = _item;
+    }
+
     function pushArtEyewear(Item calldata _item)
         external virtual
         notForged
@@ -257,13 +276,13 @@ contract WitmonLiscon21
         art.backgrounds[_index] = _item;
     }
 
-    function setArtColor(uint8 _index, string calldata _colorHex)
+    function setArtColor(uint8 _index, Item calldata _item)
         external virtual
         // notForged
         onlyOwner
     {
-        require(_index < art.colors.length, "WitmonLiscon21: out of bounds");
-        art.colors[_index] = _colorHex;
+        require(_index < ranges.colors, "WitmonLiscon21: out of bounds");
+        art.colors[_index] = _item;
     }
 
     function setArtEyewear(uint8 _index, Item calldata _item)
@@ -298,10 +317,10 @@ contract WitmonLiscon21
         returns (string memory)
     {
         return string(abi.encodePacked(
-            "<style> .a { fill: #", art.colors[_traits.baseColor],
-            "; } .b { fill: #", art.colors[_traits.eyesColor],
-            "; } .c { fill: #", art.colors[_traits.eyewearColor],
-            "; } .d { fill: #", art.colors[_traits.hatColor],
+            "<style> .a { fill: #", art.colors[_traits.baseColor].svg,
+            "; } .b { fill: #", art.colors[_traits.eyesColor].svg,
+            "; } .c { fill: #", art.colors[_traits.eyewearColor].svg,
+            "; } .d { fill: #", art.colors[_traits.hatColor].svg,
             "; }</style>"
         ));
     }
@@ -315,23 +334,19 @@ contract WitmonLiscon21
         virtual
         returns (TraitIndexes memory _traits)
     {
-        uint _seed; uint8 _numColors = uint8(art.colors.length);
-
+        uint _seed; uint8 _numColors = ranges.colors;
         _traits.baseColor = uint8(_eggIndex % _numColors);
         _traits.eyesColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
         _traits.species = _eggPhenotype.randomUint8(_seed ++, ranges.species);
-
         _traits.background = (_eggCategory == Witmons.CreatureCategory.Legendary
                 ? 1 + _eggPhenotype.randomUint8(_seed ++, ranges.backgrounds - 1)
                 : 0
             );
-
         _traits.eyewear = (_eggCategory != Witmons.CreatureCategory.Common
                 ? 1 + _eggPhenotype.randomUint8(_seed ++, (ranges.eyewears * 2) / 3)
                 : 0
             );
         _traits.eyewearColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
-
         _traits.hat = _eggPhenotype.randomUint8(_seed ++, (ranges.hats * 2) / 3);
         _traits.hatColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
     }

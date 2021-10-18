@@ -254,7 +254,7 @@ contract WitmonERC721
         // Fulfill creature data:
         Witmons.Creature memory _creature = _mintCreature(
             _tokenId,
-            block.timestamp,
+            block.timestamp, // solhint-disable not-rely-on-time
             _eggIndex,
             _eggRanking,
             _eggScore,
