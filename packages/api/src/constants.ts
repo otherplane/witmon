@@ -60,7 +60,7 @@ export const EGG_COLORS_COUNT = process.env.EGG_COLORS_COUNT
 // If `EGG_MINT_TIMESSTAMP=0`, checks are ignored (for testing purposes)
 export const EGG_MINT_TIMESSTAMP = process.env.EGG_MINT_TIMESSTAMP
   ? parseInt(process.env.EGG_MINT_TIMESSTAMP)
-  : 1635116400 // Sunday, October 24, 2021 11:00:00 PM (GMT)
+  : 1634835600 // Thursday, October 21, 2021 17:00:00 PM (GMT)
 
 // Web3 provider URL
 export const WEB3_PROVIDER =
