@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+/// @title Witty Creatures 2.0 Token surrogating interface.
+/// @author Otherplane Labs, 2021.
 interface IWitmonSurrogates {
     function mintCreature(
         address _eggOwner,

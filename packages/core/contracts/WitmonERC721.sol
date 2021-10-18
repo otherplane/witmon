@@ -14,6 +14,8 @@ import "./interfaces/IWitmonEvents.sol";
 import "./interfaces/IWitmonSurrogates.sol";
 import "./interfaces/IWitmonView.sol";
 
+/// @title Witty Creatures 2.0 - ERC721 Token contract
+/// @author Otherplane Labs, 2021.
 contract WitmonERC721
     is
         ERC721,

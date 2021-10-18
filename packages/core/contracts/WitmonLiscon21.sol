@@ -3,8 +3,11 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+
 import "./WitmonDecoratorBase.sol";
 
+/// @title Decorator contract providing specific art content for Liscon 2021.
+/// @author Otherplane Labs, 2021.
 contract WitmonLiscon21
     is
         Ownable,
@@ -151,7 +154,7 @@ contract WitmonLiscon21
             art.hats[_traits.hat]
         ];
         string[4] memory _traitTypes = [
-            "Species",
+            "Creature",
             "Background",
             "Eyewear",
             "Hat"

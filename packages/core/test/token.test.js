@@ -732,7 +732,7 @@ contract("WitmonERC721", accounts => {
                         let metadata = await witmon.metadata.call(1)
                         // remove non-printable and other non-valid JSON chars
                         metadata = JSON.parse(metadata)
-                        assert.equal(metadata.external_url, "https://wittycreatures.com/metadata/1")
+                        assert.equal(metadata.external_url, "https://api-liscon21.wittycreatures.com/metadata/1")
                     })
                     it("getting metadata from inexistent token fails", async () => {
                         await truffleAssert.reverts(
@@ -744,11 +744,11 @@ contract("WitmonERC721", accounts => {
                 describe("tokenURI(_tokenId)", async () => {
                     it("tokenURI of a previously minted creature should be valid", async () => {
                         let tokenURI = await witmon.tokenURI.call(1)
-                        assert.equal(tokenURI, "https://wittycreatures.com/metadata/1")
+                        assert.equal(tokenURI, "https://api-liscon21.wittycreatures.com/metadata/1")
                         tokenURI = await witmon.tokenURI.call(2)
-                        assert.equal(tokenURI, "https://wittycreatures.com/metadata/2")
+                        assert.equal(tokenURI, "https://api-liscon21.wittycreatures.com/metadata/2")
                         tokenURI = await witmon.tokenURI.call(3)
-                        assert.equal(tokenURI, "https://wittycreatures.com/metadata/3")
+                        assert.equal(tokenURI, "https://api-liscon21.wittycreatures.com/metadata/3")
                     })
                     it("getting tokenURI from inexistent token fails", async () => {
                         await truffleAssert.reverts(

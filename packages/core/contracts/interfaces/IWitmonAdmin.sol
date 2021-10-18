@@ -3,6 +3,8 @@ pragma solidity ^0.8.0;
 
 import "./IWitmonDecorator.sol";
 
+/// @title Witty Creatures 2.0 Token only-owner interface.
+/// @author Otherplane Labs, 2021.
 interface IWitmonAdmin {
     /// Change token/creature decorator.
     /// @param _decorator Decorating logic contract producing a creature's metadata, and picture.

@@ -3,6 +3,8 @@ pragma solidity ^0.8.0;
 
 import "./IWitmonDecorator.sol";
 
+/// @title Witty Creatures 2.0 Token viewing interface.
+/// @author Otherplane Labs, 2021.
 interface IWitmonView {
     function getCreatureData(uint256 _eggIndex) external view returns (Witmons.Creature memory);
     function getCreatureImage(uint256 _eggIndex) external view returns (string memory);
