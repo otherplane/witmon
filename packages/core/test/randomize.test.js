@@ -17,13 +17,13 @@ contract("Witmons library", _accounts => {
             )
         })
         it("variable result when called with same seed and range but different phenotype", async () => {
-            let rnd1 = await witmons.randomUniform.call(phenotype1, 0, 254)
-            let rnd2 = await witmons.randomUniform.call(phenotype2, 0, 254)
+            let rnd1 = await witmons.randomUniform.call(phenotype1, 0, 255)
+            let rnd2 = await witmons.randomUniform.call(phenotype2, 0, 255)
             assert(rnd1.toString() !== rnd2.toString())
         })
         it("variable result when called with same phenotype and range but different seed", async () => {
-            let rnd1 = await witmons.randomUniform.call(phenotype1, 0, 127)
-            let rnd2 = await witmons.randomUniform.call(phenotype1, 1, 127)
+            let rnd1 = await witmons.randomUniform.call(phenotype1, 0, 128)
+            let rnd2 = await witmons.randomUniform.call(phenotype1, 1, 128)
             assert(rnd1.toString() !== rnd2.toString())
         })
         it("same result when called with same parameters", async () => {
@@ -32,7 +32,7 @@ contract("Witmons library", _accounts => {
             assert.equal(rnd1.toString(), rnd2.toString())
         })
         it("performing full range test works", async () => {
-            for (let j = 1 ; j < 255; j ++) {
+            for (let j = 1 ; j < 256; j ++) {
                 await witmons.randomUniform.call(phenotype1, j, j)
             }  
         })

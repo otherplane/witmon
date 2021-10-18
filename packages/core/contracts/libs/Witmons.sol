@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "witnet-solidity-bridge/contracts/interfaces/IWitnetRequest.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
+/// @title Witmons Library: data model and helper functions
+/// @author Otherplane Labs, 2021.
 library Witmons {
 
     struct State {
@@ -129,7 +131,7 @@ library Witmons {
         returns (uint8)
     {
         assert(_range > 0);
-        uint8 _flagBits = msbDeBruijn32(uint32(_range)) << 3;
+        uint8 _flagBits = uint8(255 - msbDeBruijn32(uint32(_range)));
         uint256 _number = uint256(keccak256(abi.encode(_seed, _index))) & uint256(2 ** _flagBits - 1);
         return uint8((_number * _range) >> _flagBits); 
     }

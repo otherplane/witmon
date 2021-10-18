@@ -3,6 +3,8 @@ pragma solidity ^0.8.0;
 
 import "./IWitmonDecorator.sol";
 
+/// @title Witty Creatures 2.0 Token events.
+/// @author Otherplane Labs, 2021.
 interface IWitmonEvents {
     event BatchParameters(
         address signator,
