@@ -30,7 +30,7 @@
         </h3>
         <div class="mt-2">
           <p class="text-sm text-gray-500 mb-2">
-            Go to the following link to import your creature in that browser:
+            Copy the link to import your creature in another browser:
           </p>
           <p class="import-link text-xs text-gray-400">{{ importLink }}</p>
         </div>
@@ -74,7 +74,6 @@ export default defineComponent({
       importLink,
       async copyToClipboard () {
         await copyTextToClipboard(importLink)
-
         egg.notify({ message: 'Copied', icon: 'none' })
       }
     }

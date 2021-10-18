@@ -4,7 +4,7 @@
       <p class="message">
         {{ message }}
       </p>
-      <p v-if="icon" class="warning">{{ icon }} ️</p>
+      <!-- <p v-if="icon" class="warning">{{ icon }} ️</p> -->
     </div>
   </transition>
 </template>
@@ -88,7 +88,7 @@ export default {
   .message {
     color: white;
     font-size: 14px;
-    padding: 8px 8px 8px 16px;
+    padding: 8px 16px;
   }
 }
 </style>

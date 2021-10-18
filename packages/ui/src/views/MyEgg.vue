@@ -154,8 +154,8 @@ export default {
     }
 
     function openModal (name) {
-        modals[name] = true
-        modal.showModal()
+      modals[name] = true
+      modal.showModal()
     }
 
     function closeModal () {

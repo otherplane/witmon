@@ -3,14 +3,6 @@
   <div class="container">
     <p class="small-title import-label">Scan a QR code</p>
     <QrStream class="qr-code pl-4 pr-4 pb-4" @decode="onDecode"></QrStream>
-
-    <Button class="select-file-btn" color="orange" @click="triggerSelectFile">
-      <label v-if="!fileInfo" class="select-file-btn">
-        <span class="mt-2 text-base leading-normal">Select a file</span>
-      </label>
-    </Button>
-
-    <input ref="myFile" type="file" class="hidden" @change="onFileSelected" />
     <ModalDialog :show="modal.visible.value" v-on:close="modal.hideModal">
       <ModalClaimConfirmation v-on:claim="claimEgg" />
     </ModalDialog>
@@ -36,16 +28,7 @@ export default {
     const decodedString = ref('')
 
     const router = useRouter()
-    const fileUploader = useFileUploader()
     const previousRoute = ref('')
-
-    function saveInfo () {
-      egg.saveClaimInfo(fileUploader.fileInfo.value)
-      router.push({
-        name: 'egg',
-        params: { id: fileUploader.fileInfo.value.key }
-      })
-    }
 
     function submitAndRedirect () {
       router.push({ name: 'egg', params: { id: eggKey.value } })
@@ -54,7 +37,11 @@ export default {
     function onDecode (value) {
       if (value) {
         decodedString.value = value
-        modal.showModal()
+        if (!egg.getToken()) {
+          modal.showModal()
+        } else {
+          claimEgg()
+        }
       }
     }
 
@@ -69,12 +56,7 @@ export default {
 
     return {
       egg,
-      onFileSelected: fileUploader.onFileSelected,
-      triggerSelectFile: fileUploader.triggerSelectFile,
-      myFile: fileUploader.myFile,
-      fileInfo: fileUploader.fileInfo,
       eggKey,
-      saveInfo,
       submitAndRedirect,
       onDecode,
       previousRoute,
