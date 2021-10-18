@@ -25,7 +25,7 @@ const claim: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         return reply
           .status(403)
           .send(
-            new Error(`Claiming is not posssible because the game is over.`)
+            new Error(`Claiming is not possible because the game is over.`)
           )
 
       const key = request.body.key
