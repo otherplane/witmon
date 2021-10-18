@@ -92,6 +92,10 @@
       <Button @click="openModal('export')" color="grey" class="center-item">
         Eggxport &trade;
       </Button>
+      <p class="footer">
+        power by
+        <a class="link" href="https://witnet.io" target="_blank">Witnet</a>
+      </p>
     </div>
   </div>
 
@@ -229,6 +233,16 @@ export default {
       margin-left: 4px;
       margin-bottom: 4px;
     }
+  }
+}
+.footer {
+  font-size: 12px;
+  font-weight: bold;
+  color: rgb(128, 128, 128);
+  text-align: center;
+  padding-top: 8px;
+  .link {
+    text-decoration: underline;
   }
 }
 .buttons {
