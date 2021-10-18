@@ -44,7 +44,7 @@
     </div>
     <div class="buttons">
       <Button
-        v-if="egg.hasBorn && isProviderConnected && !egg.creaturePreview"
+        v-if="egg.hasBorn && !egg.creaturePreview"
         @click="openModal('openEgg')"
         color="black"
         class="center-item"
@@ -52,13 +52,13 @@
         Open my egg
       </Button>
       <Button
-        v-else-if="egg.hasBorn && isProviderConnected && egg.creaturePreview"
+        v-else-if="egg.hasBorn && egg.creaturePreview"
         @click="openModal('mint')"
         :type="type"
         color="black"
         class="center-item"
       >
-        Mint egg
+        Mint
       </Button>
       <Button
         v-if="!egg.hasBorn"
@@ -93,7 +93,7 @@
         Eggxport &trade;
       </Button>
       <p class="footer">
-        power by
+        powered by
         <a class="link" href="https://witnet.io" target="_blank">Witnet</a>
       </p>
     </div>
@@ -101,6 +101,7 @@
 
   <ModalDialog :show="modal.visible.value" v-on:close="closeModal">
     <ModalExport v-if="modals.export" />
+    <GameOverModal v-if="modals.gameOver" />
     <ModalMint v-if="modals.mint" />
     <ModalOpenEgg v-if="modals.openEgg" />
   </ModalDialog>
@@ -108,7 +109,14 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
-import { computed, onBeforeMount, onBeforeUnmount, reactive } from 'vue'
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  reactive,
+  watch,
+  ref
+} from 'vue'
 
 import imageUrl from '@/assets/egg-example.png'
 import { useModal } from '@/composables/useModal'
@@ -122,8 +130,10 @@ export default {
     const modals = reactive({
       mint: false,
       export: false,
-      openEgg: false
+      openEgg: false,
+      gameOver: false
     })
+    const hasBorn = egg.hasBorn
     let timeout
 
     onBeforeMount(async () => {
@@ -158,7 +168,12 @@ export default {
     }
 
     function openModal (name) {
-      modals[name] = true
+      const needProvider = name === 'mint' || name === 'openEgg'
+      if (!web3Witmon.isProviderConnected.value && needProvider) {
+        modals['gameOver'] = true
+      } else {
+        modals[name] = true
+      }
       modal.showModal()
     }
 
@@ -166,10 +181,12 @@ export default {
       modals.mint = false
       modals.export = false
       modals.openEgg = false
+      modals.gameOver = false
       modal.hideModal()
     }
 
     return {
+      hasBorn,
       egg,
       type,
       incubateMyEgg,

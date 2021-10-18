@@ -12,12 +12,12 @@
           class="text-lg leading-6 font-medium text-gray-900"
           id="modal-title"
         >
-          Open your egg and preview your WittyCreature
+          Hatch your Witty Creature
         </h3>
         <div class="mt-2">
           <p class="text-sm text-gray-900">
-            Opening an egg does not mean you got the NFT, once open, click 'Mint
-            egg' to mint your WittyCreature
+            This is a preview of the NFT, click the 'Mint' button to receive
+            your Witty Creature NFT.
           </p>
         </div>
       </div>

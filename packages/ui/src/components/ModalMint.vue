@@ -41,7 +41,9 @@
         </h3>
         <div class="mt-2">
           <p class="text-sm text-gray-900">
-            Are you sure you want to mint your Witty Creature?
+            A Witty Creature NFT is about to appear in the Metaverse. The
+            minting process will occur in the Ethereum mainnet and it is powered
+            by the Witnet Random Number Generator (RNG) functionality.
           </p>
         </div>
       </div>

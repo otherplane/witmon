@@ -12,7 +12,7 @@ async function requestAccounts (web3) {
 const errorNetworkMessage = {
   response: {
     data: {
-      message: `Your MetaMask should be connected to the ${NETWORK} network`
+      message: `Your web3 provider should be connected to the ${NETWORK} network`
     }
   }
 }
