@@ -14,7 +14,7 @@
         v-if="!hasBorn && timeToBirth"
         class="info time"
         :timestamp="timeToBirth"
-        :seconds="false"
+        :seconds="true"
       />
     </div>
     <div>
@@ -46,5 +46,16 @@ export default {
 }
 .label {
   margin-bottom: 4px;
+}
+.info {
+  height: 35px;
+  display: flex;
+  align-items: center;
+}
+.time {
+  width: 170px;
+  text-justify: center;
+  font-size: 20px;
+  font-weight: 500;
 }
 </style>

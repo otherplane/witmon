@@ -17,7 +17,7 @@
         <div class="mt-2">
           <p class="text-sm text-gray-900">
             Opening an egg does not mean you got the NFT, once open, click 'Mint
-            egg' to mint your WittyCreature
+            egg' to mint your WittyCreature.
           </p>
         </div>
       </div>
