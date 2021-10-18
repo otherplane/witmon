@@ -10,7 +10,7 @@
         The game consist in
         <span class="black">increasing your EggScore™</span> by convincing other
         players to incubate your egg. The higher your EggScore™ is, the more
-        numerous and rare traits your WittyCreature NFT will get. Traits with
+        numerous and rare traits your Witty Creature NFT will get. Traits with
         the same level of rarity are chosen at random by the
         <span class="black">Witnet oracle’s new Random Number Generator</span>
         functionality.
