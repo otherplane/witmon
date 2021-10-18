@@ -58,7 +58,7 @@
         color="black"
         class="center-item"
       >
-        Mint
+        Mint NFT
       </Button>
       <Button
         v-if="!egg.hasBorn"

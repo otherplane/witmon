@@ -1,6 +1,6 @@
 export const CONTRACT_ADDRESS =
   import.meta.env.CONTRACT_ADDRESS ||
-  '0xadE064924d365A90975cdfaD8515E44bC31402C0'
+  '0x691908f883E006C0fB42da190A9EA07E6996D6c6'
 
 export const NETWORK = import.meta.env.NETWORK || 'rinkeby'
 
