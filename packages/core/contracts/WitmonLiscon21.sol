@@ -189,8 +189,8 @@ contract WitmonLiscon21
                 _creature.eggScore.toString(),
             " }, { \"display_type\": \"number\",\"trait_type\": \"Ranking\",\"value\": ",
                 _creature.eggRanking.toString(),
-            " }, { \"display_type\": \"date\",\"trait_type\": \"birthday\",\"value\": ",
-                _creature.eggBirth.toString(),
+            // " }, { \"display_type\": \"date\",\"trait_type\": \"birthdate\",\"value\": ",
+            //     _creature.eggBirth.toString(),
             " }"
         ));
         return string(abi.encodePacked(
