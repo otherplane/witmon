@@ -24,9 +24,7 @@
         <p class="label">CONTRACT ADDRESS</p>
         <div class="address">
           <a
-            :href="
-              `https://rinkeby.etherscan.io/tx/${egg.mintInfo.transactionHash}`
-            "
+            :href="`${etherscanBaseUrl}/${egg.mintInfo.transactionHash}`"
             target="_blank"
             >{{ egg.mintInfo.transactionHash }}
           </a>
@@ -35,11 +33,7 @@
       </div>
       <div class="mint-status">
         <div class="opensea" v-if="creatureData && creatureData.tokenId">
-          <a
-            :href="
-              `https://testnets.opensea.io/assets/0x691908f883e006c0fb42da190a9ea07e6996d6c6/${creatureData.tokenId}`
-            "
-            target="_blank"
+          <a :href="`${openseaBaseUrl}/${creatureData.tokenId}`" target="_blank"
             >See on OpenSea
           </a>
           <img
@@ -125,18 +119,11 @@
 
 <script>
 import { useEggStore } from '@/stores/egg'
-import {
-  computed,
-  onBeforeMount,
-  onBeforeUnmount,
-  reactive,
-  watch,
-  ref
-} from 'vue'
-
+import { computed, onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue'
 import imageUrl from '@/assets/egg-example.png'
 import { useModal } from '@/composables/useModal'
 import { useWeb3Witmon } from '../composables/useWeb3Witmon'
+import { ETHERSCAN_BASE_URL, OPENSEA_BASE_URL } from '../constants'
 
 export default {
   setup () {
@@ -212,6 +199,8 @@ export default {
     }
 
     return {
+      etherscanBaseUrl: ETHERSCAN_BASE_URL,
+      openseaBaseUrl: OPENSEA_BASE_URL,
       mint,
       hasBorn,
       egg,

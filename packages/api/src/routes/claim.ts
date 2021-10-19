@@ -24,9 +24,7 @@ const claim: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       if (EGG_MINT_TIMESSTAMP && isTimeToMint())
         return reply
           .status(403)
-          .send(
-            new Error(`Claiming is not possible because the game is over.`)
-          )
+          .send(new Error(`Claiming is not possible because the game is over.`))
 
       const key = request.body.key
       const egg = await repository.get(key)
