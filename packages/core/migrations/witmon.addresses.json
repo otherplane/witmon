@@ -1,10 +1,10 @@
 {
     "ethereum.goerli": {
-        "WitmonERC721": "0x8269fF993A39fc5c8bEa0DEDE792952f9EEF2371",
-        "WitmonLiscon21": "0x39eCd92157D933a3F842b71C42f9EcD01009276b"
+        "WitmonERC721": "0xFFba4c56CDeC9B29261559698Ae051659662e49F",
+        "WitmonLiscon21": "0x53D19b5f4aF211532AaCa8d7BE21A1B1f59a3bca"
     },
     "ethereum.rinkeby": {
-        "WitmonLiscon21": "0xc0eAccCa3cb41887601db825cf2b0081b69F7F98",
+        "WitmonLiscon21": "0x6D11815A35e9BD4c6DE0467c7f05b2480C478A17",
         "WitmonERC721": "0x691908f883E006C0fB42da190A9EA07E6996D6c6"
     }
 }
