@@ -33,7 +33,11 @@
       </div>
       <div
         class="mint-status"
-        v-if="egg.creatureData && parseInt(egg.creatureData.tokenId) !== 0"
+        v-if="
+          egg.creatureData &&
+            egg.creatureData.tokenId &&
+            parseInt(egg.creatureData.tokenId) !== 0
+        "
       >
         <div class="opensea">
           <a
