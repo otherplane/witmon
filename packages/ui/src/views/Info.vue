@@ -52,7 +52,9 @@
         <span class="black">exclusive NFT</span> out of a
         <span class="black">limited series of 500</span> will be born, and you
         will be able to <span class="black">mint</span> it on
-        <span class="black">Ethereum</span>!.
+        <span class="black">Ethereum</span>! The minting period will last for
+        <span class="black">1 month</span>
+        and unclaimed eggs will be forever lost.
       </p>
     </div>
   </div>
