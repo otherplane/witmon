@@ -33,6 +33,22 @@
           <img class="external-link-icon" src="@/assets/external.svg" alt="" />
         </div>
       </div>
+      <div class="mint-status">
+        <div class="opensea" v-if="creatureData && creatureData.tokenId">
+          <a
+            :href="
+              `https://testnets.opensea.io/assets/0x691908f883e006c0fb42da190a9ea07e6996d6c6/${creatureData.tokenId}`
+            "
+            target="_blank"
+            >See on OpenSea
+          </a>
+          <img
+            class="external-link-icon"
+            src="@/assets/external-black.svg"
+            alt=""
+          />
+        </div>
+      </div>
       <IncubationInfo
         v-if="!egg.hasBorn"
         :incubatedByTimeLeft="egg.incubatedByTimeLeft"
@@ -53,7 +69,7 @@
       </Button>
       <Button
         v-else-if="egg.hasBorn && egg.creaturePreview"
-        @click="openModal('mint')"
+        @click="mint"
         :type="type"
         color="black"
         class="center-item"
@@ -127,6 +143,7 @@ export default {
     const modal = useModal()
     const egg = useEggStore()
     const web3Witmon = useWeb3Witmon()
+    const creatureData = ref(null)
     const modals = reactive({
       mint: false,
       export: false,
@@ -140,6 +157,9 @@ export default {
       await egg.getEggInfo()
       await egg.getMintInfo()
       await egg.getPreview()
+      if (egg.hasBorn) {
+        creatureData.value = await web3Witmon.getCreatureData()
+      }
 
       if (!egg.hasBorn) {
         timeout = setTimeout(() => {
@@ -153,7 +173,7 @@ export default {
     })
 
     const type = computed(() =>
-      egg.incubating || (egg.mintInfo && egg.mintInfo.blockHash)
+      egg.incubating || (creatureData.value && creatureData.value.tokenId !== 0)
         ? 'disable'
         : 'default'
     )
@@ -185,7 +205,14 @@ export default {
       modal.hideModal()
     }
 
+    function mint () {
+      if (type.value !== 'disable') {
+        openModal('mint')
+      }
+    }
+
     return {
+      mint,
       hasBorn,
       egg,
       type,
@@ -196,10 +223,11 @@ export default {
       modal,
       modals,
       mintStatus,
+      creatureData,
       enableProvider: web3Witmon.enableProvider,
       openEgg: web3Witmon.openEgg,
       isProviderConnected: web3Witmon.isProviderConnected,
-      mint: web3Witmon.mint
+      getCreatureData: web3Witmon.getCreatureData
     }
   }
 }
@@ -241,6 +269,18 @@ export default {
       cursor: pointer;
       background-color: rgb(237, 240, 247);
       color: rgb(242, 157, 98);
+      padding: 16px;
+      border-radius: 15px;
+    }
+    .opensea {
+      font-weight: 600;
+      max-width: 100%;
+      word-break: break-all;
+      font-size: 16px;
+      text-decoration: underline;
+      cursor: pointer;
+      background-color: rgb(237, 240, 247);
+      color: black;
       padding: 16px;
       border-radius: 15px;
     }

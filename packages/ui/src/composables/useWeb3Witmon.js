@@ -9,29 +9,20 @@ async function requestAccounts (web3) {
   return await web3.givenProvider.request({ method: 'eth_requestAccounts' })
 }
 
-const errorNetworkMessage = {
-  response: {
-    data: {
-      message: `Your web3 provider should be connected to the ${NETWORK} network`
+function createErrorMessage (message) {
+  return {
+    response: {
+      data: {
+        message
+      }
     }
   }
 }
 
-const errorMintMessage = {
-  response: {
-    data: {
-      message: `There was an error minting your NFT.`
-    }
-  }
-}
-
-const errorPreviewMessage = {
-  response: {
-    data: {
-      message: `There was an error showing the preview of your NFT.`
-    }
-  }
-}
+const errorNetworkMessage = `Your web3 provider should be connected to the ${NETWORK} network`
+const errorCreatureDataMessage = `There was an error getting the Witty Creature data`
+const errorMintMessage = `There was an error minting your NFT.`
+const errorPreviewMessage = `There was an error showing the preview of your NFT.`
 
 export function useWeb3Witmon () {
   let web3
@@ -49,7 +40,7 @@ export function useWeb3Witmon () {
 
   async function openEgg () {
     if ((await web3.eth.net.getNetworkType()) !== NETWORK) {
-      return egg.setError('network', errorNetworkMessage)
+      return egg.setError('network', createErrorMessage(errorNetworkMessage))
     } else {
       try {
         const contract = new web3.eth.Contract(
@@ -66,7 +57,7 @@ export function useWeb3Witmon () {
         }
       } catch (err) {
         console.error(err)
-        egg.setError('preview', errorPreviewMessage)
+        egg.setError('preview', createErrorMessage(errorPreviewMessage))
       }
     }
   }
@@ -80,9 +71,35 @@ export function useWeb3Witmon () {
     }
   })
 
+  async function getCreatureData () {
+    if ((await web3.eth.net.getNetworkType()) !== NETWORK) {
+      return egg.setError('network', createErrorMessage(errorNetworkMessage))
+    } else {
+      try {
+        const contract = new web3.eth.Contract(
+          jsonInterface.abi,
+          CONTRACT_ADDRESS
+        )
+        const from = (await requestAccounts(web3))[0]
+        const creatureData = await contract.methods
+          .getCreatureData(egg.index)
+          .call()
+        if (creatureData) {
+          return creatureData
+        }
+      } catch (err) {
+        console.error(err)
+        egg.setError(
+          'creatureData',
+          createErrorMessage(errorCreatureDataMessage)
+        )
+      }
+    }
+  }
+
   async function mint () {
     if ((await web3.eth.net.getNetworkType()) !== NETWORK) {
-      return egg.setError('network', errorNetworkMessage)
+      return egg.setError('network', createErrorMessage(errorNetworkMessage))
     } else {
       const contract = new web3.eth.Contract(
         jsonInterface.abi,
@@ -94,7 +111,7 @@ export function useWeb3Witmon () {
         .mintCreature(...mintArgs.values())
         .send({ from })
         .on('error', error => {
-          egg.setError('mint', errorMintMessage)
+          egg.setError('mint', createErrorMessage(errorMintMessage))
           console.error(error)
         })
         .on('transactionHash', function (transactionHash) {
@@ -118,6 +135,7 @@ export function useWeb3Witmon () {
     isProviderConnected,
     creaturePreview,
     enableProvider,
-    openEgg
+    openEgg,
+    getCreatureData
   }
 }
