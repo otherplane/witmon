@@ -28,7 +28,8 @@ contract WitmonLiscon21
     }
 
     struct TraitRanges {
-        uint8 colors;
+        uint8 baseColors;
+        uint8 traitColors;
         uint8 species;
         uint8 backgrounds;
         uint8 eyewears;
@@ -36,11 +37,12 @@ contract WitmonLiscon21
     }
 
     struct Art {
-        mapping(uint256 => Item) colors;
-        mapping(uint256 => Item) species;
         mapping(uint256 => Item) backgrounds;
+        mapping(uint256 => Item) baseColors;
         mapping(uint256 => Item) eyewears;
         mapping(uint256 => Item) hats;
+        mapping(uint256 => Item) species;
+        mapping(uint256 => Item) traitColors;
     }
 
     struct Item {
@@ -52,13 +54,18 @@ contract WitmonLiscon21
     bool public forged;
     TraitRanges internal ranges;
 
-    modifier notForged {
-        require(!forged, "WitmonLiscon21: already forged");
+    modifier checkBounds(uint8 _index, uint8 _range) {
+        require(_index < _range, "WitmonLiscon21: out of bounds");
         _;
     }
 
     modifier isForged {
         require(forged, "WitmonLiscon21: not forged");
+        _;
+    }
+
+    modifier notForged {
+        require(!forged, "WitmonLiscon21: already forged");
         _;
     }
 
@@ -71,10 +78,12 @@ contract WitmonLiscon21
         notForged
         onlyOwner
     {
+        require(ranges.baseColors > 0, "WitmonLiscon21: no base colors");
         require(ranges.backgrounds > 0, "WitmonLiscon21: no backgrounds");
         require(ranges.eyewears > 0, "WitmonLiscon21: no eyewears");
         require(ranges.hats > 0, "WitmonLiscon21: no hats");
         require(ranges.species > 0, "WitmonLiscon21: no species");
+        require(ranges.traitColors > 0, "WitmonLiscon21: no trait colors");
         forged = true;
     }
 
@@ -88,13 +97,13 @@ contract WitmonLiscon21
         }
     }
 
-    function getArtColors()
+    function getArtBaseColors()
         external virtual view
         returns (Item[] memory _items)
     {
-        _items = new Item[](ranges.colors);
-        for (uint _i = 0; _i < ranges.colors; _i ++) {
-            _items[_i] = art.colors[_i];
+        _items = new Item[](ranges.baseColors);
+        for (uint _i = 0; _i < ranges.baseColors; _i ++) {
+            _items[_i] = art.baseColors[_i];
         }
     }
 
@@ -128,6 +137,16 @@ contract WitmonLiscon21
         }
     }
 
+    function getArtTraitColors()
+        external virtual view
+        returns (Item[] memory _items)
+    {
+        _items = new Item[](ranges.traitColors);
+        for (uint _i = 0; _i < ranges.traitColors; _i ++) {
+            _items[_i] = art.traitColors[_i];
+        }
+    }
+
     function getCreatureMetadata(Witmons.Creature memory _creature)
         external view
         virtual override
@@ -141,13 +160,13 @@ contract WitmonLiscon21
         );
         Item[8] memory _items = [
             art.species[_traits.species],
-            art.colors[_traits.baseColor],
-            art.colors[_traits.eyesColor],
+            art.baseColors[_traits.baseColor],
+            art.traitColors[_traits.eyesColor],
             art.backgrounds[_traits.background],
             art.eyewears[_traits.eyewear],
-            art.colors[_traits.eyewearColor],
+            art.traitColors[_traits.eyewearColor],
             art.hats[_traits.hat],
-            art.colors[_traits.hatColor]
+            art.traitColors[_traits.hatColor]
         ];
         string[4] memory _simpleTraits = [
             "Creature",
@@ -185,11 +204,11 @@ contract WitmonLiscon21
         // add egg's score, birthday and ranking as trait_types in the attributes part
         _attributes = string(abi.encodePacked(
             _attributes,
-            ", { \"trait_type\": \"EggScore\",\"value\": ", 
+            ", { \"trait_type\": \"EggScore\",\"value\": ",
                 _creature.eggScore.toString(),
             " }, { \"display_type\": \"number\",\"trait_type\": \"Ranking\",\"value\": ",
                 _creature.eggRanking.toString(),
-            // " }, { \"display_type\": \"date\",\"trait_type\": \"birthdate\",\"value\": ",
+            // " }, { \"display_type\": \"date\",\"trait_type\": \"birthday\",\"value\": ",
             //     _creature.eggBirth.toString(),
             " }"
         ));
@@ -235,12 +254,12 @@ contract WitmonLiscon21
         art.backgrounds[ranges.backgrounds ++] = _item;
     }
 
-    function pushArtColor(Item calldata _item)
+    function pushArtBaseColor(Item calldata _item)
         external virtual
         notForged
         onlyOwner
     {
-        art.colors[ranges.colors ++] = _item;
+        art.baseColors[ranges.baseColors ++] = _item;
     }
 
     function pushArtEyewear(Item calldata _item)
@@ -267,49 +286,60 @@ contract WitmonLiscon21
         art.species[ranges.species ++] = _item;
     }
 
-    function setArtBackground(uint8 _index, Item calldata _item)
+    function pushArtTraitColor(Item calldata _item)
         external virtual
-        // notForged
+        notForged
         onlyOwner
     {
-        require(_index < ranges.backgrounds, "WitmonLiscon21: out of bounds");
+        art.traitColors[ranges.traitColors ++] = _item;
+    }
+
+    function setArtBackground(uint8 _index, Item calldata _item)
+        external virtual
+        onlyOwner
+        checkBounds(_index, ranges.backgrounds)
+    {
         art.backgrounds[_index] = _item;
     }
 
-    function setArtColor(uint8 _index, Item calldata _item)
+    function setArtBaseColor(uint8 _index, Item calldata _item)
         external virtual
-        // notForged
         onlyOwner
+        checkBounds(_index, ranges.baseColors)
     {
-        require(_index < ranges.colors, "WitmonLiscon21: out of bounds");
-        art.colors[_index] = _item;
+        art.baseColors[_index] = _item;
     }
 
     function setArtEyewear(uint8 _index, Item calldata _item)
         external virtual
-        // notForged
         onlyOwner
+        checkBounds(_index, ranges.eyewears)
     {
-        require(_index < ranges.eyewears, "WitmonLiscon21: out of bounds");
         art.eyewears[_index] = _item;
     }
 
     function setArtHat(uint8 _index, Item calldata _item)
         external virtual
-        // notForged
         onlyOwner
+        checkBounds(_index, ranges.hats)
     {
-        require(_index < ranges.hats, "WitmonLiscon21: out of bounds");
         art.hats[_index] = _item;
     }
 
     function setArtSpecies(uint8 _index, Item calldata _item)
         external virtual
-        // notForged
         onlyOwner
+        checkBounds(_index, ranges.species)
     {
-        require(_index < ranges.species, "WitmonLiscon21: out of bounds");
         art.species[_index] = _item;
+    }
+
+    function setArtTraitColor(uint8 _index, Item calldata _item)
+        external virtual
+        onlyOwner
+        checkBounds(_index, ranges.traitColors)
+    {
+        art.traitColors[_index] = _item;
     }
 
     function _styles(TraitIndexes memory _traits)
@@ -317,10 +347,10 @@ contract WitmonLiscon21
         returns (string memory)
     {
         return string(abi.encodePacked(
-            "<style> .a { fill: #", art.colors[_traits.baseColor].svg,
-            "; } .b { fill: #", art.colors[_traits.eyesColor].svg,
-            "; } .c { fill: #", art.colors[_traits.eyewearColor].svg,
-            "; } .d { fill: #", art.colors[_traits.hatColor].svg,
+            "<style> .a { fill: #", art.baseColors[_traits.baseColor].svg,
+            "; } .b { fill: #", art.traitColors[_traits.eyesColor].svg,
+            "; } .c { fill: #", art.traitColors[_traits.eyewearColor].svg,
+            "; } .d { fill: #", art.traitColors[_traits.hatColor].svg,
             "; }</style>"
         ));
     }
@@ -334,9 +364,9 @@ contract WitmonLiscon21
         virtual
         returns (TraitIndexes memory _traits)
     {
-        uint _seed; uint8 _numColors = ranges.colors;
-        _traits.baseColor = uint8(_eggIndex % _numColors);
-        _traits.eyesColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
+        uint _seed; uint8 _numTraitColors = ranges.traitColors;
+        _traits.baseColor = uint8(_eggIndex % ranges.baseColors);
+        _traits.eyesColor = _eggPhenotype.randomUint8(_seed ++, _numTraitColors);
         _traits.species = _eggPhenotype.randomUint8(_seed ++, ranges.species);
         _traits.background = (_eggCategory == Witmons.CreatureCategory.Legendary
                 ? 1 + _eggPhenotype.randomUint8(_seed ++, ranges.backgrounds - 1)
@@ -346,8 +376,8 @@ contract WitmonLiscon21
                 ? 1 + _eggPhenotype.randomUint8(_seed ++, (ranges.eyewears * 2) / 3)
                 : 0
             );
-        _traits.eyewearColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
+        _traits.eyewearColor = _eggPhenotype.randomUint8(_seed ++, _numTraitColors);
         _traits.hat = _eggPhenotype.randomUint8(_seed ++, (ranges.hats * 2) / 3);
-        _traits.hatColor = _eggPhenotype.randomUint8(_seed ++, _numColors);
+        _traits.hatColor = _eggPhenotype.randomUint8(_seed ++, _numTraitColors);
     }
 }

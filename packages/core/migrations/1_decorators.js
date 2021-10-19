@@ -25,25 +25,46 @@ module.exports = async function (deployer, network) {
   let decorator = await WitmonLiscon21.at(WitmonLiscon21.address)
   let forged = await decorator.forged.call()
   if (!forged) {
+    let artItems
     console.info("   > Setting missing art pieces:")
-    let colors = [
+    let baseColors = [
       ["Green", "080"],
-      ["Black", "333"],
+      ["Dark Grey", "333"],
       ["Red", "f00"],
       ["Purple", "627"],
       ["White", "eee"],
       ["Yellow", "fd2"],
       ["Blue", "00d"]
     ]
-    let artItems = await decorator.getArtColors.call()
-    if (artItems.length < colors.length) {
-      console.info("     >> Colors...")
-      for (let j = artItems.length; j < colors.length; j ++) {
-        console.info(colors[j])
-        tx = await decorator.pushArtColor(colors[j])
+    artItems = await decorator.getArtBaseColors.call()
+    if (artItems.length < baseColors.length) {
+      console.info("     >> Base colors...")
+      for (let j = artItems.length; j < baseColors.length; j ++) {
+        console.info(baseColors[j])
+        tx = await decorator.pushArtBaseColor(baseColors[j])
         gasUsed += tx.receipt.gasUsed
       }
     }
+    let traitColors = [
+      ["Butter", "edd400"],
+      ["Orange", "f57900"],
+      ["Chocolate", "c17d11"],
+      ["Chamaleon", "73d216"],
+      ["Sky Blue", "3465a4"],
+      ["Plum", "75507b"],
+      ["Scarlet Red", "cc0000"],
+      ["Aluminium", "d3d7cf"],
+    ]
+    artItems = await decorator.getArtTraitColors.call()
+    if (artItems.length < traitColors.length) {
+      console.info("     >> Trait colors...")
+      for (let j = artItems.length; j < traitColors.length; j ++) {
+        console.info(traitColors[j])
+        tx = await decorator.pushArtTraitColor(traitColors[j])
+        gasUsed += tx.receipt.gasUsed
+      }
+    }
+    
     let species = [
       ["Witnet", "<path d='m7 24v2h-2v2h-2v4h28v-4h-1v-2h-3v-2z' fill='#558'/><path d='m21 0v1h-1v1h-1v1h-2v1h-2v1h-5v1h-1v1h-1v1 1h-1v1 12 1 1 1h1v1h1v1h1v1h10v-1h2v-1h2v-1h1v-1h1v-1h1v-1h1v-3h1v1h1v1h1v1h1v-3h-1v-2h-1v-2h-1v-2h-1v-2h1v1h2v-1-1h-1v-1h-1v-1-1h-1v-1h1v-1h1v-1h1v-1h-9v-1-1-1h-1z' fill='#8c9'/><path d='m10 12v3h2v-3zm9 0v3h2v-3z' class='b'/><path d='m9 15v1h2v1h2v-1h2v1h2v-1h1v-1zm9 1v1h3v-1zm3 1v3h1v1h3v-1h1v-3h-1v-1h-3v1zm-12-1h-1v4h1zm0 4v1h11v-1zm4 4v1h2v-1z' fill='#5a6'/><path d='m11 13v1h1v-1zm9 0v1h1v-1zm4 5v1h2v-1zm-14 3v1h3v-1zm4 0v1h3v-1z' fill='#fff'/><path d='m8 7v2h4v-2zm11 0v2h4v-2z' fill='#558'/>"],
       ["AAVE", "<path d='m15 3v1h-3v1h-2v1h-1v1h-2v1h-1v2h-1v20h1v1h2v-1h1v-4h1v3h1v1h2v-1h1v-3h1v4h1v1h2v-1h1v-4h1v2h1v1h2v-1h1v-2h1v4h1v1h2v-1h1v-20h-1v-2h-1v-1h-1v-1h-2v-1h-1v-1h-3v-1h-5z' fill='#fff'/><path d='m9 12v1h-1v3h1v1h2v-1h1v-3h-1v1h-1v-1h1v-1h-2zm10 0v1h-1v3h1v1h2v-1h1v-3h-1v1h-1v-1h1v-1h-2z' class='b'/><path d='m13 19v1h1v1h2v-1h1v-1h-4z' fill='#888'/>"],
