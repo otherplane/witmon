@@ -26,176 +26,104 @@ contract("WitmonLiscon21", _accounts => {
     describe("IWitmonDecorator", async () => {
         describe("getCreatureMetadata(Creature)", async () => {
             let metadata
-
-            describe("Full range generation", async () => {
-                it("common creatures", async () => {
-                    for (let j = 0; j < 50; j ++) {
-                        metadata = await decorator.getCreatureMetadata.call([
-                            j,
-                            0,
-                            j,
-                            10000 - j * 100,
-                            j + 1,
-                            "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
-                            2
-                        ])
-                        metadata = JSON.parse(metadata)
-                        console.log(j, "=>", metadata.attributes)
-                    }
-                })
-                it("rare creatures", async () => {
-                    for (let j = 50; j < 100; j ++) {
-                        metadata = await decorator.getCreatureMetadata.call([
-                            j,
-                            0,
-                            j,
-                            10000 - j * 100,
-                            j + 1,
-                            "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
-                            1
-                        ])
-                        metadata = JSON.parse(metadata)
-                        console.log(j, "=>", metadata.attributes)
-                    }
-                })
-                it("legendary creatures", async () => {
-                    for (let j = 100; j < 150; j ++) {
-                        metadata = await decorator.getCreatureMetadata.call([
-                            j,
-                            0,
-                            j,
-                            50000 - j * 100,
-                            j + 1,
-                            "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
-                            0
-                        ])
-                        metadata = JSON.parse(metadata)
-                        console.log(j, "=>", metadata.attributes)
-                    }
-                })
-            })
-
-            describe("Common creature", async () => {
-                let creature = [
-                    /* tokenId       */ 77,
-                    /* eggBirth      */ 0,
-                    /* eggIndex      */ 17,
-                    /* eggScore      */ 837,
-                    /* eggRanking    */ 107,
-                    /* eggPhenotype  */ phenotype1,
-                    /* eggCategory   */ 2
-                ]
-                it("generates valid JSON", async() => {
-                    metadata = await decorator.getCreatureMetadata.call(creature)
-                    // console.log(metadata)
-                    // remove non-printable and other non-valid JSON chars
+            it("common creatures", async () => {
+                for (let j = 0; j < 50; j ++) {
+                    metadata = await decorator.getCreatureMetadata.call([
+                        j,
+                        0,
+                        j,
+                        10000 - j * 100,
+                        j + 1,
+                        "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
+                        2
+                    ])
+                    // generates valid JSON
                     metadata = JSON.parse(metadata)
-                })
-                it("name contains token id", async () => {
-                    assert(metadata.name.indexOf(creature[0].toString()) >= 0);
-                })
-                it("external url contains token id", async () => {
-                    assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
-                })
-                it("contains no eyewear attribute", async () => {
-                    // console.log(metadata.attributes)
+                    // name contains tokenId
+                    assert(metadata.name.indexOf(j.toString()) >= 0, "invalid JSON");
+                    // external url contains tokenId
+                    assert(metadata.external_url.indexOf(j.toString()) >= 0);
+                    // contains no eyewear attribute
                     assert(
                         metadata.attributes.filter(val => {
                             if (val.trait_type && val.trait_type === "Eyewear") {
                                 return val;
                             }
-                        }).length == 0
+                        }).length == 0,
+                        "contains eyewear attribute"
                     )
-                })
-                it("contains no background attribute", async () => {
+                    // contains no background attribute
                     assert(
                         metadata.attributes.filter(val => {
                             if (val.trait_type && val.trait_type === "Background") {
                                 return val;
                             }
-                        }).length == 0
+                        }).length == 0,
+                        "contains background attribute"
                     )
-                })
+                    // trace
+                    console.log(j, "=>", metadata.attributes)
+                }
             })
-            describe("Rare creature", async () => { 
-                const creature = [
-                    /* tokenId       */ 66,
-                    /* eggBirth      */ 0,
-                    /* eggIndex      */ 13,
-                    /* eggScore      */ 1837,
-                    /* eggRanking    */ 67,
-                    /* eggPhenotype  */ phenotype1,
-                    /* eggCategory   */ 1
-                ]
-                it("generates valid JSON", async() => {
-                    metadata = await decorator.getCreatureMetadata.call(creature)
-                    // remove non-printable and other non-valid JSON chars
+            it("rare creatures", async () => {
+                for (let j = 50; j < 100; j ++) {
+                    metadata = await decorator.getCreatureMetadata.call([
+                        j,
+                        0,
+                        j,
+                        10000 - j * 100,
+                        j + 1,
+                        "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
+                        1
+                    ])
+                    // generates valid JSON
                     metadata = JSON.parse(metadata)
-                })
-                it("name contains token id", async () => {
-                    assert(metadata.name.indexOf(creature[0].toString()) >= 0);
-                })
-                it("external url contains token index", async () => {
-                    assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
-                })
-                it("contains eyewear attribute", async () => {
-                    assert(
-                        metadata.attributes.filter(val => {
-                            if (val.trait_type && val.trait_type === "Eyewear") {
-                                return val;
-                            }
-                        }).length == 1
-                    )
-                })
-                it("contains no background attribute", async () => {
+                    // name contains tokenId
+                    assert(metadata.name.indexOf(j.toString()) >= 0, "invalid JSON");
+                    // external url contains tokenId
+                    assert(metadata.external_url.indexOf(j.toString()) >= 0);
+                    // contains no background attribute
                     assert(
                         metadata.attributes.filter(val => {
                             if (val.trait_type && val.trait_type === "Background") {
                                 return val;
                             }
-                        }).length == 0
+                        }).length == 0,
+                        "contains background attribute"
                     )
-                })
+                    // trace
+                    console.log(j, "=>", metadata.attributes)
+                }
             })
-            describe("Legendary creature", async () => {
-                const creature = [
-                    /* tokenId       */ 466,
-                    /* eggBirth      */ 0,
-                    /* eggIndex      */ 163,
-                    /* eggScore      */ 1837,
-                    /* eggRanking    */ 67,
-                    /* eggPhenotype  */ phenotype1,
-                    /* eggCategory   */ 0
-                ]
-                it("generates valid JSON", async() => {
-                    metadata = await decorator.getCreatureMetadata.call(creature)
-                    // remove non-printable and other non-valid JSON chars
+            it("legendary creatures", async () => {
+                for (let j = 100; j < 150; j ++) {
+                    metadata = await decorator.getCreatureMetadata.call([
+                        j,
+                        0,
+                        j,
+                        50000 - j * 100,
+                        j + 1,
+                        "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
+                        0
+                    ])
+                    // generates valid JSON
                     metadata = JSON.parse(metadata)
-                })
-                it("name contains token id", async () => {
-                    assert(metadata.name.indexOf(creature[0].toString()) >= 0);
-                })
-                it("external url contains token index", async () => {
-                    assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
-                })
-                it("contains eyewear attribute", async () => {
-                    assert(
-                        metadata.attributes.filter(val => {
-                            if (val.trait_type && val.trait_type === "Eyewear") {
-                                return val;
-                            }
-                        }).length == 1
-                    )
-                })
-                it("contains background attribute", async () => {
+                    // name contains tokenId
+                    assert(metadata.name.indexOf(j.toString()) >= 0, "invalid JSON");
+                    // external url contains tokenId
+                    assert(metadata.external_url.indexOf(j.toString()) >= 0);
+                    // contains background attribute
                     assert(
                         metadata.attributes.filter(val => {
                             if (val.trait_type && val.trait_type === "Background") {
                                 return val;
                             }
-                        }).length == 1
+                        }).length > 0,
+                        "contains NO background attribute"
                     )
-                })
+                    // trace
+                    console.log(j, "=>", metadata.attributes)
+                }
             })
         })
     })
