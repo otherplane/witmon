@@ -21,7 +21,7 @@
         class="mint-status"
         v-if="egg.mintInfo && egg.mintInfo.transactionHash"
       >
-        <p class="label">CONTRACT ADDRESS</p>
+        <p class="label">TRANSACTION HASH</p>
         <div class="address">
           <a
             :href="`${etherscanBaseUrl}/${egg.mintInfo.transactionHash}`"
@@ -33,10 +33,12 @@
       </div>
       <div
         class="mint-status"
-        v-if="creatureData && creatureData.tokenId !== 0"
+        v-if="egg.creatureData && parseInt(egg.creatureData.tokenId) !== 0"
       >
         <div class="opensea">
-          <a :href="`${openseaBaseUrl}/${creatureData.tokenId}`" target="_blank"
+          <a
+            :href="`${openseaBaseUrl}/${egg.creatureData.tokenId}`"
+            target="_blank"
             >See on OpenSea
           </a>
           <img
@@ -133,7 +135,6 @@ export default {
     const modal = useModal()
     const egg = useEggStore()
     const web3Witmon = useWeb3Witmon()
-    const creatureData = ref(null)
     const modals = reactive({
       mint: false,
       export: false,
@@ -148,7 +149,8 @@ export default {
       await egg.getMintInfo()
       await egg.getPreview()
       if (egg.hasBorn) {
-        creatureData.value = await web3Witmon.getCreatureData()
+        const data = await web3Witmon.getCreatureData()
+        egg.setCreatureData(data)
       }
 
       if (!egg.hasBorn) {
@@ -163,7 +165,8 @@ export default {
     })
 
     const type = computed(() =>
-      egg.incubating || (creatureData.value && creatureData.value.tokenId !== 0)
+      egg.incubating ||
+      (egg.creatureData && parseInt(egg.creatureData.tokenId) !== 0)
         ? 'disable'
         : 'default'
     )
@@ -215,7 +218,6 @@ export default {
       modal,
       modals,
       mintStatus,
-      creatureData,
       enableProvider: web3Witmon.enableProvider,
       openEgg: web3Witmon.openEgg,
       isProviderConnected: web3Witmon.isProviderConnected,

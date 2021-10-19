@@ -20,6 +20,7 @@ export const useEggStore = defineStore('egg', {
       incubating: null,
       list: [],
       color: null,
+      creatureData: null,
       errors: {
         claim: null,
         info: null,
@@ -59,6 +60,9 @@ export const useEggStore = defineStore('egg', {
         'tokenInfo',
         JSON.stringify({ ...this.getToken(), ...info })
       )
+    },
+    setCreatureData (data) {
+      this.creatureData = data
     },
     savePreview (creature) {
       localStorage.setItem('creature', creature)
