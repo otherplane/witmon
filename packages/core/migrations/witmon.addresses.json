@@ -6,5 +6,9 @@
     "ethereum.rinkeby": {
         "WitmonLiscon21": "0x62c724cfB550772a2aE758c98eA6D49F358933b3",
         "WitmonERC721": "0x691908f883E006C0fB42da190A9EA07E6996D6c6"
+    },
+    "ethereum.mainnet": {
+        "WitmonLiscon21": "0x109b0c420D2fA7E664e34cE4A570a6953985D644",
+        "WitmonERC721": "0x855BCa56D00F3f550D0c610BBF562FEBF6540bc6"
     }
 }

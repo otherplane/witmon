@@ -28,11 +28,11 @@ module.exports = async function (deployer, network, accounts) {
       WitmonERC721,
       WitnetRequestBoard.address,       // Witnet Bridge entry-point
       WitmonLiscon21.address,           // IWitmonDecorator implementation
-      "Witty Creatures 2.0",            // ERC721 Token Name
-      "WITMON",                         // ERC721 Token Symbol
-      accounts[0],                      // signator
+      "Witty Creatures 2.0 - Liscon 2021 Special Edition", // ERC721 Token Name
+      "WITTY2021",                      // ERC721 Token Symbol
+      "0x8d86Bc475bEDCB08179c5e6a4d494EbD3b44Ea8B",  // signator
       [10, 30, 60],                     // percentile marks
-      80640                             // expirationDays (~ 14 days)
+      192000                            // expirationDays (~ 30 days)
     )
     if (network !== "test" && network !== "develop") {
       witmonAddresses[network].WitmonERC721 = WitmonERC721.address

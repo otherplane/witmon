@@ -18,11 +18,6 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-//
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
-
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -40,17 +35,22 @@ module.exports = {
       host: "localhost",
       port: 8545,
       skipDryRun: true,
+      gasPrice: 10 * 10 ** 9,
+      gasLimit: 30000000,
     },
     "ethereum.mainnet": {
       network_id: 1,
       host: "localhost",
       port: 9545,
+      gasPrice: 150 * 10 ** 9,
+      skipDryRun: true,
     },
     "ethereum.rinkeby": {
       network_id: 4,
       host: "localhost",
       port: 8544,
       skipDryRun: true,
+      gasPrice: 5 * 10 ** 9,
     },
   },
 
