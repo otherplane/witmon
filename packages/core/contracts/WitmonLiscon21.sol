@@ -373,11 +373,11 @@ contract WitmonLiscon21
                 : 0
             );
         _traits.eyewear = (_eggCategory != Witmons.CreatureCategory.Common
-                ? 1 + _eggPhenotype.randomUint8(_seed ++, (ranges.eyewears * 2) / 3)
+                ? 1 + _eggPhenotype.randomUint8(_seed ++, (ranges.eyewears * 3) / 2)
                 : 0
             );
         _traits.eyewearColor = _eggPhenotype.randomUint8(_seed ++, _numTraitColors);
-        _traits.hat = _eggPhenotype.randomUint8(_seed ++, (ranges.hats * 2) / 3);
+        _traits.hat = _eggPhenotype.randomUint8(_seed ++, (ranges.hats * 3) / 2);
         _traits.hatColor = _eggPhenotype.randomUint8(_seed ++, _numTraitColors);
     }
 }

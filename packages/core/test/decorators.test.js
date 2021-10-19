@@ -5,7 +5,6 @@ const WitmonLiscon21 = artifacts.require("WitmonLiscon21")
 contract("WitmonLiscon21", _accounts => {
     let decorator
     const phenotype1 = "0xb754d49eec4434a3bd789100715ca6a0f7230fe7b66a2cd93457616128bbc5c2"
-    const phenotype2 = "0x4c02520952d3cafd935937821f75182303d2b419b92d6af88eb9374753fb3f88"
 
     before(async () => {
         decorator = await WitmonLiscon21.deployed()
@@ -27,8 +26,57 @@ contract("WitmonLiscon21", _accounts => {
     describe("IWitmonDecorator", async () => {
         describe("getCreatureMetadata(Creature)", async () => {
             let metadata
+
+            describe("Full range generation", async () => {
+                it("common creatures", async () => {
+                    for (let j = 0; j < 50; j ++) {
+                        metadata = await decorator.getCreatureMetadata.call([
+                            j,
+                            0,
+                            j,
+                            10000 - j * 100,
+                            j + 1,
+                            "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
+                            2
+                        ])
+                        metadata = JSON.parse(metadata)
+                        console.log(j, "=>", metadata.attributes)
+                    }
+                })
+                it("rare creatures", async () => {
+                    for (let j = 50; j < 100; j ++) {
+                        metadata = await decorator.getCreatureMetadata.call([
+                            j,
+                            0,
+                            j,
+                            10000 - j * 100,
+                            j + 1,
+                            "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
+                            1
+                        ])
+                        metadata = JSON.parse(metadata)
+                        console.log(j, "=>", metadata.attributes)
+                    }
+                })
+                it("legendary creatures", async () => {
+                    for (let j = 100; j < 150; j ++) {
+                        metadata = await decorator.getCreatureMetadata.call([
+                            j,
+                            0,
+                            j,
+                            50000 - j * 100,
+                            j + 1,
+                            "0x" + ("0".repeat(64 - j.toString(16).length)) + j.toString(16),
+                            0
+                        ])
+                        metadata = JSON.parse(metadata)
+                        console.log(j, "=>", metadata.attributes)
+                    }
+                })
+            })
+
             describe("Common creature", async () => {
-                const creature = [
+                let creature = [
                     /* tokenId       */ 77,
                     /* eggBirth      */ 0,
                     /* eggIndex      */ 17,
@@ -49,11 +97,11 @@ contract("WitmonLiscon21", _accounts => {
                 it("external url contains token id", async () => {
                     assert(metadata.external_url.indexOf(creature[0].toString()) >= 0);
                 })
-                it("contains no neckware attribute", async () => {
+                it("contains no eyewear attribute", async () => {
                     // console.log(metadata.attributes)
                     assert(
                         metadata.attributes.filter(val => {
-                            if (val.trait_type && val.trait_type === "Neckwear") {
+                            if (val.trait_type && val.trait_type === "Eyewear") {
                                 return val;
                             }
                         }).length == 0
