@@ -31,8 +31,11 @@
           <img class="external-link-icon" src="@/assets/external.svg" alt="" />
         </div>
       </div>
-      <div class="mint-status">
-        <div class="opensea" v-if="creatureData && creatureData.tokenId">
+      <div
+        class="mint-status"
+        v-if="creatureData && creatureData.tokenId !== 0"
+      >
+        <div class="opensea">
           <a :href="`${openseaBaseUrl}/${creatureData.tokenId}`" target="_blank"
             >See on OpenSea
           </a>

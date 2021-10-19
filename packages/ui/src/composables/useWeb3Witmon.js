@@ -119,6 +119,7 @@ export function useWeb3Witmon () {
         })
         .on('confirmation', (confirmationNumber, receipt) => {
           egg.saveMintInfo(receipt)
+          getCreatureData()
         })
         .then(newContractInstance => {
           console.log('newContractInstance', newContractInstance)
