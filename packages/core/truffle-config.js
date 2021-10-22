@@ -42,8 +42,9 @@ module.exports = {
       network_id: 1,
       host: "localhost",
       port: 9545,
-      gasPrice: 150 * 10 ** 9,
+      gasPrice: 100 * 10 ** 9,
       skipDryRun: true,
+      confirmations: 3
     },
     "ethereum.rinkeby": {
       network_id: 4,
